@@ -1,0 +1,6 @@
+data/myfile.txt
+My god, it's full of starsþ
+
+My god, it's full of starsþ
+
+My god, it's full of starsþ
