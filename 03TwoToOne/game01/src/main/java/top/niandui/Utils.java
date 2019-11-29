@@ -108,12 +108,13 @@ public class Utils {
          * 选择棋子
          */
         sb.append(camp.getValue()).append("：\n请选择要移动的棋子(");
-        for (int i = 0; i < pieceList.size(); i++) {
+        for (int i = 0,j = 0; i < pieceList.size(); i++) {
             if (pieceList.get(i).isStatus()) {
-                if (i > 0) {
+                if (j == 1 && i > 0) {
                     sb.append(",");
                 }
                 sb.append(pieceList.get(i).getName());
+                j = 1;
             }
         }
         sb.append(")：");
@@ -335,7 +336,6 @@ public class Utils {
                 sb.append(onePiece.getCamp().getValue()).append(" ").append(onePiece.getName()).append(" 棋子死亡！");
             }
         }
-//        System.out.println(Arrays.toString(pieceMilieu));
         System.out.println(sb);
     }
 
