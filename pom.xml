@@ -13,9 +13,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>top.niandui</groupId>
-    <artifactId>exercise-project</artifactId>
+    <artifactId>ExerciseProject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>exercise-project</name>
+    <name>ExerciseProject</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
