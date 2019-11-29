@@ -240,7 +240,7 @@ public class Utils {
             }
         }
         if (position[1] - 1 >= 0 && site[position[0]][position[1] - 1] != null) {
-            // 3:←
+            //            // 3:←
             if (site[position[0]][position[1] - 1].getCamp() == camp) {
                 pieceMilieu[2] = true;
             } else {
