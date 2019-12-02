@@ -11,7 +11,7 @@
     <groupId>top.niandui</groupId>
     <artifactId>01swagger</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>swagger</name>
+    <name>01swagger</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -77,6 +77,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <!-- 自动重启插件 -->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -84,6 +91,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                    <layout>ZIP</layout>
+                    <includes>
+                        <!-- 打包时不包含依赖包,打包瘦身 -->
+                        <include>
+                            <groupId>nothing</groupId>
+                            <artifactId>nothing</artifactId>
+                        </include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

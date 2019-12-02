@@ -25,7 +25,8 @@ public class UserController {
     @ApiOperation(value = "测试接口testGet", notes = "notes")
     public String testGet() {
         System.out.println("执行了。。。 UserController.testGet()");
-
+        System.out.println("aaaa");
+        System.out.println("bbb");
         return "success";
     }
 

@@ -1,3 +1,17 @@
 server:
   port: 10000
 
+management:
+  endpoints:
+    web:
+      #设置监控访问的应用根路径，默认是/actuator
+      base-path: /monitor
+#      exposure:
+        #暴露监控访问接口，默认是/health和/info
+#        include: []
+        #显式屏蔽监控访问接口
+#        exclude: env,metrics
+  endpoint:
+    shutdown:
+      #开放关闭应用程序端点，不建议开启
+      enabled: true
