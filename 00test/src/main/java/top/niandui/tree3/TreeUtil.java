@@ -5,8 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 把一个list集合,里面的bean含有 parentId 转为树形式
- *
+ * 把一个list集合,里面的bean含有 id, parentId, children 转为树形式
  */
 public class TreeUtil {
 	/**
