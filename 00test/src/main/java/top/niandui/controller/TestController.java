@@ -2,10 +2,12 @@ package top.niandui.controller;
 
 import com.sun.xml.internal.ws.client.ResponseContextReceiver;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.niandui.annotation.MyToken;
+import top.niandui.exception.MyException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -33,4 +35,8 @@ public class TestController {
         return "ok";
     }
 
+    @RequestMapping("/testMyError")
+    public String testMyError() throws MyException {
+        throw new MyException("TestController.testMyError() 错误！");
+    }
 }
