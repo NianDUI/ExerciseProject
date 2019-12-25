@@ -1,6 +1,7 @@
 import utils.BiQuGe;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,6 +16,8 @@ public class BiQuGeApplication {
             /*请
             * 输入笔趣阁小说第一章地址：http://www.biqige.com/107_107926/35015270.html
             * 请输入笔趣阁小说名称：联盟一姐的生活手册.txt
+            *
+            * 腾飞我的航空时代 https://www.biduo.cc/biquge/53_53393/c22077441.html
             */
             Scanner sc = new Scanner(System.in);
             System.out.println("http://www.biqige.com");
@@ -36,7 +39,7 @@ public class BiQuGeApplication {
 
     public static void saveFile(String fileName, List<String> list) {
         try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"));
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), StandardCharsets.UTF_8));
             for (String str : list) {
                 bw.write(str);
             }

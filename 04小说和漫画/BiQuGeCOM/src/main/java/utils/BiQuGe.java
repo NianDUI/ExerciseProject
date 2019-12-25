@@ -40,11 +40,13 @@ public class BiQuGe {
                 StringBuilder sb = new StringBuilder().append(title.get(0).toString()).append("\r\n\r\n");
                 List list = htmlPage.getByXPath("//div[@id='content']/text()");
                 for (int i = 0; i < list.size() - 3; i++) {
-                    sb.append(list.get(i).toString()).append("\r\n");
+                    sb.append(list.get(i).toString()).append("\r\n\n");
                 }
                 stringList.add(sb.toString());
                 List aList = htmlPage.getByXPath("//div[@class='bottem2']//a");
 
+                // http://www.biqige.com/107_107926/35015270.html: aList.get(3);
+                // https://www.biduo.cc/biquge/53_53393/c22077441.html: aList.get(2);
                 HtmlAnchor next = (HtmlAnchor) aList.get(3);
                 if (!next.getHrefAttribute().contains("html") && !next.getHrefAttribute().contains("HTML")) {
                     break;
