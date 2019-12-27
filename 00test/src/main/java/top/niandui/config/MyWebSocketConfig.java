@@ -18,7 +18,7 @@ public class MyWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //注册一个 Stomp 的节点(endpoint)，前端通过这个端点进行连接
-        registry.addEndpoint("/websocket")
+        registry.addEndpoint("/websocketEndpoint")
                 // 解决跨域问题
                 .setAllowedOrigins("*")
                 // 并指定使用 SockJS 协议。

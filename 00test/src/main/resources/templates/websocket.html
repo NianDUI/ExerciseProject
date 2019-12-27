@@ -10,7 +10,7 @@
 <div>
     <div>
         <button id="connect" onclick="connect();">链接</button>
-        <button id="disconnect" disabled onclick="disconnect();">链接</button>
+        <button id="disconnect" disabled onclick="disconnect();">断开链接</button>
     </div>
     <div>
         <input type="text" id="sendText">
@@ -26,7 +26,7 @@
     var stompClient = null;
     function connect() {
         // 连接 SockJs 的 endpoint 名称为 "/websocket"
-        var socket = new SockJS("[[@{/websocket}]]");
+        var socket = new SockJS("[[@{/websocketEndpoint}]]");
         // 使用 STOMP 子协议的 WebSocket 客户端
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
@@ -34,11 +34,12 @@
             // 通过 stompClient.subscribe 订阅 @SendTo("/msg/websocket") 目标发送的信息，对应控制器的 SendTo 定义
             stompClient.subscribe("/msg/websocket", function (response) {
                 // 展示返回的信息，只要订阅了 @SendTo("/msg/websocket") 目标，都可以接收到服务端返回的信息
-                content.append("\r\n" + response.body);
+                content.append("\r\n" + response.body.toString());
+                console.log(response);
             });
         });
         this.disabled = true;
-        $("#disconnect").disabled(false);
+        $("#disconnect").disabled = false;
     }
     function disconnect() {
         // 断开连接
@@ -46,13 +47,14 @@
             stompClient.disconnect();
         }
         this.disabled = true;
-        $("#connect").disabled(false);
+        $("#connect").disabled = false;
     }
     function send() {
         // 发送消息
-        stompClient.send("/websocketMapping", {}, {
+        stompClient.send("/websocketMapping", {}, JSON.stringify({
             message: $("#sendText").val()
-        });
+        }));
+
     }
 </script>
 </body>
