@@ -7,6 +7,8 @@ import com.gargoylesoftware.htmlunit.WebClientOptions;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +61,25 @@ public class BiQuGe {
         }
 
         return stringList;
+    }
+
+    public static void saveFile(String fileName, List<String> list) {
+        File target = new File("target");
+        if (!target.exists()) {
+            target.mkdirs();
+        }
+        String pathname = "target/" + fileName;
+        try {
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pathname), StandardCharsets.UTF_8));
+            for (String str : list) {
+                bw.write(str);
+            }
+            bw.flush();
+            bw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

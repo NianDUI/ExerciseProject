@@ -23,24 +23,9 @@ public class BiQuGeApplication {
             List<String> list = BiQuGe.getContext(url);
             System.out.println("获取完毕");
             System.out.println("保存文本...");
-            saveFile(fileName, list);
+            BiQuGe.saveFile(fileName, list);
             System.out.println("保存完毕");
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveFile(String fileName, List<String> list) {
-        try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"));
-            for (String str : list) {
-                bw.write(str);
-            }
-            bw.flush();
-            bw.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }

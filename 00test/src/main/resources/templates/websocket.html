@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket</title>
+</head>
+<body>
+<h1>https://www.jianshu.com/p/aea406f24b77</h1>
+<noscript><h2>你的浏览器不支持websocket</h2></noscript>
+<div>
+    <div>
+        <button id="connect" onclick="connect();">链接</button>
+        <button id="disconnect" disabled onclick="disconnect();">链接</button>
+    </div>
+    <div>
+        <input type="text" id="sendText">
+        <button id="send" onclick="send();">发送</button>
+    </div>
+    <div id="content" onclick="$(this).html('');"></div>
+</div>
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.js}"></script>
+<script th:src="@{/webjars/sockjs-client/1.1.2/sockjs.js}"></script>
+<script>
+    var content = $("#content");
+    var stompClient = null;
+    function connect() {
+        // 连接 SockJs 的 endpoint 名称为 "/websocket"
+        var socket = new SockJS("[[@{/websocket}]]");
+        // 使用 STOMP 子协议的 WebSocket 客户端
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            content.text("Connected: " + frame);
+            // 通过 stompClient.subscribe 订阅 @SendTo("/msg/websocket") 目标发送的信息，对应控制器的 SendTo 定义
+            stompClient.subscribe("/msg/websocket", function (response) {
+                // 展示返回的信息，只要订阅了 @SendTo("/msg/websocket") 目标，都可以接收到服务端返回的信息
+                content.append("\r\n" + response.body);
+            });
+        });
+        this.disabled = true;
+        $("#disconnect").disabled(false);
+    }
+    function disconnect() {
+        // 断开连接
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        this.disabled = true;
+        $("#connect").disabled(false);
+    }
+    function send() {
+        // 发送消息
+        stompClient.send("/websocketMapping", {}, {
+            message: $("#sendText").val()
+        });
+    }
+</script>
+</body>
+</html>

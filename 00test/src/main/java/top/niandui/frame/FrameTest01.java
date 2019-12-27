@@ -83,11 +83,16 @@ public class FrameTest01 {
 //            webClient.getOptions().setJavaScriptEnabled(false);
             HtmlPage page = webClient.getPage(href);
             Thread.sleep(1000 * 3);
-            FileUtils.write(new File(ClassLoader.getSystemResource("").getPath()).getParentFile().getAbsolutePath() + "/" + page.getTitleText() + ".html", page.asXml());
+            FileUtils.write(getPathname(page.getTitleText()), page.asXml());
             List<T> list = page.getByXPath("//a[@class='search_result_asset_link']/img/@src");
             System.out.println(list);
             return list;
         }
+
+        private String getPathname(String name) {
+            return new File(ClassLoader.getSystemResource("").getPath()).getParentFile().getAbsolutePath() + "/" + name + ".html";
+        }
+
     }
 
 }

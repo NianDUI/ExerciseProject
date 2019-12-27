@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BiQuGe {
+public class BiQuKan {
     //新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
     private final static WebClient webClient = new WebClient(BrowserVersion.CHROME);
 
@@ -37,12 +37,12 @@ public class BiQuGe {
         try {
             HtmlPage htmlPage = webClient.getPage(url);
             while (true) {
-                List title = htmlPage.getByXPath("//div[@id='content']/../h1/text()");
+                List title = htmlPage.getByXPath("//div[@class='content']/h1/text()");
                 System.out.println(title.get(0).toString());
                 StringBuilder sb = new StringBuilder().append(title.get(0).toString()).append("\r\n\r\n");
                 List list = htmlPage.getByXPath("//div[@id='content']/text()");
-                for (int i = 0; i < list.size() - 2; i++) {
-                    sb.append(list.get(i).toString()).append("\r\n\r\n");
+                for (int i = 0; i < list.size() - 3; i++) {
+                    sb.append(list.get(i).toString()).append("\r\n\n");
                 }
                 stringList.add(sb.toString());
                 List aList = htmlPage.getByXPath("//div[@class='page_chapter']//a");
@@ -57,6 +57,7 @@ public class BiQuGe {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return stringList;
     }
 

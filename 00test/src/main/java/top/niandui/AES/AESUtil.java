@@ -8,6 +8,7 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Title AESUtil.java
@@ -102,7 +103,7 @@ public class AESUtil {
 		Cipher cipher = Cipher.getInstance(ALGORITHMSTR);
 		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(encryptKey.getBytes(), "AES"));
 
-		return cipher.doFinal(content.getBytes("utf-8"));
+		return cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
 	}
 
 	/**
@@ -151,7 +152,7 @@ public class AESUtil {
 	 * 测试
 	 */
 	public static void main(String[] args) throws Exception {
-		String content = "admin";
+		String content = "test2";
 		System.out.println("加密前：" + content);
 		System.out.println("加密密钥和解密密钥：" + KEY);
 		String encrypt = aesEncrypt(content, KEY);
