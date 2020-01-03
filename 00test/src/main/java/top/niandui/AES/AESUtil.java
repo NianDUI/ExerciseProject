@@ -1,6 +1,6 @@
 package top.niandui.AES;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.net.util.Base64;
 import org.springframework.util.StringUtils;
 import sun.misc.BASE64Decoder;
 

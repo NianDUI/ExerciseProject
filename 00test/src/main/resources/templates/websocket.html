@@ -34,27 +34,27 @@
             // 通过 stompClient.subscribe 订阅 @SendTo("/msg/websocket") 目标发送的信息，对应控制器的 SendTo 定义
             stompClient.subscribe("/msg/websocket", function (response) {
                 // 展示返回的信息，只要订阅了 @SendTo("/msg/websocket") 目标，都可以接收到服务端返回的信息
-                content.append("\r\n" + response.body.toString());
+                content.append("<br>" + response.body.toString());
                 console.log(response);
             });
         });
-        this.disabled = true;
-        $("#disconnect").disabled = false;
+        $("#connect").attr("disabled", "disabled");
+        $("#disconnect").removeAttr("disabled");
     }
     function disconnect() {
         // 断开连接
         if (stompClient != null) {
             stompClient.disconnect();
         }
-        this.disabled = true;
-        $("#connect").disabled = false;
+        content.text("Connected: 连接断开");
+        $("#disconnect").attr("disabled", "disabled");
+        $("#connect").removeAttr("disabled");
     }
     function send() {
         // 发送消息
         stompClient.send("/websocketMapping", {}, JSON.stringify({
             message: $("#sendText").val()
         }));
-
     }
 </script>
 </body>
