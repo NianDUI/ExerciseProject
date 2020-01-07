@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/jdbc
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 建表sql
+    schema:
+      - classpath:schema-test.sql
+    # 插入数据sql
+    data:
+      - classpath:data-test.sql
+    # 初始化模式
+    initialization-mode: always
