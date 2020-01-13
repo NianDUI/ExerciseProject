@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import top.niandui.dao.IDepartmentDao;
+import top.niandui.dao.IEmployeeDao;
 import top.niandui.model.Department;
+import top.niandui.model.Employee;
 
 /**
  * @Title: DepartmentController.java
@@ -19,6 +21,9 @@ public class DepartmentController {
     @Autowired
     private IDepartmentDao iDepartmentDao;
 
+    @Autowired
+    private IEmployeeDao iEmployeeDao;
+
     @GetMapping("/dept/{id}")
     public Department getDepartmentById(@PathVariable Integer id) {
         return iDepartmentDao.getDeptById(id);
@@ -28,5 +33,10 @@ public class DepartmentController {
     public Department getDepartmentById(Department department) {
         iDepartmentDao.insertDept(department);
         return department;
+    }
+
+    @GetMapping("/emp/{id}")
+    public Employee getEmp(@PathVariable Integer id) {
+        return iEmployeeDao.getEmpById(id);
     }
 }

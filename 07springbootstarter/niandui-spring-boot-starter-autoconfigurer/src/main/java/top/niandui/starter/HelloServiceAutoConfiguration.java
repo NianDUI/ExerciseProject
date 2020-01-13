@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnClass(value = {HelloService.class, HelloProperties.class})
 @EnableConfigurationProperties(HelloProperties.class)
-public class HelloAutoConfiguration {
+public class HelloServiceAutoConfiguration {
     @Autowired
     private HelloProperties helloProperties;
 

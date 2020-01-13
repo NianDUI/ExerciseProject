@@ -1,4 +1,4 @@
-package com.synqnc.util;
+package top.niandui.utils;
 
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

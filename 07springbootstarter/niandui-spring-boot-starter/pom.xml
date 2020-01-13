@@ -8,5 +8,15 @@
     <artifactId>niandui-spring-boot-starter</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- 自定义启动器 -->
+    <dependencies>
+        <!-- 启动器自动配置 -->
+        <dependency>
+            <groupId>top.niandui.starter</groupId>
+            <artifactId>niandui-spring-boot-starter-autoconfigurer</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

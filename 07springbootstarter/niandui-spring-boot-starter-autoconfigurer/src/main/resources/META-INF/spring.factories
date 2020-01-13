@@ -1,0 +1,3 @@
+# Auto Configure 自己的自动配置类 加进来
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+top.niandui.starter.HelloServiceAutoConfiguration
