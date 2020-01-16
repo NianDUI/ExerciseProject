@@ -1,7 +1,7 @@
-package top.niandui.AES;
+package top.niandui.utils;
 
-import org.apache.commons.net.util.Base64;
-import org.springframework.util.StringUtils;
+//import com.synqnc.exception.ReStateException;
+import org.apache.tomcat.util.codec.binary.Base64;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
@@ -30,14 +30,13 @@ public class AESUtil {
 	 *
 	 * @param encrypt 内容
 	 * @return
-	 * @throws Exception
 	 */
 	public static String aesDecrypt(String encrypt) {
 		try {
 			return aesDecrypt(encrypt, KEY);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
+			throw new RuntimeException("解密错误，请联系管理员！");
 		}
 	}
 
@@ -46,14 +45,13 @@ public class AESUtil {
 	 *
 	 * @param content
 	 * @return
-	 * @throws Exception
 	 */
 	public static String aesEncrypt(String content) {
 		try {
 			return aesEncrypt(content, KEY);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
+			throw new RuntimeException("加密错误，请联系管理员！");
 		}
 	}
 
@@ -151,13 +149,13 @@ public class AESUtil {
 	/**
 	 * 测试
 	 */
-	public static void main(String[] args) throws Exception {
-		String content = "test2";
-		System.out.println("加密前：" + content);
-		System.out.println("加密密钥和解密密钥：" + KEY);
-		String encrypt = aesEncrypt(content, KEY);
-		System.out.println("加密后：" + encrypt);
-		String decrypt = aesDecrypt(encrypt, KEY);
-		System.out.println("解密后：" + decrypt);
-	}
+//	public static void main(String[] args) throws Exception {
+//		String content = "admin";
+//		System.out.println("加密前：" + content);
+//		System.out.println("加密密钥和解密密钥：" + KEY);
+//		String encrypt = aesEncrypt(content, KEY);
+//		System.out.println("加密后：" + encrypt);
+//		String decrypt = aesDecrypt(encrypt, KEY);
+//		System.out.println("解密后：" + decrypt);
+//	}
 }
