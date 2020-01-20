@@ -22,10 +22,7 @@ public class MyHandlerMethodArgumentResolver implements HandlerMethodArgumentRes
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         MyToken annotation = parameter.getParameterAnnotation(MyToken.class);
-        if (annotation != null) {
-            return true;
-        }
-        return false;
+        return annotation != null;
     }
 
     // 使用该解析器时返回什么信息
