@@ -43,6 +43,8 @@ public class WebClientUtil {
         webClientOptions.setCssEnabled(false);
         //是否启用JS
         webClientOptions.setJavaScriptEnabled(false);
+        //开启https
+        webClientOptions.setUseInsecureSSL(true);
         //很重要，设置支持AJAX
         WEB_CLIENT.setAjaxController(new NicelyResynchronizingAjaxController());
     }
@@ -119,7 +121,7 @@ public class WebClientUtil {
                 // 获取下一页的超链接DOM
                 HtmlAnchor next = (HtmlAnchor) aList.get(info.nextAnchorIndex);
                 // 调用自定义方法判断下一页是否还有内容
-                if (info.isEndHref.apply(next.getHrefAttribute())) {
+                if (info.isEndHref.apply(next.getHrefAttribute(), sb)) {
                     break;
                 }
                 // 跳转下一页

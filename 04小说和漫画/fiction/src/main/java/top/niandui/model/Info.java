@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.*;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -39,7 +40,7 @@ public class Info {
     @NotNull(message = "下一页超链接索引，不能为空")
     public Integer nextAnchorIndex;
     @NotNull(message = "方法：是否是结束路径判断，不能为空")
-    public Function<String, Boolean> isEndHref = Info::isEndHrefDefaultMethod;
+    public BiFunction<String, StringBuilder, Boolean> isEndHref = Info::isEndHrefDefaultMethod;
 
     /**
      * 定制标题处理器
@@ -75,9 +76,10 @@ public class Info {
      * 是否是结束路径默认判断方法
      *
      * @param nextPageUrl 下一页URl
+     * @param content     获取的本章内容
      * @return true 是最后一页，false不是最后一页
      */
-    private static Boolean isEndHrefDefaultMethod(String nextPageUrl) {
+    private static Boolean isEndHrefDefaultMethod(String nextPageUrl, StringBuilder content) {
         return !nextPageUrl.toLowerCase().contains("html");
     }
 
