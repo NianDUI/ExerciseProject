@@ -44,28 +44,19 @@ public class SingleChapterReading {
         info.contentXPathExpr = "//div[@id='content']/text()";
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 3;
-        info.isEndHref = SingleChapterReading::isEndHrefDefaultMethod;
-        return info;
-    }
-
-    /**
-     * 是否是结束路径判断方法
-     *
-     * @param nextPageUrl 下一页URl
-     * @param content     获取的本章内容
-     * @return true 是最后一页，false 不是最后一页
-     */
-    private static Boolean isEndHrefDefaultMethod(String nextPageUrl, StringBuilder content) {
+        info.isEndHref = (nextPageUrl, content) -> {
 //        WebClientUtil.saveFile(content.substring(0, content.indexOf("\r\n")) + ".txt",
 //                Arrays.asList(content.toString()));
-        WebClientUtil.saveFile("temp.txt", Arrays.asList(content.toString()));
-        if (nextPageUrl.toLowerCase().contains("html")) {
-            System.out.print("是否获取下一章(1获取)：");
-            String line = sc.nextLine();
-            if ("1".equals(line.trim())) {
-                return false;
+            WebClientUtil.saveFile("temp.txt", Arrays.asList(content.toString()));
+            if (nextPageUrl.toLowerCase().contains("html")) {
+                System.out.print("是否获取下一章(1获取)：");
+                String line = sc.nextLine();
+                if ("1".equals(line.trim())) {
+                    return false;
+                }
             }
-        }
-        return true;
+            return true;
+        };
+        return info;
     }
 }
