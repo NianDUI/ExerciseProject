@@ -1,4 +1,4 @@
-package utils;
+package top.niandui.utils;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;

@@ -4,19 +4,23 @@ import top.niandui.model.Info;
 import top.niandui.utils.WebClientUtil;
 
 /**
- * @Title: BiQuGe_LC.java
- * @description: BiQuGe_LC
+ * @Title: BiQuGe_LU.java
+ * @description: BiQuGe_LU
  * @time: 2020/1/19 11:16
  * @author: liyongda
  * @version: 1.0
  */
-public class BiQuGe_LC {
+public class BiQuGe_LU {
 
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
         /*
-         * 联盟一姐的生活手册.txt http://www.biqige.com/107_107926/35015270.html
+         * 魔法纪元黎明.txt https://www.biquge.lu/book/59471/488362450.html
          */
-        System.out.println("http://www.biqige.com");
+        System.out.println("http://www.biquge.lu");
         WebClientUtil.importInfo(getInfo());
     }
 
@@ -26,11 +30,12 @@ public class BiQuGe_LC {
      */
     public static Info getInfo() {
         Info info = new Info();
-        info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
+        info.titleXPathExpr = "//div[@id='content']/../h1/text()";
+        info.customizeTitleHandler();
         info.contentXPathExpr = "//div[@id='content']/text()";
-        info.contentEndIndexOffset = -3;
-        info.anchorXPathExpr = "//div[@class='bottem2']//a";
-        info.nextAnchorIndex = 3;
+        info.contentEndIndexOffset = -2;
+        info.anchorXPathExpr = "//div[@class='page_chapter']//a";
+        info.nextAnchorIndex = 2;
         return info;
     }
 }

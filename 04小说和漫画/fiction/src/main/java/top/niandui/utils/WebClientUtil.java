@@ -1,4 +1,4 @@
-package utils;
+package top.niandui.utils;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
@@ -7,16 +7,16 @@ import com.gargoylesoftware.htmlunit.WebClientOptions;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.Test;
+import top.niandui.model.Info;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Path;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.metadata.ConstraintDescriptor;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -47,13 +47,45 @@ public class WebClientUtil {
         WEB_CLIENT.setAjaxController(new NicelyResynchronizingAjaxController());
     }
 
+    // 测试数据校验
     @Test
     public void test() {
         Info info = new Info();
         getContext(info);
     }
 
+    /**
+     * 输入相关信息
+     * @param info  获取内容，必要的信息
+     */
+    public static void importInfo(Info info) {
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("请输入小说第一章地址：");
+            info.startUrl = sc.nextLine();
+            System.out.print("请输入小说名称：");
+            String fileName = sc.nextLine();
+            if (!fileName.endsWith(".txt")) {
+                fileName += ".txt";
+            }
+            System.out.println("获取文本...");
+            List<String> list = getContext(info);
+            System.out.println("获取完毕");
+            System.out.println("保存文本...");
+            saveFile(fileName, list);
+            System.out.println("保存完毕");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取小说各章节内容
+     * @param info  获取内容，必要的信息
+     * @return
+     */
     public static List<String> getContext(Info info) {
+        // 数据校验
         Set<ConstraintViolation<Info>> violationSet = VALIDATOR.validate(info);
         for (ConstraintViolation<Info> violation : violationSet) {
             System.out.println(violation.getConstraintDescriptor());
@@ -64,23 +96,33 @@ public class WebClientUtil {
         if (violationSet.size() > 0) {
             System.exit(0);
         }
+        // 获取的文本
         List<String> stringList = new ArrayList<>();
         try {
+            // 获取起始页面
             HtmlPage htmlPage = WEB_CLIENT.getPage(info.startUrl);
             while (true) {
-                List title = htmlPage.getByXPath(info.titleXPathExpr);
-                System.out.println(title.get(0).toString());
-                StringBuilder sb = new StringBuilder().append(title.get(0).toString()).append(info.titleNewLine);
+                // 获取标题DOM列表
+                List titleList = htmlPage.getByXPath(info.titleXPathExpr);
+                // 调用自定义方法处理标题
+                String title = info.titleHandler.apply(titleList.get(0).toString());
+                System.out.println(title);
+                StringBuilder sb = new StringBuilder().append(title).append(info.titleNewLine);
+                // 获取内容DOM列表
                 List list = htmlPage.getByXPath(info.contentXPathExpr);
                 for (int i = 0 + info.contentStartIndexOffset; i < list.size() + info.contentEndIndexOffset; i++) {
                     sb.append(list.get(i).toString()).append(info.contentNewLine);
                 }
                 stringList.add(sb.toString());
+                // 获取跳转超链接DOM列表
                 List aList = htmlPage.getByXPath(info.anchorXPathExpr);
+                // 获取下一页的超链接DOM
                 HtmlAnchor next = (HtmlAnchor) aList.get(info.nextAnchorIndex);
+                // 调用自定义方法判断下一页是否还有内容
                 if (info.isEndHref.apply(next.getHrefAttribute())) {
                     break;
                 }
+                // 跳转下一页
                 htmlPage = next.click();
             }
         } catch (Exception e) {
@@ -89,6 +131,11 @@ public class WebClientUtil {
         return stringList;
     }
 
+    /**
+     * 保存内容到文件
+     * @param fileName 文件路径+名称
+     * @param list     要写入到文件的内容
+     */
     public static void saveFile(String fileName, List<String> list) {
         File target = new File("target");
         if (!target.exists()) {

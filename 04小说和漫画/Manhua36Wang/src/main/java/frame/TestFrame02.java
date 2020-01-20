@@ -1,6 +1,6 @@
 package frame;
 
-import utils.Manhua36Wang;
+import top.niandui.utils.Manhua36Wang;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

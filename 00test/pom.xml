@@ -176,8 +176,39 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                    <layout>ZIP</layout>
+                </configuration>
+<!--                <includes>-->
+<!--                    &lt;!&ndash; 打包时不包含依赖包,打包瘦身 &ndash;&gt;-->
+<!--                    <include>-->
+<!--                        <groupId>nothing</groupId>-->
+<!--                        <artifactId>nothing</artifactId>-->
+<!--                    </include>-->
+<!--                </includes>-->
             </plugin>
         </plugins>
     </build>
+
+    <!--仓库配置 -->
+    <!--<repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>-->
 
 </project>
