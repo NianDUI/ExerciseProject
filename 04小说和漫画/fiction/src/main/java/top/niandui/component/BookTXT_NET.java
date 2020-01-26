@@ -31,7 +31,7 @@ public class BookTXT_NET {
      * 组装Info对象
      * @return
      */
-    public static Info getInfo() {
+    private static Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
         info.customizeTitleHandler();

@@ -27,7 +27,12 @@ public class BiDuo_CC {
         WebClientUtil.importInfo(getInfo());
     }
 
-    public static Info getInfo() {
+
+    /**
+     * 组装Info对象
+     * @return
+     */
+    private static Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
         info.customizeTitleHandler();

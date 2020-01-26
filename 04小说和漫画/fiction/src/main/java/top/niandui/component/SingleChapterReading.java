@@ -35,7 +35,7 @@ public class SingleChapterReading {
      * 组装Info对象
      * @return
      */
-    public static Info getInfo() {
+    private static Info getInfo() {
         Info info = new Info();
         System.out.print("请输入章节地址：");
         info.startUrl = sc.nextLine();

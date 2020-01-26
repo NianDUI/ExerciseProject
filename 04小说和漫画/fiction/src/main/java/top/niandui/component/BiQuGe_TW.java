@@ -4,23 +4,26 @@ import top.niandui.model.Info;
 import top.niandui.utils.WebClientUtil;
 
 /**
- * @Title: BiQuKan_COM.java
- * @description: BiQuKan_COM
- * @time: 2020/1/19 11:19
+ * @Title: BiQuGe_TW.java
+ * @description: BiQuGe_TW
+ * @time: 2020/1/26 21:32
  * @author: liyongda
  * @version: 1.0
  */
-public class BiQuKan_COM {
+public class BiQuGe_TW {
 
     public static void main(String[] args) {
         start();
     }
 
+    /**
+     * 开始方法
+     */
     public static void start() {
         /*
-         * 腾飞我的航空时代.txt https://www.biqukan.com/72_72762/491732466.html
+         * 铜胎掐丝珐琅锻造锤.txt https://www.biquge.tw/488_488711/2548121.html
          */
-        System.out.println("http://www.biqukan.com");
+        System.out.println("http://www.biquge.tw");
         WebClientUtil.importInfo(getInfo());
     }
 
@@ -30,11 +33,11 @@ public class BiQuKan_COM {
      */
     private static Info getInfo() {
         Info info = new Info();
-        info.titleXPathExpr = "//div[@class='content']/h1/text()";
+        info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
+        info.titleNewLine = "";
         info.customizeTitleHandler();
         info.contentXPathExpr = "//div[@id='content']/text()";
-        info.contentEndIndexOffset = -3;
-        info.anchorXPathExpr = "//div[@class='page_chapter']//a";
+        info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 2;
         return info;
     }
