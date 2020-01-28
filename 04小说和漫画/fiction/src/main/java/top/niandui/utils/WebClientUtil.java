@@ -112,7 +112,7 @@ public class WebClientUtil {
                 StringBuilder sb = new StringBuilder().append(title).append(info.titleNewLine);
                 // 获取内容DOM列表
                 List list = htmlPage.getByXPath(info.contentXPathExpr);
-                for (int i = 0 + info.contentStartIndexOffset; i < list.size() + info.contentEndIndexOffset; i++) {
+                for (int i = info.contentStartIndexOffset; i < list.size() + info.contentEndIndexOffset; i++) {
                     sb.append(list.get(i).toString()).append(info.contentNewLine);
                 }
                 stringList.add(sb.toString());
