@@ -1,10 +1,7 @@
 package top.niandui.component;
 
+import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
-import top.niandui.utils.WebClientUtil;
-
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * @Title: BiQuGe_COM.java
@@ -13,25 +10,22 @@ import java.util.Scanner;
  * @author: liyongda
  * @version: 1.0
  */
-public class BiQuGe_COM {
+public class BiQuGe_COM implements IBaseComponent {
 
     public static void main(String[] args) {
+        new BiQuGe_COM().start();
+    }
+
+    @Override
+    public void startBeforePrint() {
         /*
          * 联盟一姐的生活手册.txt http://www.biqige.com/107_107926/35015270.html
          */
         System.out.println("http://www.biqige.com");
-        start();
     }
 
-    public static void start() {
-        WebClientUtil.importInfo(getInfo());
-    }
-
-    /**
-     * 组装Info对象
-     * @return
-     */
-    private static Info getInfo() {
+    @Override
+    public Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
         info.customizeTitleHandler();

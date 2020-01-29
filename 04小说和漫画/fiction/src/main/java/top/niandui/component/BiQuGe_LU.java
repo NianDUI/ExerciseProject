@@ -1,7 +1,7 @@
 package top.niandui.component;
 
+import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
-import top.niandui.utils.WebClientUtil;
 
 /**
  * @Title: BiQuGe_LU.java
@@ -10,25 +10,22 @@ import top.niandui.utils.WebClientUtil;
  * @author: liyongda
  * @version: 1.0
  */
-public class BiQuGe_LU {
+public class BiQuGe_LU implements IBaseComponent {
 
     public static void main(String[] args) {
+        new BiQuGe_LU().start();
+    }
+
+    @Override
+    public void startBeforePrint() {
         /*
          * 魔法纪元黎明.txt https://www.biquge.lu/book/59471/488362450.html
          */
         System.out.println("http://www.biquge.lu");
-        start();
     }
 
-    public static void start() {
-        WebClientUtil.importInfo(getInfo());
-    }
-
-    /**
-     * 组装Info对象
-     * @return
-     */
-    private static Info getInfo() {
+    @Override
+    public Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@id='content']/../h1/text()";
         info.customizeTitleHandler();

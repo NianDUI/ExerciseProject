@@ -5,7 +5,9 @@ import sun.net.www.protocol.jar.JarURLConnection;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -55,15 +57,16 @@ public class Application {
 
     /**
      * 根据组件所在url获取组件名称
+     *
      * @param dirUrl 组件所在url
-     * @return       有哪些组件
+     * @return 有哪些组件
      * @throws IOException
      */
-    public static List<String> getFiles(URL dirUrl) throws IOException {
+    public static List<String> getFiles(URL dirUrl) throws Exception {
         List<String> files = null;
         String protocol = dirUrl.getProtocol();
         if ("file".equals(protocol)) {
-            File dir = new File(dirUrl.getFile());
+            File dir = new File(URLDecoder.decode(dirUrl.getFile(), "utf-8"));
             files = Arrays.asList(Objects.requireNonNull(dir.list((_dir, name) -> name.endsWith(".class"))));
         } else if ("jar".equals(protocol)) {
             files = new ArrayList<>();

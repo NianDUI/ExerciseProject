@@ -1,5 +1,6 @@
 package top.niandui.component;
 
+import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
 import top.niandui.utils.WebClientUtil;
 
@@ -13,29 +14,23 @@ import java.util.Scanner;
  * @author: liyongda
  * @version: 1.0
  */
-public class SingleChapterReading {
-    private static Scanner sc = new Scanner(System.in);
+public class SingleChapterReading implements IBaseComponent {
 
     public static void main(String[] args) {
+        new SingleChapterReading().start();
+    }
+
+    @Override
+    public void startBeforePrint() {
         /*
          * 巫师不朽.txt http://www.booktxt.net/6_6254/3144372.html 324章
          */
         System.out.println("http://www.booktxt.net");
-        start();
     }
 
-    /**
-     * 开始方法
-     */
-    public static void start() {
-        WebClientUtil.getContext(getInfo());
-    }
-
-    /**
-     * 组装Info对象
-     * @return
-     */
-    private static Info getInfo() {
+    @Override
+    public Info getInfo() {
+        Scanner sc = new Scanner(System.in);
         Info info = new Info();
         System.out.print("请输入章节地址：");
         info.startUrl = sc.nextLine();

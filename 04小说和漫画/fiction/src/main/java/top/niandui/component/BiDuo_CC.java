@@ -1,10 +1,7 @@
 package top.niandui.component;
 
+import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
-import top.niandui.utils.WebClientUtil;
-
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * @Title: BiDuo_CC.java
@@ -13,26 +10,22 @@ import java.util.Scanner;
  * @author: liyongda
  * @version: 1.0
  */
-public class BiDuo_CC {
+public class BiDuo_CC implements IBaseComponent {
 
     public static void main(String[] args) {
+        new BiDuo_CC().start();
+    }
+
+    @Override
+    public void startBeforePrint() {
         /*
          * 腾飞我的航空时代.txt https://www.biduo.cc/biquge/53_53393/c22077441.html
          */
         System.out.println("http://www.biduo.cc");
-        start();
     }
 
-    public static void start() {
-        WebClientUtil.importInfo(getInfo());
-    }
-
-
-    /**
-     * 组装Info对象
-     * @return
-     */
-    private static Info getInfo() {
+    @Override
+    public Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
         info.customizeTitleHandler();

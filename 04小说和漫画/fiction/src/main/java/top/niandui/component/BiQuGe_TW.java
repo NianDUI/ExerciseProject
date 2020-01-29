@@ -1,7 +1,7 @@
 package top.niandui.component;
 
+import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
-import top.niandui.utils.WebClientUtil;
 
 /**
  * @Title: BiQuGe_TW.java
@@ -10,28 +10,22 @@ import top.niandui.utils.WebClientUtil;
  * @author: liyongda
  * @version: 1.0
  */
-public class BiQuGe_TW {
+public class BiQuGe_TW implements IBaseComponent {
 
     public static void main(String[] args) {
+        new BiQuGe_TW().start();
+    }
+
+    @Override
+    public void startBeforePrint() {
         /*
          * 铜胎掐丝珐琅锻造锤.txt https://www.biquge.tw/488_488711/2548121.html
          */
         System.out.println("http://www.biquge.tw");
-        start();
     }
 
-    /**
-     * 开始方法
-     */
-    public static void start() {
-        WebClientUtil.importInfo(getInfo());
-    }
-
-    /**
-     * 组装Info对象
-     * @return
-     */
-    private static Info getInfo() {
+    @Override
+    public Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
         info.titleNewLine = "";

@@ -1,7 +1,7 @@
 package top.niandui.component;
 
+import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
-import top.niandui.utils.WebClientUtil;
 
 /**
  * @Title: BiQuGe7_COM.java
@@ -10,25 +10,22 @@ import top.niandui.utils.WebClientUtil;
  * @author: liyongda
  * @version: 1.0
  */
-public class BiQuGe7_COM {
+public class BiQuGe7_COM implements IBaseComponent {
 
     public static void main(String[] args) {
+        new BiQuGe7_COM().start();
+    }
+
+    @Override
+    public void startBeforePrint() {
         /*
          * 科学大佬的文艺生活.txt http://www.biquge7.com/book/5568014/520207084.html
          */
         System.out.println("http://www.biquge7.com");
-        start();
     }
 
-    public static void start() {
-        WebClientUtil.importInfo(getInfo());
-    }
-
-    /**
-     * 组装Info对象
-     * @return
-     */
-    private static Info getInfo() {
+    @Override
+    public Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='content']/h1/text()";
         info.customizeTitleHandler();
