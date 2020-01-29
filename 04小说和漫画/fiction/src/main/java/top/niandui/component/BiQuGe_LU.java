@@ -13,14 +13,14 @@ import top.niandui.utils.WebClientUtil;
 public class BiQuGe_LU {
 
     public static void main(String[] args) {
-        start();
-    }
-
-    public static void start() {
         /*
          * 魔法纪元黎明.txt https://www.biquge.lu/book/59471/488362450.html
          */
         System.out.println("http://www.biquge.lu");
+        start();
+    }
+
+    public static void start() {
         WebClientUtil.importInfo(getInfo());
     }
 

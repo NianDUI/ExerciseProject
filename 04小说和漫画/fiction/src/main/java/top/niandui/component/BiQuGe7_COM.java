@@ -13,14 +13,14 @@ import top.niandui.utils.WebClientUtil;
 public class BiQuGe7_COM {
 
     public static void main(String[] args) {
-        start();
-    }
-
-    public static void start() {
         /*
          * 科学大佬的文艺生活.txt http://www.biquge7.com/book/5568014/520207084.html
          */
         System.out.println("http://www.biquge7.com");
+        start();
+    }
+
+    public static void start() {
         WebClientUtil.importInfo(getInfo());
     }
 

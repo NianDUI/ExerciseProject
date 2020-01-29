@@ -13,6 +13,10 @@ import top.niandui.utils.WebClientUtil;
 public class BookTXT_NET {
 
     public static void main(String[] args) {
+        /*
+         * 巫师不朽.txt https://www.booktxt.net/6_6254/2363524.html
+         */
+        System.out.println("http://www.booktxt.net");
         start();
     }
 
@@ -20,10 +24,6 @@ public class BookTXT_NET {
      * 开始方法
      */
     public static void start() {
-        /*
-         * 巫师不朽.txt https://www.booktxt.net/6_6254/2363524.html
-         */
-        System.out.println("http://www.booktxt.net");
         WebClientUtil.importInfo(getInfo());
     }
 

@@ -17,6 +17,10 @@ public class SingleChapterReading {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        /*
+         * 巫师不朽.txt http://www.booktxt.net/6_6254/3144372.html 324章
+         */
+        System.out.println("http://www.booktxt.net");
         start();
     }
 
@@ -24,10 +28,6 @@ public class SingleChapterReading {
      * 开始方法
      */
     public static void start() {
-        /*
-         * 巫师不朽.txt http://www.booktxt.net/6_6254/3144372.html 324章
-         */
-        System.out.println("http://www.booktxt.net");
         WebClientUtil.getContext(getInfo());
     }
 

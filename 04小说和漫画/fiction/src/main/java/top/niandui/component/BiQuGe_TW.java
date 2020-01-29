@@ -13,6 +13,10 @@ import top.niandui.utils.WebClientUtil;
 public class BiQuGe_TW {
 
     public static void main(String[] args) {
+        /*
+         * 铜胎掐丝珐琅锻造锤.txt https://www.biquge.tw/488_488711/2548121.html
+         */
+        System.out.println("http://www.biquge.tw");
         start();
     }
 
@@ -20,10 +24,6 @@ public class BiQuGe_TW {
      * 开始方法
      */
     public static void start() {
-        /*
-         * 铜胎掐丝珐琅锻造锤.txt https://www.biquge.tw/488_488711/2548121.html
-         */
-        System.out.println("http://www.biquge.tw");
         WebClientUtil.importInfo(getInfo());
     }
 

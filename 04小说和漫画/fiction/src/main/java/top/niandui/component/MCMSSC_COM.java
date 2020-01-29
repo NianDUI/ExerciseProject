@@ -13,6 +13,10 @@ import top.niandui.utils.WebClientUtil;
 public class MCMSSC_COM {
 
     public static void main(String[] args) {
+        /*
+         * 我的女友是声优.txt http://www.mcmssc.com/90_90956/38213658.html
+         */
+        System.out.println("http://www.mcmssc.com");
         start();
     }
 
@@ -20,10 +24,6 @@ public class MCMSSC_COM {
      * 开始方法
      */
     public static void start() {
-        /*
-         * 我的女友是声优.txt http://www.mcmssc.com/90_90956/38213658.html
-         */
-        System.out.println("http://www.mcmssc.com");
         WebClientUtil.importInfo(getInfo());
     }
 

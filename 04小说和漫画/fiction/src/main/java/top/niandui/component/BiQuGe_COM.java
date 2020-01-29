@@ -16,14 +16,14 @@ import java.util.Scanner;
 public class BiQuGe_COM {
 
     public static void main(String[] args) {
-        start();
-    }
-
-    public static void start() {
         /*
          * 联盟一姐的生活手册.txt http://www.biqige.com/107_107926/35015270.html
          */
         System.out.println("http://www.biqige.com");
+        start();
+    }
+
+    public static void start() {
         WebClientUtil.importInfo(getInfo());
     }
 

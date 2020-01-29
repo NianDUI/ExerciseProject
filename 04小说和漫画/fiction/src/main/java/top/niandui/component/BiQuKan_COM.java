@@ -13,14 +13,14 @@ import top.niandui.utils.WebClientUtil;
 public class BiQuKan_COM {
 
     public static void main(String[] args) {
-        start();
-    }
-
-    public static void start() {
         /*
          * 腾飞我的航空时代.txt https://www.biqukan.com/72_72762/491732466.html
          */
         System.out.println("http://www.biqukan.com");
+        start();
+    }
+
+    public static void start() {
         WebClientUtil.importInfo(getInfo());
     }
 
