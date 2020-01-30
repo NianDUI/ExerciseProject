@@ -174,7 +174,7 @@ public class WebClientUtil {
         }
         String pathname = "target/" + fileName;
         try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pathname), StandardCharsets.UTF_8));
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pathname, append), StandardCharsets.UTF_8));
             for (String str : list) {
                 bw.write(str);
             }
