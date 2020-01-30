@@ -6,13 +6,17 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebClientOptions;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import top.niandui.model.Info;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,19 +67,33 @@ public class WebClientUtil {
     public static void importInfo(Info info) {
         try {
             Scanner sc = new Scanner(System.in);
-            System.out.print("请输入小说第一章地址：");
-            info.startUrl = sc.nextLine();
-            System.out.print("请输入小说名称：");
-            String fileName = sc.nextLine();
-            if (!fileName.endsWith(".txt")) {
-                fileName += ".txt";
+            if (StringUtils.isBlank(info.startUrl)) {
+                String line = StringUtils.EMPTY;
+                while ("".equals(line)) {
+                    System.out.print("请输入章节地址：");
+                    line = sc.nextLine().trim();
+                }
+                info.startUrl = line;
+            }
+            if (StringUtils.isBlank(info.fileName)) {
+                String line = StringUtils.EMPTY;
+                while ("".equals(line)) {
+                    System.out.print("请输入保存文件名称：");
+                    line = sc.nextLine().trim();
+                }
+                info.fileName = line;
+            }
+            if (!info.fileName.endsWith(".txt")) {
+                info.fileName += ".txt";
             }
             System.out.println("获取文本...");
             List<String> list = getContext(info);
             System.out.println("获取完毕");
-            System.out.println("保存文本...");
-            saveFile(fileName, list);
-            System.out.println("保存完毕");
+            if (info.isSaveFile) {
+                System.out.println("保存文本...");
+                saveFile(info.fileName, list, info.isAppendSave);
+                System.out.println("保存完毕");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,7 +125,17 @@ public class WebClientUtil {
                 // 获取标题DOM列表
                 List titleList = htmlPage.getByXPath(info.titleXPathExpr);
                 // 调用自定义方法处理标题
-                String title = info.titleHandler.apply(titleList.get(0).toString());
+                String title;
+                try {
+                    title = info.titleHandler.apply(titleList.get(0).toString());
+                } catch (Exception e) {
+                    // 获取内容出错时，为服务端限制，重新拉去该页面。
+                    // Index: 0, Size: 0
+                    System.out.println(e.getMessage());
+                    Thread.sleep((long) (Math.random() * 4000 + 2000));
+                    htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
+                    continue;
+                }
                 System.out.println(title);
                 StringBuilder sb = new StringBuilder().append(title).append(info.titleNewLine);
                 // 获取内容DOM列表
@@ -137,8 +165,9 @@ public class WebClientUtil {
      * 保存内容到文件
      * @param fileName 文件路径+名称
      * @param list     要写入到文件的内容
+     * @param append   是否追加写入
      */
-    public static void saveFile(String fileName, List<String> list) {
+    public static void saveFile(String fileName, List<String> list, boolean append) {
         File target = new File("target");
         if (!target.exists()) {
             target.mkdirs();

@@ -25,24 +25,20 @@ public class SingleChapterReading implements IBaseComponent {
         /*
          * 巫师不朽.txt http://www.booktxt.net/6_6254/3144372.html 324章
          */
-        System.out.println("http://www.booktxt.net");
     }
 
     @Override
     public Info getInfo() {
         Scanner sc = new Scanner(System.in);
         Info info = new Info();
-        System.out.print("请输入章节地址：");
-        info.startUrl = sc.nextLine();
+        info.startUrl = "http://www.mcmssc.com/90_90956/38213658.html";
+        info.fileName = "aa";
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
-        info.customizeTitleHandler();
         info.contentXPathExpr = "//div[@id='content']/text()";
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 3;
         info.isEndHref = (nextPageUrl, content) -> {
-//        WebClientUtil.saveFile(content.substring(0, content.indexOf("\r\n")) + ".txt",
-//                Arrays.asList(content.toString()));
-            WebClientUtil.saveFile("temp.txt", Arrays.asList(content.toString()));
+            WebClientUtil.saveFile(info.fileName, Arrays.asList(content.toString()), info.isAppendSave);
             if (nextPageUrl.toLowerCase().contains("html")) {
                 System.out.print("是否获取下一章(1获取)：");
                 String line = sc.nextLine();
@@ -52,6 +48,7 @@ public class SingleChapterReading implements IBaseComponent {
             }
             return true;
         };
+        info.isSaveFile = false;
         return info;
     }
 }

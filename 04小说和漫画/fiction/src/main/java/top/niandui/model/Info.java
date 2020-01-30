@@ -41,6 +41,12 @@ public class Info {
     public Integer nextAnchorIndex;
     @NotNull(message = "方法：是否是结束路径判断，不能为空")
     public BiFunction<String, StringBuilder, Boolean> isEndHref = Info::isEndHrefDefaultMethod;
+    @NotBlank(message = "保存文件名称，不能为空")
+    public String fileName;
+    @NotNull(message = "是否保存为文件，不能为空")
+    public Boolean isSaveFile = true;
+    @NotNull(message = "是否追加保存，不能为空")
+    public Boolean isAppendSave = false;
 
     /**
      * 定制标题处理器
@@ -63,7 +69,7 @@ public class Info {
      * @param delimiter 分割符
      * @return
      */
-    private static String titleHandler(String title, String delimiter) {
+    public static String titleHandler(String title, String delimiter) {
         int index = title.indexOf(delimiter);
         if (index >= 0) {
             System.out.print(title + " -> ");
@@ -79,7 +85,7 @@ public class Info {
      * @param content     获取的本章内容
      * @return true 是最后一页，false不是最后一页
      */
-    private static Boolean isEndHrefDefaultMethod(String nextPageUrl, StringBuilder content) {
+    public static Boolean isEndHrefDefaultMethod(String nextPageUrl, StringBuilder content) {
         return !nextPageUrl.toLowerCase().contains("html");
     }
 
