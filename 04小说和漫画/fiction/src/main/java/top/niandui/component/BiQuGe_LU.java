@@ -22,6 +22,7 @@ public class BiQuGe_LU implements IBaseComponent {
          * 魔法纪元黎明.txt https://www.biquge.lu/book/59471/488362450.html
          */
         System.out.println("http://www.biquge.lu");
+        System.out.println("http://www.biqumo.com");
     }
 
     @Override
