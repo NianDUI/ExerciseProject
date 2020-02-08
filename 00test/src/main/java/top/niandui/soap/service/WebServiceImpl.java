@@ -1,5 +1,6 @@
 package top.niandui.soap.service;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -13,7 +14,7 @@ import javax.jws.WebService;
 public class WebServiceImpl implements IWebService {
 
     @Override
-    public String sayHello(String name) {
+    public String sayHello(@WebParam(name = "name") String name) {
         name = "你好：" + name;
         return name;
     }
