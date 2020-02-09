@@ -7,6 +7,7 @@ import javax.validation.constraints.*;
 import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @Title: Info.java
@@ -47,6 +48,17 @@ public class Info {
     public Boolean isSaveFile = true;
     @NotNull(message = "是否追加保存，不能为空")
     public Boolean isAppendSave = false;
+    @NotNull(message = "方法：休眠处理，不能为空")
+    public Supplier<Long> sleepHandler = () -> {
+        long sleepTime = (long) (Math.random() * 4000 + 2000);
+        try {
+            System.out.println("sleep：" + (sleepTime / 1000.0) + "s");
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sleepTime;
+    };
 
     /**
      * 定制标题处理器

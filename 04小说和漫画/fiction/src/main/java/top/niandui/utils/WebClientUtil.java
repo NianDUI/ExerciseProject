@@ -132,7 +132,8 @@ public class WebClientUtil {
                     // 获取内容出错时，为服务端限制，重新拉去该页面。
                     // Index: 0, Size: 0
                     System.out.println(e.getMessage());
-                    Thread.sleep((long) (Math.random() * 4000 + 2000));
+                    // 调用休眠处理方法
+                    info.sleepHandler.get();
                     htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
                     continue;
                 }
