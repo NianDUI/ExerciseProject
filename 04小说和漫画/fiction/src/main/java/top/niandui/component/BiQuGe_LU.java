@@ -23,6 +23,7 @@ public class BiQuGe_LU implements IBaseComponent {
          */
         System.out.println("http://www.biquge.lu");
         System.out.println("http://www.biqumo.com");
+        System.out.println("http://www.bqg99.cc");
     }
 
     @Override
