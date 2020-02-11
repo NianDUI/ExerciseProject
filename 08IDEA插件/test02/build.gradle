@@ -6,6 +6,10 @@ plugins {
 group 'top.niandui'
 version '1.0-SNAPSHOT'
 
+apply plugin: "org.jetbrains.intellij"
+apply plugin: 'java'
+apply plugin: 'idea'
+
 sourceCompatibility = 1.8
 
 repositories {
@@ -24,6 +28,8 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version '2019.3.1'
+//    version = '2017.3' //调试我们插件的版本
+    sandboxDirectory = project.rootDir.canonicalPath + "/.sandbox" //插件生成的临时文件的地址，可以省略
 }
 patchPluginXml {
     changeNotes """

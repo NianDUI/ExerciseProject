@@ -18,5 +18,8 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="MyAnAction" class="MyAnAction" text="MyAnAction Name" description="MyAnAction Des">
+            <add-to-group group-id="ToolsMenu" anchor="last"></add-to-group>
+        </action>
     </actions>
 </idea-plugin>

@@ -9,3 +9,7 @@ classes/
 # */ 这个斜杠代表 * 下的文件夹
 # * 任意文件
 # ** 代表层次（目录）
+
+lombok-intellij-plugin/
+OAuth2.0Demo/
+soap/
