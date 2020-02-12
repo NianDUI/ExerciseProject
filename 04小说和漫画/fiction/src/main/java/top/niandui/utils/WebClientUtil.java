@@ -127,7 +127,7 @@ public class WebClientUtil {
                 // 调用自定义方法处理标题
                 String title;
                 try {
-                    title = info.titleHandler.apply(titleList.get(0).toString());
+                    title = info.titleHandler.apply(titleList.get(0).toString().trim());
                 } catch (Exception e) {
                     // 获取内容出错时，为服务端限制，重新拉去该页面。
                     // Index: 0, Size: 0
@@ -150,7 +150,7 @@ public class WebClientUtil {
                 // 获取下一页的超链接DOM
                 HtmlAnchor next = (HtmlAnchor) aList.get(info.nextAnchorIndex);
                 // 调用自定义方法判断下一页是否还有内容
-                if (info.isEndHref.apply(next.getHrefAttribute(), sb)) {
+                if (info.isEndHref.apply(next.getHrefAttribute().trim(), sb)) {
                     break;
                 }
                 // 跳转下一页

@@ -65,27 +65,32 @@ public class Info {
      */
     public void customizeTitleHandler() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("是否对标题进行处理(1处理,其他不处理)：");
-        if ("1".equals(sc.nextLine().trim())) {
-            System.out.println("处理示例：123(分割符)xxx -> 第123章 xxx");
+        System.out.println("1: 使用分隔符。示例：123(分割符)xxx -> 第123章 xxx");
+        System.out.println("2: 数字开头无分隔符。示例：123xxx -> 第123章 xxx");
+        System.out.print("是否对标题进行处理(其他不处理)：");
+        String line = sc.nextLine().trim();
+        if ("1".equals(line)) {
             System.out.print("请输入分隔符：");
             String delimiter = sc.nextLine();
-            titleHandler = title -> titleHandler(title, delimiter);
+            titleHandler = title -> titleHandler(title, delimiter, delimiter.length());
+        } else if ("2".equals(line)) {
+            titleHandler = title -> titleHandler(title, title.replaceAll("^\\d*", ""), 0);
         }
     }
 
     /**
-     * 标题处理方法1：123(分割符)xxx -> 第123章 xxx
+     * 标题分割处理方法1：123(分割符)xxx -> 第123章 xxx
      *
      * @param title     标题
      * @param delimiter 分割符
+     * @param delLength 分割长度
      * @return
      */
-    public static String titleHandler(String title, String delimiter) {
+    public static String titleHandler(String title, String delimiter, int delLength) {
         int index = title.indexOf(delimiter);
         if (index >= 0) {
             System.out.print(title + " -> ");
-            title = "第" + title.substring(0, index).trim() + "章 " + title.substring(index + delimiter.length()).trim();
+            title = "第" + title.substring(0, index).trim() + "章 " + title.substring(index + delLength).trim();
         }
         return title;
     }
