@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: BiQuGe_TW.java
@@ -21,8 +22,8 @@ public class BiQuGe_TW implements IBaseComponent {
         /*
          * 铜胎掐丝珐琅锻造锤.txt https://www.biquge.tw/488_488711/2548121.html
          */
-        System.out.println("http://www.biquge.tw");
-        System.out.println("http://www.e8zw.com");
+        PrintUtil.println("\thttp://www.biquge.tw");
+        PrintUtil.println("\thttp://www.e8zw.com");
     }
 
     @Override

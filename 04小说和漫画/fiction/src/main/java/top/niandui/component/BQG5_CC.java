@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: BQG5_CC.java
@@ -21,7 +22,7 @@ public class BQG5_CC implements IBaseComponent {
         /*
          * 信息空间.txt https://www.bqg5.cc/128_128660/171885147.html
          */
-        System.out.println("http://www.bqg5.cc");
+        PrintUtil.println("\thttp://www.bqg5.cc");
     }
 
     @Override

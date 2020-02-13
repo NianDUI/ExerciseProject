@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: BiQuGer_COM.java
@@ -21,7 +22,7 @@ public class BiQuGer_COM implements IBaseComponent {
         /*
          * 魔法的学术时代.txt http://www.biquger.com/biquge/112679/45424996
          */
-        System.out.println("http://www.biquger.com");
+        PrintUtil.println("\thttp://www.biquger.com");
     }
 
     @Override

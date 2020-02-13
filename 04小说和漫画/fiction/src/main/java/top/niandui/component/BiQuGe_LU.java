@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: BiQuGe_LU.java
@@ -21,9 +22,9 @@ public class BiQuGe_LU implements IBaseComponent {
         /*
          * 魔法纪元黎明.txt https://www.biquge.lu/book/59471/488362450.html
          */
-        System.out.println("http://www.biquge.lu");
-        System.out.println("http://www.biqumo.com");
-        System.out.println("http://www.bqg99.cc");
+        PrintUtil.println("\thttp://www.biquge.lu");
+        PrintUtil.println("\thttp://www.biqumo.com");
+        PrintUtil.println("\thttp://www.bqg99.cc");
     }
 
     @Override

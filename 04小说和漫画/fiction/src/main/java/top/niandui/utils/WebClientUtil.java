@@ -11,6 +11,7 @@ import org.junit.Test;
 import top.niandui.model.Info;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.BufferedWriter;
@@ -57,6 +58,9 @@ public class WebClientUtil {
     @Test
     public void test() {
         Info info = new Info();
+        info.startUrl = "http://localhost:9001/doc.html/阿斯顿发?ie=UTF-8&wd=deque等&xx=xx";
+//        info.startUrl = "http://localhost:9001/doc.html/阿斯顿发";
+        info.contentStartIndexOffset = -1;
         getContext(info);
     }
 
@@ -70,7 +74,7 @@ public class WebClientUtil {
             if (StringUtils.isBlank(info.startUrl)) {
                 String line = StringUtils.EMPTY;
                 while ("".equals(line)) {
-                    System.out.print("请输入章节地址：");
+                    PrintUtil.print("请输入章节地址：");
                     line = sc.nextLine().trim();
                 }
                 info.startUrl = line;
@@ -78,7 +82,7 @@ public class WebClientUtil {
             if (StringUtils.isBlank(info.fileName)) {
                 String line = StringUtils.EMPTY;
                 while ("".equals(line)) {
-                    System.out.print("请输入保存文件名称：");
+                    PrintUtil.print("请输入保存文件名称：");
                     line = sc.nextLine().trim();
                 }
                 info.fileName = line;
@@ -86,16 +90,16 @@ public class WebClientUtil {
             if (!info.fileName.endsWith(".txt")) {
                 info.fileName += ".txt";
             }
-            System.out.println("获取文本...");
+            PrintUtil.println("获取文本...");
             List<String> list = getContext(info);
-            System.out.println("获取完毕");
+            PrintUtil.println("获取完毕");
             if (info.isSaveFile) {
-                System.out.println("保存文本...");
+                PrintUtil.println("保存文本...");
                 saveFile(info.fileName, list, info.isAppendSave);
-                System.out.println("保存完毕");
+                PrintUtil.println("保存完毕");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PrintUtil.println(e);
         }
     }
 
@@ -108,17 +112,17 @@ public class WebClientUtil {
         // 数据校验
         Set<ConstraintViolation<Info>> violationSet = VALIDATOR.validate(info);
         for (ConstraintViolation<Info> violation : violationSet) {
-            System.out.println(violation.getConstraintDescriptor());
+            PrintUtil.println("------------------------------");
+            PrintUtil.println(violation.getConstraintDescriptor().getAttributes());
             String message = violation.getRootBeanClass() + ": " + violation.getPropertyPath() + " = " + violation.getInvalidValue() + "; " + violation.getMessage();
-            System.out.println(message);
-            System.out.println("------------------------------");
+            PrintUtil.println(message);
         }
         if (violationSet.size() > 0) {
-            System.exit(0);
+            SystemUtil.exit(0);
         }
-        // 获取的文本
-        List<String> stringList = new ArrayList<>();
         try {
+            // 获取的文本
+            List<String> stringList = new ArrayList<>();
             // 获取起始页面
             HtmlPage htmlPage = WEB_CLIENT.getPage(info.startUrl);
             while (true) {
@@ -131,13 +135,13 @@ public class WebClientUtil {
                 } catch (Exception e) {
                     // 获取内容出错时，为服务端限制，重新拉去该页面。
                     // Index: 0, Size: 0
-                    System.out.println(e.getMessage());
+                    PrintUtil.println(e.getMessage());
                     // 调用休眠处理方法
                     info.sleepHandler.get();
                     htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
                     continue;
                 }
-                System.out.println(title);
+                PrintUtil.println(title);
                 StringBuilder sb = new StringBuilder().append(title).append(info.titleNewLine);
                 // 获取内容DOM列表
                 List list = htmlPage.getByXPath(info.contentXPathExpr);
@@ -156,10 +160,13 @@ public class WebClientUtil {
                 // 跳转下一页
                 htmlPage = next.click();
             }
+            return stringList;
         } catch (Exception e) {
-            e.printStackTrace();
+            PrintUtil.println(e);
+            PrintUtil.println("获取失败...");
+            SystemUtil.exit(0);
+            throw new RuntimeException();
         }
-        return stringList;
     }
 
     /**
@@ -182,7 +189,7 @@ public class WebClientUtil {
             bw.flush();
             bw.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            PrintUtil.println(e);
         }
     }
 }

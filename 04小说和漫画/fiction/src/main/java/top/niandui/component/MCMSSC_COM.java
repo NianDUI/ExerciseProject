@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: MCMSSC_COM.java
@@ -21,7 +22,7 @@ public class MCMSSC_COM implements IBaseComponent {
         /*
          * 我的女友是声优.txt http://www.mcmssc.com/90_90956/38213658.html
          */
-        System.out.println("http://www.mcmssc.com");
+        PrintUtil.println("\thttp://www.mcmssc.com");
     }
 
     @Override

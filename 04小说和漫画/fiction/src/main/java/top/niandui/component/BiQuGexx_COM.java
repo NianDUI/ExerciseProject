@@ -5,35 +5,35 @@ import top.niandui.model.Info;
 import top.niandui.utils.PrintUtil;
 
 /**
- * @Title: BiDuo_CC.java
- * @description: BiDuo_CC
- * @time: 2020/1/19 11:00
+ * @Title: BiQuGexx_COM.java
+ * @description: BiQuGexx_COM
+ * @time: 2020/1/19 11:22
  * @author: liyongda
  * @version: 1.0
  */
-public class BiDuo_CC implements IBaseComponent {
+public class BiQuGexx_COM implements IBaseComponent {
 
     public static void main(String[] args) {
-        new BiDuo_CC().start();
+        new BiQuGexx_COM().start();
     }
 
     @Override
     public void startBeforePrint() {
         /*
-         * 腾飞我的航空时代.txt https://www.biduo.cc/biquge/53_53393/c22077441.html
+         * 科技霸权.txt https://www.biqugexx.com/70_70265/16165726.html
          */
-        PrintUtil.println("\thttp://www.biduo.cc");
+        PrintUtil.println("\thttp://www.biqugexx.com");
     }
 
     @Override
     public Info getInfo() {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
+        info.titleNewLine = "";
         info.customizeTitleHandler();
         info.contentXPathExpr = "//div[@id='content']/text()";
-        info.contentEndIndexOffset = -3;
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
-        info.nextAnchorIndex = 2;
+        info.nextAnchorIndex = 3;
         return info;
     }
 }

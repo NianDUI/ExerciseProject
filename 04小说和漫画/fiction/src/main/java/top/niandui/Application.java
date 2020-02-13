@@ -1,11 +1,12 @@
 package top.niandui;
 
 import sun.net.www.protocol.jar.JarURLConnection;
+import top.niandui.model.IBaseComponent;
+import top.niandui.utils.PrintUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
@@ -23,32 +24,27 @@ public class Application {
 
     public static void main(String[] args) {
         try {
-            List<String> files = getFiles(ClassLoader.getSystemResource("top/niandui/component"));
-            for (int i = 0; i < files.size(); i++) {
-                files.set(i, files.get(i).substring(0, files.get(i).indexOf('.')));
-                System.out.println((i + 1) + "：" + files.get(i));
+            List<IBaseComponent> components = getFiles(ClassLoader.getSystemResource("top/niandui/component"));
+            for (int i = 0; i < components.size(); i++) {
+                String print = (i + 1) + "：" + components.get(i).getClass().getSimpleName();
+                PrintUtil.println(print);
+                components.get(i).startBeforePrint();
             }
             Scanner sc = new Scanner(System.in);
-            String tip = "请选择组件(1-" + files.size() + ")：";
-            System.out.print(tip);
+            String tip = "请选择组件(1-" + components.size() + ")：";
+            PrintUtil.print(tip);
             String line;
-            String comName;
             while (true) {
                 line = sc.nextLine();
                 try {
                     int index = Integer.parseInt(line) - 1;
-                    if (index >= 0 && index < files.size()) {
-                        comName = files.get(index);
+                    if (index >= 0 && index < components.size()) {
+                        components.get(index).start();
                         break;
                     }
                 } catch (Exception ex) {
-                    System.out.print(tip);
+                    PrintUtil.print(tip);
                 }
-            }
-            if (comName != null) {
-                Class<?> comClass = Class.forName("top.niandui.component." + comName);
-                Method startMethod = comClass.getMethod("start");
-                startMethod.invoke(comClass.newInstance());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +58,7 @@ public class Application {
      * @return 有哪些组件
      * @throws IOException
      */
-    public static List<String> getFiles(URL dirUrl) throws Exception {
+    public static List<IBaseComponent> getFiles(URL dirUrl) throws Exception {
         List<String> files = null;
         String protocol = dirUrl.getProtocol();
         if ("file".equals(protocol)) {
@@ -86,6 +82,11 @@ public class Application {
                 }
             }
         }
-        return files == null ? Collections.EMPTY_LIST : files;
+        files = files == null ? Collections.EMPTY_LIST : files;
+        List<IBaseComponent> list = new ArrayList<>();
+        for (String file : files) {
+            list.add((IBaseComponent) (Class.forName("top.niandui.component." + file.substring(0, file.indexOf('.'))).newInstance()));
+        }
+        return list;
     }
 }

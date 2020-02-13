@@ -2,6 +2,7 @@ package top.niandui.model;
 
 
 import lombok.ToString;
+import top.niandui.utils.PrintUtil;
 
 import javax.validation.constraints.*;
 import java.util.Scanner;
@@ -18,7 +19,8 @@ import java.util.function.Supplier;
  */
 @ToString
 public class Info {
-    @NotBlank(message = "起始页URL，不能为空")
+    @Pattern(regexp = "https?://[-A-Za-z0-9+@#/%=~_|.:\\u4e00-\\u9fa5]+(\\?[-A-Za-z0-9+&@#/%=~_|\\u4e00-\\u9fa5]*)?", message = "起始地址错误")
+    @NotBlank(message = "起始地址，不能为空")
     public String startUrl;
     @NotBlank(message = "标题匹配路径，不能为空")
     public String titleXPathExpr;
@@ -52,10 +54,10 @@ public class Info {
     public Supplier<Long> sleepHandler = () -> {
         long sleepTime = (long) (Math.random() * 4000 + 2000);
         try {
-            System.out.println("sleep：" + (sleepTime / 1000.0) + "s");
+            PrintUtil.println("sleep：" + (sleepTime / 1000.0) + "s");
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            PrintUtil.println(e);
         }
         return sleepTime;
     };
@@ -65,12 +67,12 @@ public class Info {
      */
     public void customizeTitleHandler() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("1: 使用分隔符。示例：123(分割符)xxx -> 第123章 xxx");
-        System.out.println("2: 数字开头无分隔符。示例：123xxx -> 第123章 xxx");
-        System.out.print("是否对标题进行处理(其他不处理)：");
+        PrintUtil.println("1: 使用分隔符。示例：123(分割符)xxx -> 第123章 xxx");
+        PrintUtil.println("2: 数字开头无分隔符。示例：123xxx -> 第123章 xxx");
+        PrintUtil.print("是否对标题进行处理(其他不处理)：");
         String line = sc.nextLine().trim();
         if ("1".equals(line)) {
-            System.out.print("请输入分隔符：");
+            PrintUtil.print("请输入分隔符：");
             String delimiter = sc.nextLine();
             titleHandler = title -> titleHandler(title, delimiter, delimiter.length());
         } else if ("2".equals(line)) {

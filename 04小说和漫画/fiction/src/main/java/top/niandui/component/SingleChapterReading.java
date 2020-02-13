@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 import top.niandui.utils.WebClientUtil;
 
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class SingleChapterReading implements IBaseComponent {
         info.isEndHref = (nextPageUrl, content) -> {
             WebClientUtil.saveFile(info.fileName, Arrays.asList(content.toString()), info.isAppendSave);
             if (nextPageUrl.toLowerCase().contains("html")) {
-                System.out.print("是否获取下一章(1获取)：");
+                PrintUtil.print("是否获取下一章(1获取)：");
                 String line = sc.nextLine();
                 if ("1".equals(line.trim())) {
                     return false;

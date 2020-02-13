@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 import java.lang.reflect.Method;
 
@@ -23,7 +24,7 @@ public class BiQuGe_INFO implements IBaseComponent {
         /*
          * 饲养全人类.txt http://www.biquge.info/69_69120/12898729.html
          */
-        System.out.println("http://www.biquge.info");
+        PrintUtil.println("\thttp://www.biquge.info");
     }
 
     @Override

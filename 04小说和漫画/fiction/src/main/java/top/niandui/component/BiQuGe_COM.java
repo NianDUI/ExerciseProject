@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: BiQuGe_COM.java
@@ -21,7 +22,7 @@ public class BiQuGe_COM implements IBaseComponent {
         /*
          * 联盟一姐的生活手册.txt http://www.biqige.com/107_107926/35015270.html
          */
-        System.out.println("http://www.biqige.com");
+        PrintUtil.println("\thttp://www.biqige.com");
     }
 
     @Override

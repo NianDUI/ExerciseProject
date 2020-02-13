@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 import javax.swing.border.TitledBorder;
 
@@ -23,8 +24,8 @@ public class BookTXT_NET implements IBaseComponent {
         /*
          * 巫师不朽.txt https://www.booktxt.net/6_6254/2363524.html
          */
-        System.out.println("http://www.booktxt.net");
-        System.out.println("http://www.bxquge.com");
+        PrintUtil.println("\thttp://www.booktxt.net");
+        PrintUtil.println("\thttp://www.bxquge.com");
         // bxquge.com: info.titleHandler = title -> title.substring(6);
     }
 

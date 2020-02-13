@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: BoQuGe_COM.java
@@ -22,7 +23,7 @@ public class BoQuGe_COM implements IBaseComponent {
          * 大明的工业革命.txt https://www.boquge.com/book/116114/167888770.html
          * https://www.boquge.com/book/116114/169505845.html
          */
-        System.out.println("http://www.boquge.com");
+        PrintUtil.println("\thttp://www.boquge.com");
     }
 
     @Override

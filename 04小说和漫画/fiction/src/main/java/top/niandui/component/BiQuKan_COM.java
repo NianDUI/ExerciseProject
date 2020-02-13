@@ -2,6 +2,7 @@ package top.niandui.component;
 
 import top.niandui.model.IBaseComponent;
 import top.niandui.model.Info;
+import top.niandui.utils.PrintUtil;
 
 /**
  * @Title: BiQuKan_COM.java
@@ -21,7 +22,7 @@ public class BiQuKan_COM implements IBaseComponent {
         /*
          * 腾飞我的航空时代.txt https://www.biqukan.com/72_72762/491732466.html
          */
-        System.out.println("http://www.biqukan.com");
+        PrintUtil.println("\thttp://www.biqukan.com");
     }
 
     @Override
