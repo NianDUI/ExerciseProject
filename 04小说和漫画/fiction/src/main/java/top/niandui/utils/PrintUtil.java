@@ -25,6 +25,7 @@ public class PrintUtil {
 
         @SneakyThrows
         @Override
+
         public void run() {
             while (true) {
                 System.out.print(PRINT_QUEUE.take());
@@ -40,17 +41,31 @@ public class PrintUtil {
         thread.start();
     }
 
-    // 无换行输出
+    /**
+     * 无换行输出
+     *
+     * @param content 控制台打印的内容
+     * @return
+     */
     public static boolean print(Object content) {
         return PRINT_QUEUE.add(content.toString());
     }
 
-    // 有换行输出
+    /**
+     * 有换行输出
+     *
+     * @param content 控制台打印的内容
+     * @return
+     */
     public static boolean println(Object content) {
         return print(content.toString() + NEW_LINE);
     }
 
-    // 打印队列是否为空
+    /**
+     * 打印队列是否为空
+     *
+     * @return
+     */
     public static boolean isEmpty() {
         return PRINT_QUEUE.isEmpty();
     }

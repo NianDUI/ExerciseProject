@@ -8,7 +8,13 @@ package top.niandui.utils;
  * @version: 1.0
  */
 public class SystemUtil {
-    public static void exit(int status){
+
+    /**
+     * 结束运行
+     *
+     * @param status 退出状态码
+     */
+    public static void exit(int status) {
         while (!PrintUtil.isEmpty()) {
             try {
                 Thread.sleep(100);
