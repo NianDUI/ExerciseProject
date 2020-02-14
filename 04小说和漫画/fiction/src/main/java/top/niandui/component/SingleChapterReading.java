@@ -38,9 +38,9 @@ public class SingleChapterReading implements IBaseComponent {
         info.contentXPathExpr = "//div[@id='content']/text()";
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 3;
-        info.isEndHref = (nextPageUrl, content) -> {
-            WebClientUtil.saveFile(info.fileName, Arrays.asList(content.toString()), info.isAppendSave);
-            if (nextPageUrl.toLowerCase().contains("html")) {
+        info.isEndHref = (pageLink, content) -> {
+            WebClientUtil.saveFile(info.fileName, Arrays.asList(content.toString()), info.isAppendWrite);
+            if (pageLink[1].toLowerCase().contains("html")) {
                 PrintUtil.print("是否获取下一章(1获取)：");
                 String line = sc.nextLine();
                 if ("1".equals(line.trim())) {

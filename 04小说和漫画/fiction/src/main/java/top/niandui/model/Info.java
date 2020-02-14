@@ -43,13 +43,13 @@ public class Info {
     @NotNull(message = "下一页超链接索引，不能为空")
     public Integer nextAnchorIndex;
     @NotNull(message = "方法：是否是结束路径判断，不能为空")
-    public BiFunction<String, StringBuilder, Boolean> isEndHref = Info::isEndHrefDefaultMethod;
+    public BiFunction<String[], StringBuilder, Boolean> isEndHref = Info::isEndHrefDefaultMethod;
     @NotBlank(message = "保存文件名称，不能为空")
     public String fileName;
     @NotNull(message = "是否保存为文件，不能为空")
     public Boolean isSaveFile = true;
-    @NotNull(message = "是否追加保存，不能为空")
-    public Boolean isAppendSave = false;
+    @NotNull(message = "是否追加写入，不能为空")
+    public Boolean isAppendWrite = false;
     @NotNull(message = "方法：休眠处理，不能为空")
     public Supplier<Long> sleepHandler = () -> {
         long sleepTime = (long) (Math.random() * 4000 + 2000);
@@ -100,12 +100,12 @@ public class Info {
     /**
      * 是否是结束路径默认判断方法
      *
-     * @param nextPageUrl 下一页URl
-     * @param content     获取的本章内容
+     * @param pageLink   页面URL，0本页URL、1下一页Href
+     * @param content   获取的本章内容
      * @return true 是最后一页，false不是最后一页
      */
-    public static Boolean isEndHrefDefaultMethod(String nextPageUrl, StringBuilder content) {
-        return !nextPageUrl.toLowerCase().contains("html");
+    public static Boolean isEndHrefDefaultMethod(String[] pageLink, StringBuilder content) {
+        return !pageLink[1].toLowerCase().contains("html") || pageLink[0].endsWith(pageLink[1]);
     }
 
 }

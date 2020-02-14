@@ -5,24 +5,24 @@ import top.niandui.model.Info;
 import top.niandui.utils.PrintUtil;
 
 /**
- * @Title: BiQuGer_COM.java
- * @description: BiQuGer_COM
- * @time: 2020/1/19 11:22
+ * @Title: BiQuWu_COM.java
+ * @description: BiQuWu_COM
+ * @time: 2020/1/20 14:46
  * @author: liyongda
  * @version: 1.0
  */
-public class BiQuGer_COM implements IBaseComponent {
+public class BiQuWu_COM implements IBaseComponent {
 
     public static void main(String[] args) {
-        new BiQuGer_COM().start();
+        new BiQuWu_COM().start();
     }
 
     @Override
     public void startBeforePrint() {
         /*
-         * 魔法的学术时代.txt http://www.biquger.com/biquge/112679/45424996
+         * 重写科技格局.txt https://www.biqiwu.com/b/219/219203/63725271.html
          */
-        PrintUtil.println("\thttp://www.biquger.com");
+        PrintUtil.println("\thttp://www.biqiwu.com");
     }
 
     @Override
@@ -30,11 +30,11 @@ public class BiQuGer_COM implements IBaseComponent {
         Info info = new Info();
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
         info.customizeTitleHandler();
-        info.contentXPathExpr = "//div[@class='content']/text()";
+        info.contentXPathExpr = "//div[@id='content']/text()";
         info.contentNewLine = "\r\n";
-        info.anchorXPathExpr = "//div[@class='bottem']//a";
+        info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 3;
-        info.isEndHref = (pageLink, content) -> pageLink[1].endsWith("/");
+        info.isAppendWrite = true;
         return info;
     }
 }

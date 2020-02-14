@@ -25,7 +25,6 @@ public class PrintUtil {
 
         @SneakyThrows
         @Override
-
         public void run() {
             while (true) {
                 System.out.print(PRINT_QUEUE.take());
@@ -68,5 +67,19 @@ public class PrintUtil {
      */
     public static boolean isEmpty() {
         return PRINT_QUEUE.isEmpty();
+    }
+
+    /**
+     * 等待打印结束
+     *
+     * @param waitTime 每次等待休眠时间
+     */
+    public static void waitPrintEnd(long waitTime) {
+        while (!PrintUtil.isEmpty()) {
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+            }
+        }
     }
 }

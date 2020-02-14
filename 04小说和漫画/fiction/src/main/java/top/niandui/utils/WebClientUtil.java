@@ -11,7 +11,6 @@ import org.junit.Test;
 import top.niandui.model.Info;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.BufferedWriter;
@@ -19,10 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Title: WebClientUtil.java
@@ -66,7 +62,8 @@ public class WebClientUtil {
 
     /**
      * 输入相关信息
-     * @param info  获取内容，必要的信息
+     *
+     * @param info 获取内容，必要的信息
      */
     public static void importInfo(Info info) {
         try {
@@ -95,17 +92,19 @@ public class WebClientUtil {
             PrintUtil.println("获取完毕");
             if (info.isSaveFile) {
                 PrintUtil.println("保存文本...");
-                saveFile(info.fileName, list, info.isAppendSave);
+                saveFile(info.fileName, list, info.isAppendWrite);
                 PrintUtil.println("保存完毕");
             }
         } catch (Exception e) {
             PrintUtil.println(e);
         }
+        SystemUtil.exit(0);
     }
 
     /**
      * 获取小说各章节内容
-     * @param info  获取内容，必要的信息
+     *
+     * @param info 获取内容，必要的信息
      * @return
      */
     public static List<String> getContext(Info info) {
@@ -153,8 +152,15 @@ public class WebClientUtil {
                 List aList = htmlPage.getByXPath(info.anchorXPathExpr);
                 // 获取下一页的超链接DOM
                 HtmlAnchor next = (HtmlAnchor) aList.get(info.nextAnchorIndex);
+                // 页面链接
+                String[] pageLink = {
+                        // 本页链接
+                        htmlPage.getUrl().toString().trim(),
+                        // 下一页链接
+                        next.getHrefAttribute().trim()
+                };
                 // 调用自定义方法判断下一页是否还有内容
-                if (info.isEndHref.apply(next.getHrefAttribute().trim(), sb)) {
+                if (info.isEndHref.apply(pageLink, sb)) {
                     break;
                 }
                 // 跳转下一页
@@ -171,6 +177,7 @@ public class WebClientUtil {
 
     /**
      * 保存内容到文件
+     *
      * @param fileName 文件路径+名称
      * @param list     要写入到文件的内容
      * @param append   是否追加写入

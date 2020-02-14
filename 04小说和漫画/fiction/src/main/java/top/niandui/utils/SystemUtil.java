@@ -15,12 +15,7 @@ public class SystemUtil {
      * @param status 退出状态码
      */
     public static void exit(int status) {
-        while (!PrintUtil.isEmpty()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-            }
-        }
+        PrintUtil.waitPrintEnd(100);
         Runtime.getRuntime().exit(status);
     }
 }
