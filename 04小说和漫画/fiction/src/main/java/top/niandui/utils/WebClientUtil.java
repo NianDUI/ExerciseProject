@@ -120,6 +120,8 @@ public class WebClientUtil {
             SystemUtil.exit(0);
         }
         try {
+            // 获取开始结束时间
+            long startTime = System.currentTimeMillis(), endTimes;
             // 获取的文本
             List<String> stringList = new ArrayList<>();
             // 获取起始页面
@@ -137,9 +139,14 @@ public class WebClientUtil {
                     PrintUtil.println(e.getMessage());
                     // 调用休眠处理方法
                     info.sleepHandler.get();
+                    startTime = System.currentTimeMillis();
                     htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
                     continue;
                 }
+                // 计算使用时间
+                endTimes = System.currentTimeMillis();
+                title += " " + (endTimes - startTime) / 1000.0 + "s";
+                startTime = endTimes;
                 PrintUtil.println(title);
                 StringBuilder sb = new StringBuilder().append(title).append(info.titleNewLine);
                 // 获取内容DOM列表
