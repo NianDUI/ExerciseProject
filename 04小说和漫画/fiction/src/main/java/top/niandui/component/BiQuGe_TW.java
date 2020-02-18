@@ -32,8 +32,6 @@ public class BiQuGe_TW implements IBaseComponent {
         info.titleXPathExpr = "//div[@class='bookname']/h1/text()";
         info.customizeTitleHandler();
         info.contentXPathExpr = "//div[@id='content']/text()";
-        info.contentStartIndexOffset = 1;
-        info.contentEndIndexOffset = -3;
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 2;
         return info;
