@@ -145,9 +145,8 @@ public class WebClientUtil {
                 }
                 // 计算使用时间
                 endTimes = System.currentTimeMillis();
-                title += " " + (endTimes - startTime) / 1000.0 + "s";
+                PrintUtil.println(title + " " + (endTimes - startTime) / 1000.0 + "s");
                 startTime = endTimes;
-                PrintUtil.println(title);
                 StringBuilder sb = new StringBuilder().append(title).append(info.titleNewLine);
                 // 获取内容DOM列表
                 List list = htmlPage.getByXPath(info.contentXPathExpr);
