@@ -2,6 +2,7 @@ package top.niandui.model;
 
 
 import lombok.ToString;
+import top.niandui.utils.FileWriter;
 import top.niandui.utils.PrintUtil;
 
 import javax.validation.constraints.*;
@@ -48,6 +49,10 @@ public class Info {
     public String fileName;
     @NotNull(message = "是否保存为文件，不能为空")
     public Boolean isSaveFile = true;
+    @NotNull(message = "写入方式，不能为空")
+    public WriteType writeType = WriteType.ONCE;
+    @NotNull(message = "文件写对象，不能为空")
+    public FileWriter fileWriter = new FileWriter(this);
     @NotNull(message = "是否追加写入，不能为空")
     public Boolean isAppendWrite = false;
     @NotNull(message = "方法：休眠处理，不能为空")
@@ -62,11 +67,13 @@ public class Info {
         return sleepTime;
     };
 
+    // 输入
+    private Scanner sc = new Scanner(System.in);
+
     /**
      * 定制标题处理器
      */
     public void customizeTitleHandler() {
-        Scanner sc = new Scanner(System.in);
         PrintUtil.println("1: 使用分隔符。示例：123(分割符)xxx -> 第123章 xxx");
         PrintUtil.println("2: 数字开头无分隔符。示例：123xxx -> 第123章 xxx");
         PrintUtil.print("是否对标题进行处理(其他不处理)：");
@@ -77,6 +84,17 @@ public class Info {
             titleHandler = title -> titleHandler(title, delimiter, delimiter.length());
         } else if ("2".equals(line)) {
             titleHandler = title -> titleHandler(title, title.replaceAll("^\\d*", ""), 0);
+        }
+    }
+
+    /**
+     * 定制文件写入方式
+     */
+    public void customizeWriteType() {
+        PrintUtil.print("选择文件写入方式(1：多次写入。其他一次写入)：");
+        String line = sc.nextLine().trim();
+        if ("1".equals(line)) {
+            writeType = WriteType.REPEATEDLY;
         }
     }
 
@@ -107,5 +125,4 @@ public class Info {
     public static Boolean isEndHrefDefaultMethod(String[] pageLink, StringBuilder content) {
         return !pageLink[1].toLowerCase().contains("html") || pageLink[0].endsWith(pageLink[1]);
     }
-
 }

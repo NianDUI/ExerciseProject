@@ -23,6 +23,7 @@ public class BiQuKan_COM implements IBaseComponent {
          * 腾飞我的航空时代.txt https://www.biqukan.com/72_72762/491732466.html
          */
         PrintUtil.println("\thttp://www.biqukan.com");
+        PrintUtil.println("\thttps://www.biqumo.com");
     }
 
     @Override
@@ -34,6 +35,7 @@ public class BiQuKan_COM implements IBaseComponent {
         info.contentEndIndexOffset = -3;
         info.anchorXPathExpr = "//div[@class='page_chapter']//a";
         info.nextAnchorIndex = 2;
+        info.customizeWriteType();
         return info;
     }
 }

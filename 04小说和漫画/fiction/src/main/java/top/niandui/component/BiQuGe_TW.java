@@ -34,6 +34,7 @@ public class BiQuGe_TW implements IBaseComponent {
         info.contentXPathExpr = "//div[@id='content']/text()";
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 2;
+        info.customizeWriteType();
         return info;
     }
 }

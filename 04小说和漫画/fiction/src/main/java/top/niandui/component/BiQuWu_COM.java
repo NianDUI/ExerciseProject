@@ -35,6 +35,7 @@ public class BiQuWu_COM implements IBaseComponent {
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 3;
         info.isAppendWrite = true;
+        info.customizeWriteType();
         return info;
     }
 }

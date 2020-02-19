@@ -15,7 +15,7 @@ public class SystemUtil {
      * @param status 退出状态码
      */
     public static void exit(int status) {
-        PrintUtil.waitPrintEnd(100);
+        PrintUtil.waitPrintEnd(10);
         Runtime.getRuntime().exit(status);
     }
 }

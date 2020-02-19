@@ -34,6 +34,7 @@ public class BiDuo_CC implements IBaseComponent {
         info.contentEndIndexOffset = -3;
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 2;
+        info.customizeWriteType();
         return info;
     }
 }

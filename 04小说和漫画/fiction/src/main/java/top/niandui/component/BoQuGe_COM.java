@@ -34,6 +34,7 @@ public class BoQuGe_COM implements IBaseComponent {
         info.contentXPathExpr = "//div[@id='txtContent']/text()";
         info.anchorXPathExpr = "//div[@class='clearfix']/ul/li/a";
         info.nextAnchorIndex = 6;
+        info.customizeWriteType();
         return info;
     }
 }

@@ -20,24 +20,20 @@ public class PrintUtil {
     // 换行符
     public static final String NEW_LINE = AccessController.doPrivileged(new GetPropertyAction("line.separator"));
 
-    // 打印线程
-    private static class Output implements Runnable {
-
-        @SneakyThrows
-        @Override
-        public void run() {
-            while (true) {
-                System.out.print(PRINT_QUEUE.take());
-            }
-        }
-    }
-
     // 打印线程初始化
     static {
-        Thread thread = new Thread(new Output());
-        thread.setDaemon(true);
-        thread.setPriority(Thread.MIN_PRIORITY);
-        thread.start();
+        Thread output = new Thread(() -> {
+            while (true) {
+                try {
+                    System.out.print(PRINT_QUEUE.take());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        output.setDaemon(true);
+        output.setPriority(Thread.MIN_PRIORITY);
+        output.start();
     }
 
     /**
@@ -74,12 +70,10 @@ public class PrintUtil {
      *
      * @param waitTime 每次等待休眠时间
      */
+    @SneakyThrows
     public static void waitPrintEnd(long waitTime) {
-        while (!PrintUtil.isEmpty()) {
-            try {
-                Thread.sleep(waitTime);
-            } catch (InterruptedException e) {
-            }
+        while (!isEmpty()) {
+            Thread.sleep(waitTime);
         }
     }
 }

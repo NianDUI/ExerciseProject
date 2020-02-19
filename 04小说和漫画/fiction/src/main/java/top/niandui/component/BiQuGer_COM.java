@@ -35,6 +35,7 @@ public class BiQuGer_COM implements IBaseComponent {
         info.anchorXPathExpr = "//div[@class='bottem']//a";
         info.nextAnchorIndex = 3;
         info.isEndHref = (pageLink, content) -> pageLink[1].endsWith("/");
+        info.customizeWriteType();
         return info;
     }
 }

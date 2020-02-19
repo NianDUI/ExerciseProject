@@ -34,6 +34,7 @@ public class MCMSSC_COM implements IBaseComponent {
         info.contentXPathExpr = "//div[@id='content']/text()";
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 3;
+        info.customizeWriteType();
         return info;
     }
 }

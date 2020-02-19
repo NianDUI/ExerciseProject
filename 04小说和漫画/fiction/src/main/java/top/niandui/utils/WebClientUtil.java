@@ -6,6 +6,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebClientOptions;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import top.niandui.model.Info;
@@ -65,7 +66,7 @@ public class WebClientUtil {
      *
      * @param info 获取内容，必要的信息
      */
-    public static void importInfo(Info info) {
+    public static void importInfo(final Info info) {
         try {
             Scanner sc = new Scanner(System.in);
             if (StringUtils.isBlank(info.startUrl)) {
@@ -87,16 +88,19 @@ public class WebClientUtil {
             if (!info.fileName.endsWith(".txt")) {
                 info.fileName += ".txt";
             }
+            PrintUtil.println("写对象初始化");
+            info.fileWriter.init();
             PrintUtil.println("获取文本...");
-            List<String> list = getContext(info);
+            getContext(info);
             PrintUtil.println("获取完毕");
             if (info.isSaveFile) {
-                PrintUtil.println("保存文本...");
-                saveFile(info.fileName, list, info.isAppendWrite);
-                PrintUtil.println("保存完毕");
+                info.fileWriter.endWrite();
+                PrintUtil.println("结束写");
             }
         } catch (Exception e) {
-            PrintUtil.println(e);
+            info.fileWriter.endWrite();
+            PrintUtil.waitPrintEnd(10);
+            e.printStackTrace();
         }
         SystemUtil.exit(0);
     }
@@ -107,7 +111,7 @@ public class WebClientUtil {
      * @param info 获取内容，必要的信息
      * @return
      */
-    public static List<String> getContext(Info info) {
+    public static void getContext(final Info info) {
         // 数据校验
         Set<ConstraintViolation<Info>> violationSet = VALIDATOR.validate(info);
         for (ConstraintViolation<Info> violation : violationSet) {
@@ -122,8 +126,6 @@ public class WebClientUtil {
         try {
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
-            // 获取的文本
-            List<String> stringList = new ArrayList<>();
             // 获取起始页面
             HtmlPage htmlPage = WEB_CLIENT.getPage(info.startUrl);
             while (true) {
@@ -153,7 +155,7 @@ public class WebClientUtil {
                 for (int i = info.contentStartIndexOffset; i < list.size() + info.contentEndIndexOffset; i++) {
                     sb.append(list.get(i).toString()).append(info.contentNewLine);
                 }
-                stringList.add(sb.toString());
+                info.fileWriter.write(sb);
                 // 获取跳转超链接DOM列表
                 List aList = htmlPage.getByXPath(info.anchorXPathExpr);
                 // 获取下一页的超链接DOM
@@ -172,12 +174,9 @@ public class WebClientUtil {
                 // 跳转下一页
                 htmlPage = next.click();
             }
-            return stringList;
         } catch (Exception e) {
-            PrintUtil.println(e);
             PrintUtil.println("获取失败...");
-            SystemUtil.exit(0);
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -188,21 +187,18 @@ public class WebClientUtil {
      * @param list     要写入到文件的内容
      * @param append   是否追加写入
      */
+    @SneakyThrows
     public static void saveFile(String fileName, List<String> list, boolean append) {
         File target = new File("target");
         if (!target.exists()) {
             target.mkdirs();
         }
         String pathname = "target/" + fileName;
-        try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pathname, append), StandardCharsets.UTF_8));
-            for (String str : list) {
-                bw.write(str);
-            }
-            bw.flush();
-            bw.close();
-        } catch (Exception e) {
-            PrintUtil.println(e);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pathname, append), StandardCharsets.UTF_8));
+        for (String str : list) {
+            bw.write(str);
         }
+        bw.flush();
+        bw.close();
     }
 }

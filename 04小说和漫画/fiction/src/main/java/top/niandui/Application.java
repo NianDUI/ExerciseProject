@@ -85,7 +85,8 @@ public class Application {
         files = files == null ? Collections.EMPTY_LIST : files;
         List<IBaseComponent> list = new ArrayList<>();
         for (String file : files) {
-            list.add((IBaseComponent) (Class.forName("top.niandui.component." + file.substring(0, file.indexOf('.'))).newInstance()));
+            list.add((IBaseComponent) (Class.forName("top.niandui.component." + file.substring(0, file.indexOf('.')))
+                    .newInstance()));
         }
         return list;
     }

@@ -34,6 +34,7 @@ public class BiQuGe_COM implements IBaseComponent {
         info.contentEndIndexOffset = -3;
         info.anchorXPathExpr = "//div[@class='bottem2']//a";
         info.nextAnchorIndex = 3;
+        info.customizeWriteType();
         return info;
     }
 }
