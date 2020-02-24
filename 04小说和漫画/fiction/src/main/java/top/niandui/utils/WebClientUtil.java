@@ -153,11 +153,11 @@ public class WebClientUtil {
                 // 获取内容DOM列表
                 List list = htmlPage.getByXPath(info.contentXPathExpr);
                 for (int i = info.contentStartIndexOffset; i < list.size() + info.contentEndIndexOffset; i++) {
-                    String str = list.get(i).toString();
-                    if (str.trim().length() == 0) {
+                    String line = list.get(i).toString();
+                    if (line.trim().length() == 0) {
                         continue;
                     }
-                    sb.append(str).append(info.contentNewLine);
+                    sb.append(line).append(info.contentNewLine);
                 }
                 info.fileWriter.write(sb);
                 // 获取跳转超链接DOM列表
