@@ -32,7 +32,7 @@ public class BiQuKan_COM implements IBaseComponent {
         info.titleXPathExpr = "//div[@class='content']/h1/text()";
         info.customizeTitleHandler();
         info.contentXPathExpr = "//div[@id='content']/text()";
-        info.contentEndIndexOffset = -3;
+        info.contentEndIndexOffset = -2;
         info.anchorXPathExpr = "//div[@class='page_chapter']//a";
         info.nextAnchorIndex = 2;
         info.customizeWriteType();
