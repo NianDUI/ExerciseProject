@@ -100,8 +100,9 @@ public class Info {
         int startIndex = 0;
         try {
             startIndex = Integer.parseInt(line);
-        } catch (NumberFormatException e) {}
-        return startIndex;
+        } finally {
+            return startIndex;
+        }
     }
 
     /**
