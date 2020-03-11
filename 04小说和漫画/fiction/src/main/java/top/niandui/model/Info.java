@@ -107,10 +107,10 @@ public class Info {
     }
 
     /**
-     * 标题分割处理方法1：123(分割符)xxx -> 第123章 xxx
+     * 标题分割处理方法1：**(开始分割索引)123(分割符)xxx -> 第123章 xxx
      *
      * @param title      标题
-     * @param startIndex 开始分割索引值
+     * @param startIndex 开始分割索引
      * @param delimiter  分割符
      * @param delLength  分割长度
      * @return
