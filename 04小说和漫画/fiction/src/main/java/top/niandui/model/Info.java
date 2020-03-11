@@ -85,7 +85,8 @@ public class Info {
             titleHandler = title -> titleHandler(title, startIndex, delimiter, delimiter.length());
         } else if ("2".equals(line)) {
             int startIndex = importStartIndex();
-            titleHandler = title -> titleHandler(title, startIndex, title.replaceAll("^\\d*", ""), 0);
+            titleHandler = title -> titleHandler(title, startIndex,
+                    title.substring(startIndex).replaceAll("^\\d*", ""), 0);
         }
     }
 
