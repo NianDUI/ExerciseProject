@@ -79,12 +79,47 @@ public class Info {
         PrintUtil.print("是否对标题进行处理(其他不处理)：");
         String line = sc.nextLine().trim();
         if ("1".equals(line)) {
+            int startIndex = importStartIndex();
             PrintUtil.print("请输入分隔符：");
             String delimiter = sc.nextLine();
-            titleHandler = title -> titleHandler(title, delimiter, delimiter.length());
+            titleHandler = title -> titleHandler(title, startIndex, delimiter, delimiter.length());
         } else if ("2".equals(line)) {
-            titleHandler = title -> titleHandler(title, title.replaceAll("^\\d*", ""), 0);
+            int startIndex = importStartIndex();
+            titleHandler = title -> titleHandler(title, startIndex, title.replaceAll("^\\d*", ""), 0);
         }
+    }
+
+    /**
+     * 输入开始分割索引
+     *
+     * @return 开始分割索引值
+     */
+    public int importStartIndex() {
+        PrintUtil.print("请输入分割开始索引(默认为0)：");
+        String line = sc.nextLine().trim();
+        int startIndex = 0;
+        try {
+            startIndex = Integer.parseInt(line);
+        } catch (NumberFormatException e) {}
+        return startIndex;
+    }
+
+    /**
+     * 标题分割处理方法1：123(分割符)xxx -> 第123章 xxx
+     *
+     * @param title      标题
+     * @param startIndex 开始分割索引值
+     * @param delimiter  分割符
+     * @param delLength  分割长度
+     * @return
+     */
+    public static String titleHandler(String title, int startIndex, String delimiter, int delLength) {
+        int index = title.indexOf(delimiter);
+        if (index >= startIndex) {
+            System.out.print(title + " -> ");
+            title = "第" + title.substring(startIndex, index).trim() + "章 " + title.substring(index + delLength).trim();
+        }
+        return title;
     }
 
     /**
@@ -96,23 +131,6 @@ public class Info {
         if ("1".equals(line)) {
             writeType = WriteType.REPEATEDLY;
         }
-    }
-
-    /**
-     * 标题分割处理方法1：123(分割符)xxx -> 第123章 xxx
-     *
-     * @param title     标题
-     * @param delimiter 分割符
-     * @param delLength 分割长度
-     * @return
-     */
-    public static String titleHandler(String title, String delimiter, int delLength) {
-        int index = title.indexOf(delimiter);
-        if (index >= 0) {
-            System.out.print(title + " -> ");
-            title = "第" + title.substring(0, index).trim() + "章 " + title.substring(index + delLength).trim();
-        }
-        return title;
     }
 
     /**
