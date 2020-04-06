@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!--路径-->
+    <define name="LogDir" class="top.niandui.common.uitls.GetInfo"/>
+    <!--IP-->
+    <define name="ip" class="top.niandui.common.uitls.GetInfo"/>
+    <!--服务名-->
+    <define name="applicationName" class="top.niandui.common.uitls.GetInfo"/>
+
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %green(%-5level) %magenta([%thread]) %cyan(%logger{36}) - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+    <appender name="fileInfoLog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}- %msg%n</pattern>
+        </encoder> <!--滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!--路径 -->
+            <fileNamePattern>${LogDir}${applicationName}-log/info/[${ip}]-[${applicationName}]-[info.%d].log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory><!-- 只保存30天的日志文件 -->
+        </rollingPolicy>
+    </appender>
+    <appender name="fileErrorLog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}- %msg%n</pattern>
+        </encoder> <!--滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!--路径 -->
+            <fileNamePattern>${LogDir}${applicationName}-log/error/[${ip}]-[${applicationName}]-[error.%d].log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory><!-- 只保存30天的日志文件 -->
+        </rollingPolicy>
+    </appender>
+    <root level="info">
+        <appender-ref ref="consoleLog"/>
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileErrorLog"/>
+    </root>
+
+    <logger name="top.niandui.dao"><!--这里配置自己的dao（mybaties mapper接口）的包路径-->
+        <level value="DEBUG"/>
+    </logger>
+</configuration>

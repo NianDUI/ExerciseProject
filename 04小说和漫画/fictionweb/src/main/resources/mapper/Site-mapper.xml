@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.niandui.dao.ISiteDao">
+    <!--表字段-->
+    <sql id="tableField">
+        "siteid","name","url","configid","createtime"
+    </sql>
+
+    <!-- 新增站点 -->
+    <insert id="create" parameterType="top.niandui.model.Site" useGeneratedKeys="true" keyProperty="siteid">
+        INSERT INTO "site"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "name","url","configid",
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            #{name,jdbcType=VARCHAR},
+            #{url,jdbcType=VARCHAR},
+            #{configid,jdbcType=BIGINT},
+        </trim>
+    </insert>
+
+    <!-- 修改站点 -->
+    <update id="update" parameterType="top.niandui.model.Site">
+        UPDATE "site"
+        <set>
+            "name" = #{name},
+            "url" = #{url},
+            "configid" = #{configid},
+        </set>
+        WHERE "siteid" = #{siteid};
+    </update>
+
+    <!-- 重名校验 -->
+    <select id="checkName" parameterType="top.niandui.common.model.IdNameModel" resultType="int">
+        SELECT COUNT(1)
+        FROM "site"
+        <where>
+            "name" = #{name}
+            <if test="id != null">
+                and "siteid" != #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询单条站点 -->
+    <select id="model" parameterType="Long" resultType="top.niandui.model.Site">
+        SELECT
+            <include refid="tableField"/>
+        FROM "site"
+        WHERE "siteid" = #{id}
+    </select>
+
+    <!-- 所有站点下拉列表 -->
+    <select id="option" resultType="top.niandui.common.model.IdNameModel">
+        SELECT
+            "siteid" AS "id",
+            "name" AS "name"
+        FROM "site"
+    </select>
+
+    <!-- 查询所有站点列表 -->
+    <select id="queryList" parameterType="top.niandui.model.vo.SiteSearchVO" resultType="top.niandui.model.vo.SiteListReturnVO">
+        SELECT
+            s."siteid",s."name",s."url",s."configid",s."createtime"
+            ,c."name" "configname"
+        FROM "site" s
+            LEFT JOIN "config" c ON c."configid" = s."configid"
+        <where>
+            <if test="name != null and name != ''">
+                AND s."name" ILIKE '%${name}%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 删除站点 -->
+    <delete id="delete" parameterType="String">
+        DELETE FROM "site"
+        WHERE "siteid" IN (${id})
+    </delete>
+</mapper>

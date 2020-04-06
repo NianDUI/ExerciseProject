@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加</title>
+    <link th:href="@{/webjars/layui/2.5.6/css/layui.css}" rel="stylesheet" media="all">
+</head>
+<body>
+<form class="layui-form layui-col-md11" lay-filter="form">
+    <br/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" placeholder="请输入站点名称" lay-verify="required" autocomplete="off"
+                   class="layui-input name">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">配置</label>
+        <div class="layui-input-block">
+            <select name="configid" class="configid" lay-verify="required">
+                <option value=""></option>
+                <option th:each="item : ${optionConfig}"
+                        th:value="${item.id}" th:text="${item.name}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">链接</label>
+        <div class="layui-input-block">
+            <textarea placeholder="站点链接" name="url" class="layui-textarea url"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="submit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+        </div>
+    </div>
+</form>
+<script>const base = "[[@{/}]]";
+const id = [[${id}]];</script>
+<script th:src="@{/webjars/layui/2.5.6/layui.all.js}"></script>
+<script th:src="@{/js/chapter/add.js}"></script>
+</body>
+</html>

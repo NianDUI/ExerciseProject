@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加</title>
+    <link th:href="@{/webjars/layui/2.5.6/css/layui.css}" rel="stylesheet" media="all">
+</head>
+<body>
+<form class="layui-form layui-col-md11" lay-filter="form">
+    <br/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" placeholder="请输入配置名称" lay-verify="required"
+                   autocomplete="off" class="layui-input name">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline layui-col-md8">
+            <label class="layui-form-label">标题匹配路径</label>
+            <div class="layui-input-block">
+                <input type="text" name="titlematch" placeholder="请输入标题匹配路径" lay-verify="required"
+                       autocomplete="off" class="layui-input titlematch">
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md3">
+            <label class="layui-form-label">标题后换行数量</label>
+            <div class="layui-input-block">
+                <input type="text" name="titlelnnum" value="2" placeholder="请输入标题后换行数量"
+                       lay-verify="required|number|titlelnnum"
+                       autocomplete="off" class="layui-input titlelnnum">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline layui-col-md8">
+            <label class="layui-form-label">内容匹配路径</label>
+            <div class="layui-input-block">
+                <input type="text" name="conmatch" placeholder="请输入内容匹配路径" lay-verify="required"
+                       autocomplete="off" class="layui-input conmatch">
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md3">
+            <label class="layui-form-label">内容后换行数量</label>
+            <div class="layui-input-block">
+                <input type="text" name="conlnnum" value="2" placeholder="请输入内容后换行数量"
+                       lay-verify="required|number|conlnnum"
+                       autocomplete="off" class="layui-input conlnnum">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline layui-col-md5">
+            <label class="layui-form-label">内容开始索引偏移量</label>
+            <div class="layui-input-block">
+                <input type="text" name="startoffset" value="0" placeholder="请输入内容开始索引偏移量"
+                       lay-verify="required|number|startoffset"
+                       autocomplete="off" class="layui-input startoffset">
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md5">
+            <label class="layui-form-label">内容结束索引偏移量</label>
+            <div class="layui-input-block">
+                <input type="text" name="endoffset" value="0" placeholder="请输入内容结束索引偏移量"
+                       lay-verify="required|number|endoffset"
+                       autocomplete="off" class="layui-input endoffset">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline layui-col-md8">
+            <label class="layui-form-label">跳转超链接匹配路径</label>
+            <div class="layui-input-block">
+                <input type="text" name="amatch" placeholder="请输入跳转超链接匹配路径" lay-verify="required"
+                       autocomplete="off" class="layui-input amatch">
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md3">
+            <label class="layui-form-label">下一页超链接索引</label>
+            <div class="layui-input-block">
+                <input type="text" name="nexta" value="0" placeholder="请输入下一页超链接索引" lay-verify="required|number|nexta"
+                       autocomplete="off" class="layui-input nexta">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="submit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+        </div>
+    </div>
+</form>
+<script>const base = "[[@{/}]]";
+const id = [[${id}]];</script>
+<script th:src="@{/webjars/layui/2.5.6/layui.all.js}"></script>
+<script th:src="@{/js/config/add.js}"></script>
+</body>
+</html>

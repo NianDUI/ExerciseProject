@@ -13,3 +13,4 @@ classes/
 lombok-intellij-plugin/
 OAuth2.0Demo/
 soap/
+*-log/
