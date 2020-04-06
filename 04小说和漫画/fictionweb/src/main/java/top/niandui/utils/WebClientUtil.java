@@ -7,6 +7,8 @@ import com.gargoylesoftware.htmlunit.WebClientOptions;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
+import top.niandui.dao.IChapterDao;
+import top.niandui.dao.IParagraphDao;
 import top.niandui.model.Book;
 import top.niandui.model.Chapter;
 import top.niandui.model.Config;
@@ -51,12 +53,12 @@ public class WebClientUtil {
      * @param config               配置
      * @param book                 书籍
      * @param seqid                章节序号
-     * @param createChapter        创建章节回调方法
-     * @param createBatchParagraph 创建段落回调方法
+     * @param iChapterDao        创建章节回调方法
+     * @param iParagraphDao 创建段落回调方法
      */
     public static void getBook(Config config, Book book, long seqid,
-                               Function<Chapter, Integer> createChapter,
-                               Function<List<Paragraph>, Integer> createBatchParagraph) {
+                               IChapterDao iChapterDao,
+                               IParagraphDao iParagraphDao) {
         Function<String, String> titleHandler = HandleUtils.getTitleHandler(book.getTitlehandler());
         try {
             // 获取开始结束时间
@@ -93,7 +95,7 @@ public class WebClientUtil {
                 chapter.setUrl(htmlPage.getUrl().toString().trim());
                 chapter.setSeqid(seqid++);
                 // 创建章节
-                createChapter.apply(chapter);
+                iChapterDao.create(chapter);
                 // 获取内容DOM列表
                 List list = htmlPage.getByXPath(config.getConmatch());
                 List<Paragraph> paragraphList = new ArrayList<>();
@@ -115,7 +117,7 @@ public class WebClientUtil {
                     paragraphList.add(paragraph);
                 }
                 // 创建段落列表
-                createBatchParagraph.apply(paragraphList);
+                iParagraphDao.createBatch(paragraphList);
                 // 获取跳转超链接DOM列表
                 List aList = htmlPage.getByXPath(config.getAmatch());
                 // 获取下一页的超链接DOM

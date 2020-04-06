@@ -93,6 +93,6 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         iParagraphDao.deleteByBookId(id.toString());
         Book book = (Book) iBookDao.model(id);
         Config config = (Config) iConfigDao.model(book.getConfigid());
-        WebClientUtil.getBook(config, book, 0, iChapterDao::create, iParagraphDao::createBatch);
+        WebClientUtil.getBook(config, book, 0, iChapterDao, iParagraphDao);
     }
 }
