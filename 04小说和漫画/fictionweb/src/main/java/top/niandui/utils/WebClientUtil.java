@@ -50,15 +50,13 @@ public class WebClientUtil {
     /**
      * 获取书籍各章节内容
      *
-     * @param config               配置
-     * @param book                 书籍
-     * @param seqid                章节序号
-     * @param iChapterDao        创建章节回调方法
+     * @param config        配置
+     * @param book          书籍
+     * @param seqid         章节序号
+     * @param iChapterDao   创建章节回调方法
      * @param iParagraphDao 创建段落回调方法
      */
-    public static void getBook(Config config, Book book, long seqid,
-                               IChapterDao iChapterDao,
-                               IParagraphDao iParagraphDao) {
+    public static void getBook(Config config, Book book, long seqid, IChapterDao iChapterDao, IParagraphDao iParagraphDao) {
         Function<String, String> titleHandler = HandleUtils.getTitleHandler(book.getTitlehandler());
         try {
             // 获取开始结束时间
@@ -133,6 +131,7 @@ public class WebClientUtil {
         } catch (Exception e) {
             log.info("获取失败...");
             log.error(e.toString());
+            throw new RuntimeException(e);
         }
     }
 }
