@@ -65,11 +65,13 @@ $(".delAll").click(function () {
         });
     }
 });
+
 function search() {
     tableList.reload({
         page: {curr: 1}, where: {name: $(".searVal").val()}
     })
 }
+
 function add(id) {
     layer.open({
         type: 2
@@ -81,6 +83,7 @@ function add(id) {
         , content: base + "config/add/" + id // [, "no"]
     });
 }
+
 function del(id) {
     $.ajax({
         type: "get"

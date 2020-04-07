@@ -27,7 +27,7 @@ const tableList = table.render({
         , {field: "configname", title: "配置"}
         , {field: "createtime", title: "创建时间"}
         , {field: "url", title: "链接"}
-        , {title: "操作", fixed: "right", minWidth: 100, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 115, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
@@ -44,11 +44,25 @@ table.on("tool(table)", function (obj) {
 $(".search").click(function () {
     search();
 });
-$(".obtain").click(function () {
+$(".reacquire").click(function () {
     $.ajax({
         type: "get"
         , contentType: "application/json"
-        , url: base + "api/obtainChapter/" + bookid
+        , url: base + "api/reacquireChapter/" + bookid
+        , success: function (data) {
+            if (data.code == 200) {
+                layer.msg("正在获取");
+            } else {
+                layer.alert(data.message);
+            }
+        }
+    });
+});
+$(".getFollowUp").click(function () {
+    $.ajax({
+        type: "get"
+        , contentType: "application/json"
+        , url: base + "api/getFollowUpChapter/" + bookid
         , success: function (data) {
             if (data.code == 200) {
                 layer.msg("正在获取");
@@ -87,7 +101,7 @@ function add(id) {
         , shadeClose: true
         , maxmin: true
         , area: "450px"
-        , offset: "100px"
+        , offset: "50px"
         , content: base + "chapter/add/" + id // [, "no"]
     });
 }

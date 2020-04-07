@@ -46,8 +46,6 @@
         UPDATE "chapter"
         <set>
             "name" = #{name},
-            "bookid" = #{bookid},
-            "configid" = #{configid},
             "rawname" = #{rawname},
             "seqid" = #{seqid},
             "url" = #{url},
@@ -118,4 +116,15 @@
         DELETE FROM "chapter"
         WHERE "bookid" IN (${id})
     </delete>
+
+    <!-- 查询书籍最后一章节 -->
+    <select id="queryBookAsList" resultType="top.niandui.model.Chapter">
+        SELECT
+            c."chapterid",c."name",c."bookid",c."configid",c."rawname",c."createtime",c."seqid",c."url"
+        FROM "chapter" c
+            INNER JOIN "book" b ON b."bookid" = c."bookid"
+        WHERE b."bookid" = #{id}
+        ORDER BY c."seqid" DESC
+        LIMIT 1
+    </select>
 </mapper>

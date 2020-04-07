@@ -9,6 +9,7 @@ const tableList = table.render({
     , url: base + "api/queryBookList"
     , where: {
         name: ""
+        , siteid: siteid
     }
     , request: {pageName: "pageNum", limitName: "pageSize"}
     , response: {statusCode: 200}
@@ -22,11 +23,12 @@ const tableList = table.render({
     , cols: [[
         {checkbox: true, fixed: "left"}
         , {field: "name", title: "名称"}
+        , {field: "sitename", title: "站点"}
         , {field: "configname", title: "配置"}
         , {field: "createtime", title: "创建时间"}
         , {field: "url", title: "链接"}
         , {field: "starturl", title: "起始章节链接"}
-        , {title: "操作", fixed: "right", minWidth: 100, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 212, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
@@ -68,7 +70,7 @@ $(".delAll").click(function () {
 
 function search() {
     tableList.reload({
-        page: {curr: 1}, where: {name: $(".searVal").val()}
+        page: {curr: 1}, where: {name: $(".searVal").val(), siteid: siteid}
     })
 }
 

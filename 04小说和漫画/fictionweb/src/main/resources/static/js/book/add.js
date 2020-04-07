@@ -77,6 +77,7 @@ form.on('select(handleType)', function (data) {
 });
 const startIndexDiv = $(".startIndexDiv").hide();
 const delimiterDiv = $(".delimiterDiv").hide();
+
 function setShowHide() {
     let val = handleType.val();
     if (val == 1) {

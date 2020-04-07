@@ -16,6 +16,15 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">站点</label>
+        <div class="layui-input-block">
+            <select name="siteid" class="siteid" lay-verify="required">
+                <option value=""></option>
+                <option th:each="item : ${optionSite}" th:value="${item.id}" th:text="${item.name}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">配置</label>
         <div class="layui-input-block">
             <select name="configid" class="configid" lay-verify="required">

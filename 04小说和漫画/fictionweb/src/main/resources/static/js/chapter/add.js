@@ -3,6 +3,7 @@ const layer = layui.layer;
 const form = layui.form;
 const thisIndex = parent.layer.getFrameIndex(window.name);
 parent.layer.iframeAuto(thisIndex);
+parent.layer.full(thisIndex);
 if (id != null) {
     parent.layer.title("修改", thisIndex);
     $.ajax({

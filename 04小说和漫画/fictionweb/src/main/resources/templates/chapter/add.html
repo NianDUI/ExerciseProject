@@ -11,24 +11,49 @@
     <div class="layui-form-item">
         <label class="layui-form-label">名称</label>
         <div class="layui-input-block">
-            <input type="text" name="name" placeholder="请输入站点名称" lay-verify="required" autocomplete="off"
-                   class="layui-input name">
+            <input type="text" name="name" placeholder="请输入章节名称" lay-verify="required"
+                   autocomplete="off" class="layui-input name">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">配置</label>
+        <label class="layui-form-label">原名称</label>
         <div class="layui-input-block">
-            <select name="configid" class="configid" lay-verify="required">
-                <option value=""></option>
-                <option th:each="item : ${optionConfig}"
-                        th:value="${item.id}" th:text="${item.name}"></option>
-            </select>
+            <input type="text" name="rawname" placeholder="请输入原章节名称" lay-verify="required"
+                   autocomplete="off" class="layui-input rawname">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">书籍</label>
+            <div class="layui-input-block">
+                <select name="bookid" class="bookid" lay-verify="required" disabled>
+                    <option value=""></option>
+                    <option th:each="item : ${optionBook}" th:value="${item.id}" th:text="${item.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">配置</label>
+            <div class="layui-input-block">
+                <select name="configid" class="configid" lay-verify="required" disabled>
+                    <option value=""></option>
+                    <option th:each="item : ${optionConfig}" th:value="${item.id}" th:text="${item.name}"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="text" name="seqid" placeholder="请输入排序id" lay-verify="required|number"
+                   autocomplete="off" class="layui-input seqid">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">链接</label>
         <div class="layui-input-block">
-            <textarea placeholder="站点链接" name="url" class="layui-textarea url"></textarea>
+            <input type="text" name="url" placeholder="请输入章节链接" lay-verify="required|url"
+                   autocomplete="off" class="layui-input url">
         </div>
     </div>
     <div class="layui-form-item">

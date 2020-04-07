@@ -3,14 +3,14 @@
 <mapper namespace="top.niandui.dao.IBookDao">
     <!--表字段-->
     <sql id="tableField">
-        "bookid","name","url","configid","createtime","starturl","titlehandler"
+        "bookid","name","url","configid","createtime","starturl","titlehandler","siteid"
     </sql>
 
     <!-- 新增书籍 -->
     <insert id="create" parameterType="top.niandui.model.Book" useGeneratedKeys="true" keyProperty="bookid">
         INSERT INTO "book"
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            "name","url","configid","starturl","titlehandler",
+            "name","url","configid","starturl","titlehandler","siteid",
         </trim>
         <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
             #{name,jdbcType=VARCHAR},
@@ -18,6 +18,7 @@
             #{configid,jdbcType=BIGINT},
             #{starturl,jdbcType=VARCHAR},
             #{titlehandler,jdbcType=VARCHAR},
+            #{siteid,jdbcType=BIGINT},
         </trim>
     </insert>
 
@@ -30,6 +31,7 @@
             "configid" = #{configid},
             "starturl" = #{starturl},
             "titlehandler" = #{titlehandler},
+            "siteid" = #{siteid},
         </set>
         WHERE "bookid" = #{bookid};
     </update>
@@ -65,13 +67,17 @@
     <!-- 查询所有书籍列表 -->
     <select id="queryList" parameterType="top.niandui.model.vo.BookSearchVO" resultType="top.niandui.model.vo.BookListReturnVO">
         SELECT
-            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."titlehandler"
-            ,c."name" "configname"
+            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."titlehandler",b."siteid"
+            ,c."name" "configname",s."name" "sitename"
         FROM "book" b
             LEFT JOIN "config" c ON c."configid" = b."configid"
+            LEFT JOIN "site" s ON s."siteid" = b."siteid"
         <where>
             <if test="name != null and name != ''">
-                AND "name" ILIKE '%${name}%'
+                AND b."name" ILIKE '%${name}%'
+            </if>
+            <if test="siteid != null">
+                AND b."siteid" = #{siteid}
             </if>
         </where>
     </select>

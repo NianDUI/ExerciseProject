@@ -25,12 +25,14 @@ const tableList = table.render({
         , {field: "configname", title: "配置"}
         , {field: "createtime", title: "创建时间"}
         , {field: "url", title: "链接"}
-        , {title: "操作", fixed: "right", minWidth: 100, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 160, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
     var data = obj.data;
-    if (obj.event === "edit") {
+    if (obj.event === "showBook") {
+        self.location.href = base + "book/list/" + data.siteid;
+    } else if (obj.event === "edit") {
         add(data.siteid);
     } else if (obj.event === "del") {
         layer.confirm("确认删除该信息？", function (index) {
@@ -60,11 +62,13 @@ $(".delAll").click(function () {
         });
     }
 });
+
 function search() {
     tableList.reload({
         page: {curr: 1}, where: {name: $(".searVal").val()}
     })
 }
+
 function add(id) {
     layer.open({
         type: 2
@@ -76,6 +80,7 @@ function add(id) {
         , content: base + "site/add/" + id // [, "no"]
     });
 }
+
 function del(id) {
     $.ajax({
         type: "get"
