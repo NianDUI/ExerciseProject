@@ -25,6 +25,7 @@ const tableList = table.render({
         , {field: "name", title: "名称"}
         , {field: "sitename", title: "站点"}
         , {field: "configname", title: "配置"}
+        , {field: "taskname", title: "任务"}
         , {field: "createtime", title: "创建时间"}
         , {field: "url", title: "链接"}
         , {field: "starturl", title: "起始章节链接"}

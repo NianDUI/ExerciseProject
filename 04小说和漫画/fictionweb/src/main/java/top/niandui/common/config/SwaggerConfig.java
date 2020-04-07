@@ -1,4 +1,4 @@
-package top.niandui.config;
+package top.niandui.common.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.context.annotation.Bean;

@@ -3,9 +3,9 @@ package top.niandui.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import top.niandui.common.base.BaseServiceImpl;
+import top.niandui.common.expection.ReStateException;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
@@ -21,7 +21,7 @@ import top.niandui.utils.WebClientUtil;
 
 import java.util.List;
 
-import static top.niandui.utils.MethodUtils.addDefaultSort;
+import static top.niandui.common.uitls.MethodUtils.addDefaultSort;
 
 /**
  * @author 李永达
@@ -40,6 +40,8 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     private IConfigDao iConfigDao;
     @Autowired
     private IParagraphDao iParagraphDao;
+    @Autowired
+    private WebClientUtil webClientUtil;
 
     @Override
     public void create(Chapter chapter) throws Exception {
@@ -86,29 +88,45 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         }
     }
 
-    @Async
     @Override
     public void reacquireChapter(Long id) throws Exception {
+        Book book = (Book) iBookDao.model(id);
+        isTaskStatus(book);
         iChapterDao.deleteByBookId(id.toString());
         iParagraphDao.deleteByBookId(id.toString());
-        Book book = (Book) iBookDao.model(id);
         Config config = (Config) iConfigDao.model(book.getConfigid());
+        // 更新任务状态
+        iBookDao.updateTaskstatus(book.getBookid(), 1);
         // 第一次不跳过
-        WebClientUtil.getBook(config, book, 0, false, iChapterDao, iParagraphDao);
+        webClientUtil.getBook(config, book, 0, false);
     }
 
     @Override
     public void getFollowUpChapter(Long id) throws Exception {
         Book book = (Book) iBookDao.model(id);
+        isTaskStatus(book);
         Config config = (Config) iConfigDao.model(book.getConfigid());
         Chapter chapter = iChapterDao.queryBookAsList(id);
+        // 更新任务状态
+        iBookDao.updateTaskstatus(book.getBookid(), 2);
         if (chapter != null) {
             book.setStarturl(chapter.getUrl());
             // 第一次跳过
-            WebClientUtil.getBook(config, book, chapter.getSeqid() + 1, true, iChapterDao, iParagraphDao);
+            webClientUtil.getBook(config, book, chapter.getSeqid() + 1, true);
         } else {
             // 第一次不跳过
-            WebClientUtil.getBook(config, book, 0, false, iChapterDao, iParagraphDao);
+            webClientUtil.getBook(config, book, 0, false);
+        }
+    }
+
+    private void isTaskStatus(Book book) throws Exception {
+        if (book.getTaskstatus() == null) {
+            return;
+        }
+        if (book.getTaskstatus() == 1) {
+            throw new ReStateException("正在执行重新获取任务");
+        } else if (book.getTaskstatus() == 2) {
+            throw new ReStateException("正在执行获取后续任务");
         }
     }
 }

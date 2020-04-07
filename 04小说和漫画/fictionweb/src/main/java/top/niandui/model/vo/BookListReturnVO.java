@@ -19,4 +19,6 @@ public class BookListReturnVO extends Book {
     private String configname;
     @ApiModelProperty(value = "站点名称")
     private String sitename;
+    @ApiModelProperty(value = "任务状态：无，重新获取，获取后续")
+    private String taskname;
 }

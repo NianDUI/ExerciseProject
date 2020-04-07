@@ -1,4 +1,4 @@
-package top.niandui.utils;
+package top.niandui.common.uitls;
 
 import org.springframework.util.StringUtils;
 import top.niandui.common.model.PageOrder;

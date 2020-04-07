@@ -1,9 +1,10 @@
-package top.niandui.config;
+package top.niandui.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import top.niandui.common.expection.ReStateException;
 import top.niandui.common.model.ResponseData;
 import top.niandui.common.outher.StatusCode;
 
@@ -23,7 +24,7 @@ import java.io.OutputStream;
 public class ExceptionHandler {
     private ObjectMapper mapper = new ObjectMapper();
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @org.springframework.web.bind.annotation.ExceptionHandler({Exception.class})
     public void exceptionHandler(Exception e, HttpServletResponse response) {
         OutputStream os = null;
         try {
@@ -34,6 +35,8 @@ public class ExceptionHandler {
             if (e instanceof MethodArgumentNotValidException) {
                 rd = ResponseData.fail(StatusCode.PARAM_FORMAT_ERROR, ((MethodArgumentNotValidException) e).getBindingResult()
                         .getFieldError().getDefaultMessage());
+            } else if (e instanceof ReStateException) {
+                rd = ResponseData.fail(StatusCode.RESTATE, e.getMessage());
             } else {
                 rd = ResponseData.fail(StatusCode.EXECUTE_FAIL, e.getMessage());
             }

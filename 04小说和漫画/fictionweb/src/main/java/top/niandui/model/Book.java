@@ -42,4 +42,6 @@ public class Book extends BaseModel {
     @NotNull(message = "站点id不能为空")
     @ApiModelProperty(value = "站点id", required = true)
     private Long siteid;
+    @ApiModelProperty(value = "任务状态：0无，1重新获取，2获取后续")
+    private Integer taskstatus;
 }

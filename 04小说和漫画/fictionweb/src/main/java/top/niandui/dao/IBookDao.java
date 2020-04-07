@@ -12,4 +12,6 @@ import top.niandui.common.base.IBaseDao;
  */
 @Repository
 public interface IBookDao<T> extends IBaseDao<T> {
+    // 更新任务状态
+    void updateTaskstatus(Long bookid, Integer taskstatus);
 }

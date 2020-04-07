@@ -3,7 +3,7 @@
 <mapper namespace="top.niandui.dao.IBookDao">
     <!--表字段-->
     <sql id="tableField">
-        "bookid","name","url","configid","createtime","starturl","titlehandler","siteid"
+        "bookid","name","url","configid","createtime","starturl","titlehandler","siteid","taskstatus"
     </sql>
 
     <!-- 新增书籍 -->
@@ -67,8 +67,13 @@
     <!-- 查询所有书籍列表 -->
     <select id="queryList" parameterType="top.niandui.model.vo.BookSearchVO" resultType="top.niandui.model.vo.BookListReturnVO">
         SELECT
-            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."titlehandler",b."siteid"
+            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."titlehandler",b."siteid",b."taskstatus"
             ,c."name" "configname",s."name" "sitename"
+            ,CASE b."taskstatus"
+                WHEN 1 THEN '重新获取'
+                WHEN 2 THEN '获取后续'
+                ELSE '无'
+             END "taskname"
         FROM "book" b
             LEFT JOIN "config" c ON c."configid" = b."configid"
             LEFT JOIN "site" s ON s."siteid" = b."siteid"
@@ -87,4 +92,11 @@
         DELETE FROM "book"
         WHERE "bookid" IN (${id})
     </delete>
+
+    <!-- 更新任务状态 -->
+    <update id="updateTaskstatus">
+        UPDATE "book"
+        SET "taskstatus" = #{taskstatus}
+        WHERE "bookid" = #{bookid}
+    </update>
 </mapper>

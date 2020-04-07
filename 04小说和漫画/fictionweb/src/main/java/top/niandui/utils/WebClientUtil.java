@@ -7,6 +7,10 @@ import com.gargoylesoftware.htmlunit.WebClientOptions;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IParagraphDao;
 import top.niandui.model.Book;
@@ -26,9 +30,16 @@ import java.util.function.Function;
  * @version: 1.0
  */
 @Slf4j
+@Component
 public class WebClientUtil {
     //新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
     private final static WebClient WEB_CLIENT = new WebClient(BrowserVersion.CHROME);
+    @Autowired
+    private IBookDao iBookDao;
+    @Autowired
+    private IChapterDao iChapterDao;
+    @Autowired
+    private IParagraphDao iParagraphDao;
 
     static {
         WebClientOptions webClientOptions = WEB_CLIENT.getOptions();
@@ -50,14 +61,13 @@ public class WebClientUtil {
     /**
      * 获取书籍各章节内容
      *
-     * @param config        配置
-     * @param book          书籍
-     * @param seqid         章节序号
-     * @param isFirstJump   第一次是否跳过,t跳过、f不跳过
-     * @param iChapterDao   章节dao
-     * @param iParagraphDao 段落dao
+     * @param config      配置
+     * @param book        书籍
+     * @param seqid       章节序号
+     * @param isFirstJump 第一次是否跳过,t跳过、f不跳过
      */
-    public static void getBook(Config config, Book book, long seqid, boolean isFirstJump, IChapterDao iChapterDao, IParagraphDao iParagraphDao) {
+    @Async
+    public void getBook(Config config, Book book, long seqid, boolean isFirstJump) {
         Function<String, String> titleHandler = HandleUtils.getTitleHandler(book.getTitlehandler());
         try {
             // 获取开始结束时间
@@ -140,5 +150,7 @@ public class WebClientUtil {
             log.error(e.toString());
             throw new RuntimeException(e);
         }
+        // 更新任务状态
+        iBookDao.updateTaskstatus(book.getBookid(), 0);
     }
 }
