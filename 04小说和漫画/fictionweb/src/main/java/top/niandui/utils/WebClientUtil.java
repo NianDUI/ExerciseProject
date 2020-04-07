@@ -99,14 +99,14 @@ public class WebClientUtil {
                 List<Paragraph> paragraphList = new ArrayList<>();
                 for (int i = config.getStartoffset(); i < list.size() + config.getEndoffset(); i++) {
                     String line = list.get(i).toString().trim();
-                    if (line.length() == 0) {
-                        continue;
-                    }
                     int start = 0;
                     while (line.startsWith("　", start)) {
                         start++;
                     }
-                    line = line.substring(start);
+                    line = line.substring(start).trim();
+                    if (line.length() == 0) {
+                        continue;
+                    }
                     Paragraph paragraph = new Paragraph();
                     paragraph.setBookid(book.getBookid());
                     paragraph.setChapterid(chapter.getChapterid());
