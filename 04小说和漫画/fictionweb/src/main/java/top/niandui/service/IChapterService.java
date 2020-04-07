@@ -3,6 +3,7 @@ package top.niandui.service;
 import com.github.pagehelper.PageInfo;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.model.Chapter;
+import top.niandui.model.vo.ChapterInfoReturnVO;
 import top.niandui.model.vo.ChapterListReturnVO;
 import top.niandui.model.vo.ChapterSearchVO;
 
@@ -42,4 +43,7 @@ public interface IChapterService {
 
     // 获取后续章节
     void getFollowUpChapter(Long id) throws Exception;
+
+    // 查询章节信息
+    ChapterInfoReturnVO queryChapterInfo(Long id) throws Exception;
 }

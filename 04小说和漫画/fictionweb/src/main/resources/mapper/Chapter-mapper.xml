@@ -127,4 +127,31 @@
         ORDER BY c."seqid" DESC
         LIMIT 1
     </select>
+
+    <select id="nextModel" resultType="top.niandui.model.Chapter">
+        SELECT
+            <include refid="tableField"/>
+        FROM "chapter" c
+        WHERE EXISTS (
+                SELECT 1 FROM  "chapter" cc
+                WHERE "chapterid" = 1387
+                    AND c."bookid" = cc."bookid"
+                    AND c."seqid" > cc."seqid"
+            )
+        ORDER BY "seqid" ASC
+        LIMIT 1
+    </select>
+
+    <select id="nextChapterid" resultType="long">
+        SELECT "chapterid"
+        FROM "chapter" c
+        WHERE EXISTS (
+                SELECT 1 FROM  "chapter" cc
+                WHERE "chapterid" = 1387
+                    AND c."bookid" = cc."bookid"
+                    AND c."seqid" > cc."seqid"
+            )
+        ORDER BY "seqid" ASC
+        LIMIT 1
+    </select>
 </mapper>

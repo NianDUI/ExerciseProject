@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${chapter.name}"></title>
+    <link th:href="@{/webjars/layui/2.5.6/css/layui.css}" rel="stylesheet" media="all">
+</head>
+<body>
+<blockquote class="layui-elem-quote">
+    <fieldset class="layui-elem-field">
+        <legend th:text="${chapter.name} + ' - ' + ${book.name}"></legend>
+        <br/>
+        <div class="layui-field-box" th:each="i : ${paragraphList}" th:text="'  ' + ${i.content}"></div>
+    </fieldset>
+</blockquote>
+<script>const base = "[[@{/}]]";
+const nextChapterid = [[${nextChapterid}]];
+alert(nextChapterid)</script>
+<script th:src="@{/webjars/layui/2.5.6/layui.all.js}"></script>
+<script th:src="@{/js/chapter/show.js}"></script>
+</body>
+</html>

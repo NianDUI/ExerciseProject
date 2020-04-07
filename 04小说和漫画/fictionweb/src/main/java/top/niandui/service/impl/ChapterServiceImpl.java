@@ -14,8 +14,10 @@ import top.niandui.dao.IParagraphDao;
 import top.niandui.model.Book;
 import top.niandui.model.Chapter;
 import top.niandui.model.Config;
+import top.niandui.model.vo.ChapterInfoReturnVO;
 import top.niandui.model.vo.ChapterListReturnVO;
 import top.niandui.model.vo.ChapterSearchVO;
+import top.niandui.model.vo.ParagraphSearchVO;
 import top.niandui.service.IChapterService;
 import top.niandui.utils.WebClientUtil;
 
@@ -128,5 +130,20 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         } else if (book.getTaskstatus() == 2) {
             throw new ReStateException("正在执行获取后续任务");
         }
+    }
+
+    @Override
+    public ChapterInfoReturnVO queryChapterInfo(Long id) throws Exception {
+        ChapterInfoReturnVO rv = new ChapterInfoReturnVO();
+        // 获取本章
+        rv.setChapter((Chapter) iChapterDao.model(id));
+        // 获取下一章id
+        rv.setNextChapterid(iChapterDao.nextChapterid(id));
+        rv.setBook((Book) iBookDao.model(rv.getChapter().getBookid()));
+        ParagraphSearchVO sv = new ParagraphSearchVO();
+        sv.setChapterid(rv.getChapter().getChapterid());
+        addDefaultSort(sv, "seqid", "ASC");
+        rv.setParagraphList(iParagraphDao.queryList(sv));
+        return rv;
     }
 }

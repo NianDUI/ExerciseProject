@@ -7,7 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import springfox.documentation.annotations.ApiIgnore;
+import top.niandui.model.Chapter;
+import top.niandui.model.vo.ChapterInfoReturnVO;
+import top.niandui.model.vo.ParagraphSearchVO;
 import top.niandui.service.IBookService;
+import top.niandui.service.IChapterService;
 import top.niandui.service.IConfigService;
 import top.niandui.service.ISiteService;
 
@@ -25,11 +29,13 @@ import java.util.Map;
 @Controller
 public class PageController {
     @Autowired
+    private IConfigService iConfigService;
+    @Autowired
     private ISiteService iSiteService;
     @Autowired
     private IBookService iBookService;
     @Autowired
-    private IConfigService iConfigService;
+    private IChapterService iChapterService;
 
     /*站点*/
     @GetMapping("/site/list")
@@ -94,5 +100,16 @@ public class PageController {
         map.put("optionBook", iBookService.option());
         map.put("optionConfig", iConfigService.option());
         return "chapter/add";
+    }
+
+    @SneakyThrows
+    @GetMapping("/chapter/show/{id}")
+    public String chapterShow(@PathVariable String id, Map map) {
+        ChapterInfoReturnVO rv = iChapterService.queryChapterInfo(Long.valueOf(id));
+        map.put("book", rv.getBook());
+        map.put("chapter", rv.getChapter());
+        map.put("nextChapterid", rv.getNextChapterid() + "");
+        map.put("paragraphList", rv.getParagraphList());
+        return "chapter/show";
     }
 }

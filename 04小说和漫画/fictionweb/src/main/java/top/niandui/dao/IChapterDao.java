@@ -18,4 +18,10 @@ public interface IChapterDao<T> extends IBaseDao<T> {
 
     // 查询书籍最后一章节
     Chapter queryBookAsList(Long id);
+
+    // 获取下一章
+    Chapter nextModel(Long id);
+
+    // 获取下一章id
+    Long nextChapterid(Long id);
 }
