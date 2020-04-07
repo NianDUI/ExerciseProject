@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author: liyongda
  * @version: 1.0
  */
-@EnableAsync
 @Configuration
 public class WebMvcConfig {
 
