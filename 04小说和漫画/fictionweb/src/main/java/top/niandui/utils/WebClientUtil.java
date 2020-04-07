@@ -53,10 +53,11 @@ public class WebClientUtil {
      * @param config        配置
      * @param book          书籍
      * @param seqid         章节序号
-     * @param iChapterDao   创建章节回调方法
-     * @param iParagraphDao 创建段落回调方法
+     * @param isFirstJump   第一次是否跳过,t跳过、f不跳过
+     * @param iChapterDao   章节dao
+     * @param iParagraphDao 段落dao
      */
-    public static void getBook(Config config, Book book, long seqid, IChapterDao iChapterDao, IParagraphDao iParagraphDao) {
+    public static void getBook(Config config, Book book, long seqid, boolean isFirstJump, IChapterDao iChapterDao, IParagraphDao iParagraphDao) {
         Function<String, String> titleHandler = HandleUtils.getTitleHandler(book.getTitlehandler());
         try {
             // 获取开始结束时间
@@ -64,64 +65,70 @@ public class WebClientUtil {
             // 获取起始页面
             HtmlPage htmlPage = WEB_CLIENT.getPage(book.getStarturl());
             while (true) {
-                Chapter chapter = new Chapter();
-                chapter.setBookid(book.getBookid());
-                chapter.setConfigid(book.getConfigid());
-                // 获取标题DOM列表
-                List titleList = htmlPage.getByXPath(config.getTitlematch());
-                // 调用自定义方法处理标题
-                try {
-                    chapter.setRawname(titleList.get(0).toString().trim());
-                    String title = titleHandler.apply(chapter.getRawname());
-                    chapter.setName(title);
-                    log.info(chapter.getRawname() + " -> " + title);
-                } catch (Exception e) {
-                    // 获取内容出错时，为服务端限制，重新拉去该页面。
-                    // Index: 0, Size: 0
-                    log.info(e.getMessage());
-                    // 调用休眠处理方法
-                    HandleUtils.sleepHandler.get();
-                    startTime = System.currentTimeMillis();
-                    htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
-                    continue;
-                }
-                // 计算使用时间
-                endTimes = System.currentTimeMillis();
-                log.info(chapter.getName() + " " + (endTimes - startTime) / 1000.0 + "s");
-                startTime = endTimes;
-                // 本页链接
-                chapter.setUrl(htmlPage.getUrl().toString().trim());
-                chapter.setSeqid(seqid++);
-                // 创建章节
-                iChapterDao.create(chapter);
-                // 获取内容DOM列表
-                List list = htmlPage.getByXPath(config.getConmatch());
-                List<Paragraph> paragraphList = new ArrayList<>();
-                for (int i = config.getStartoffset(); i < list.size() + config.getEndoffset(); i++) {
-                    String line = list.get(i).toString().trim();
-                    int start = 0;
-                    while (line.startsWith("　", start)) {
-                        start++;
-                    }
-                    line = line.substring(start).trim();
-                    if (line.length() == 0) {
+                String url = htmlPage.getUrl().toString().trim();
+                if (!isFirstJump) {
+                    Chapter chapter = new Chapter();
+                    // 获取标题DOM列表
+                    List titleList = htmlPage.getByXPath(config.getTitlematch());
+                    // 调用自定义方法处理标题
+                    try {
+                        chapter.setRawname(titleList.get(0).toString().trim());
+                        String title = titleHandler.apply(chapter.getRawname());
+                        chapter.setName(title);
+                        log.info(chapter.getRawname() + " -> " + title);
+                    } catch (Exception e) {
+                        // 获取内容出错时，为服务端限制，重新拉去该页面。
+                        // Index: 0, Size: 0
+                        log.info(e.getMessage());
+                        // 调用休眠处理方法
+                        HandleUtils.sleepHandler.get();
+                        startTime = System.currentTimeMillis();
+                        htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
                         continue;
                     }
-                    Paragraph paragraph = new Paragraph();
-                    paragraph.setBookid(book.getBookid());
-                    paragraph.setChapterid(chapter.getChapterid());
-                    paragraph.setContent(line);
-                    paragraph.setSeqid((long) i);
-                    paragraphList.add(paragraph);
+                    // 计算使用时间
+                    endTimes = System.currentTimeMillis();
+                    log.info(chapter.getName() + " " + (endTimes - startTime) / 1000.0 + "s");
+                    startTime = endTimes;
+                    chapter.setBookid(book.getBookid());
+                    chapter.setConfigid(book.getConfigid());
+                    // 本页链接
+                    chapter.setUrl(url);
+                    chapter.setSeqid(seqid++);
+                    // 创建章节
+                    iChapterDao.create(chapter);
+                    // 获取内容DOM列表
+                    List list = htmlPage.getByXPath(config.getConmatch());
+                    List<Paragraph> paragraphList = new ArrayList<>();
+                    for (int i = config.getStartoffset(); i < list.size() + config.getEndoffset(); i++) {
+                        String line = list.get(i).toString().trim();
+                        int start = 0;
+                        while (line.startsWith("　", start)) {
+                            start++;
+                        }
+                        line = line.substring(start).trim();
+                        if (line.length() == 0) {
+                            continue;
+                        }
+                        Paragraph paragraph = new Paragraph();
+                        paragraph.setBookid(book.getBookid());
+                        paragraph.setChapterid(chapter.getChapterid());
+                        paragraph.setContent(line);
+                        paragraph.setSeqid((long) i);
+                        paragraphList.add(paragraph);
+                    }
+                    // 创建段落列表
+                    iParagraphDao.createBatch(paragraphList);
                 }
-                // 创建段落列表
-                iParagraphDao.createBatch(paragraphList);
+                if (isFirstJump) {
+                    isFirstJump = false;
+                }
                 // 获取跳转超链接DOM列表
                 List aList = htmlPage.getByXPath(config.getAmatch());
                 // 获取下一页的超链接DOM
                 HtmlAnchor next = (HtmlAnchor) aList.get(config.getNexta());
                 // 调用自定义方法判断下一页是否还有内容
-                if (HandleUtils.isEndHref.apply(chapter.getUrl(), next.getHrefAttribute().trim())) {
+                if (HandleUtils.isEndHref.apply(url, next.getHrefAttribute().trim())) {
                     break;
                 }
                 // 跳转下一页

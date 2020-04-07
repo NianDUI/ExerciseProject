@@ -24,12 +24,12 @@ public class Chapter extends BaseModel {
     @NotBlank(message = "章节名称不能为空")
     @ApiModelProperty(value = "章节名称", required = true)
     private String name;
-    @NotNull(message = "书籍id不能为空")
-    @ApiModelProperty(value = "书籍id", required = true)
+    @ApiModelProperty(value = "书籍id")
     private Long bookid;
     @ApiModelProperty(value = "配置id")
     private Long configid;
-    @ApiModelProperty(value = "原章节名称")
+    @NotBlank(message = "原章节名称不能为空")
+    @ApiModelProperty(value = "原章节名称", required = true)
     private String rawname;
     @ApiModelProperty(value = "创建时间")
     private Timestamp createtime;

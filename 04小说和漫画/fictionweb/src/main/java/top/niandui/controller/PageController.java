@@ -1,5 +1,6 @@
 package top.niandui.controller;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import springfox.documentation.annotations.ApiIgnore;
 import top.niandui.service.IBookService;
 import top.niandui.service.IConfigService;
+import top.niandui.service.ISiteService;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -24,6 +25,8 @@ import java.util.Map;
 @Controller
 public class PageController {
     @Autowired
+    private ISiteService iSiteService;
+    @Autowired
     private IBookService iBookService;
     @Autowired
     private IConfigService iConfigService;
@@ -34,23 +37,33 @@ public class PageController {
         return "site/list";
     }
 
+    @SneakyThrows
     @GetMapping("/site/add/{id}")
     public String siteAdd(@PathVariable String id, Map map) {
         map.put("id", id);
-        addOptionConfig(map);
+        map.put("optionConfig", iConfigService.option());
         return "site/add";
     }
 
     /*书籍*/
-    @GetMapping("/book/list")
-    public String bookList() {
+    @GetMapping("/book/list/{id}")
+    public String bookList(@PathVariable String id, Map map){
+        map.put("siteid", id);
         return "book/list";
     }
 
+    @GetMapping("/book/list")
+    public String bookList(Map map) {
+        map.put("siteid", "null");
+        return "book/list";
+    }
+
+    @SneakyThrows
     @GetMapping("/book/add/{id}")
     public String bookAdd(@PathVariable String id, Map map) {
         map.put("id", id);
-        addOptionConfig(map);
+        map.put("optionSite", iSiteService.option());
+        map.put("optionConfig", iConfigService.option());
         return "book/add";
     }
 
@@ -67,25 +80,19 @@ public class PageController {
     }
 
     /*章节*/
+    @SneakyThrows
     @GetMapping("/chapter/list/{id}")
-    public String chapterList(@PathVariable String id, Map map) throws Exception {
+    public String chapterList(@PathVariable String id, Map map) {
         map.put("book", iBookService.model(Long.valueOf(id)));
         return "chapter/list";
     }
 
+    @SneakyThrows
     @GetMapping("/chapter/add/{id}")
     public String chapterAdd(@PathVariable String id, Map map) {
         map.put("id", id);
+        map.put("optionBook", iBookService.option());
+        map.put("optionConfig", iConfigService.option());
         return "chapter/add";
-    }
-
-    private void addOptionConfig(Map map) {
-        try {
-            map.put("optionConfig", iConfigService.option());
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.toString());
-            map.put("optionConfig", Collections.EMPTY_LIST);
-        }
     }
 }

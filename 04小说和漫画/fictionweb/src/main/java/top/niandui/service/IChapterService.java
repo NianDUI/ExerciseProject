@@ -38,5 +38,8 @@ public interface IChapterService {
     void checkName(IdNameModel checkName) throws Exception;
 
     // 获取章节
-    void obtainChapter(Long id) throws Exception;
+    void reacquireChapter(Long id) throws Exception;
+
+    // 获取后续章节
+    void getFollowUpChapter(Long id) throws Exception;
 }

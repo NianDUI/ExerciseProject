@@ -17,4 +17,6 @@ import top.niandui.model.Book;
 public class BookListReturnVO extends Book {
     @ApiModelProperty(value = "配置名称")
     private String configname;
+    @ApiModelProperty(value = "站点名称")
+    private String sitename;
 }

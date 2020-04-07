@@ -39,4 +39,7 @@ public class Book extends BaseModel {
     @NotBlank(message = "标题处理信息不能为空")
     @ApiModelProperty(value = "标题处理信息", required = true)
     private String titlehandler;
+    @NotNull(message = "站点id不能为空")
+    @ApiModelProperty(value = "站点id", required = true)
+    private Long siteid;
 }

@@ -88,11 +88,27 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
 
     @Async
     @Override
-    public void obtainChapter(Long id) throws Exception {
+    public void reacquireChapter(Long id) throws Exception {
         iChapterDao.deleteByBookId(id.toString());
         iParagraphDao.deleteByBookId(id.toString());
         Book book = (Book) iBookDao.model(id);
         Config config = (Config) iConfigDao.model(book.getConfigid());
-        WebClientUtil.getBook(config, book, 0, iChapterDao, iParagraphDao);
+        // 第一次不跳过
+        WebClientUtil.getBook(config, book, 0, false, iChapterDao, iParagraphDao);
+    }
+
+    @Override
+    public void getFollowUpChapter(Long id) throws Exception {
+        Book book = (Book) iBookDao.model(id);
+        Config config = (Config) iConfigDao.model(book.getConfigid());
+        Chapter chapter = iChapterDao.queryBookAsList(id);
+        if (chapter != null) {
+            book.setStarturl(chapter.getUrl());
+            // 第一次跳过
+            WebClientUtil.getBook(config, book, chapter.getSeqid() + 1, true, iChapterDao, iParagraphDao);
+        } else {
+            // 第一次不跳过
+            WebClientUtil.getBook(config, book, 0, false, iChapterDao, iParagraphDao);
+        }
     }
 }

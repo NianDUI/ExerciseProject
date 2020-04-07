@@ -17,4 +17,6 @@ import top.niandui.common.model.PageOrder;
 public class BookSearchVO extends PageOrder {
     @ApiModelProperty(value = "书籍名称")
     private String name;
+    @ApiModelProperty(value = "站点id")
+    private Long siteid;
 }
