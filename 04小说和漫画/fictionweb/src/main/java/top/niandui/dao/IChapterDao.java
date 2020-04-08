@@ -24,4 +24,7 @@ public interface IChapterDao<T> extends IBaseDao<T> {
 
     // 获取下一章id
     Long nextChapterid(Long id);
+
+    // 获取上一章id
+    Long prevChapterid(Long id);
 }

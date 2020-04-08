@@ -128,13 +128,14 @@
         LIMIT 1
     </select>
 
+    <!-- 获取下一章 -->
     <select id="nextModel" resultType="top.niandui.model.Chapter">
         SELECT
             <include refid="tableField"/>
         FROM "chapter" c
         WHERE EXISTS (
                 SELECT 1 FROM  "chapter" cc
-                WHERE "chapterid" = 1387
+                WHERE "chapterid" = #{id}
                     AND c."bookid" = cc."bookid"
                     AND c."seqid" > cc."seqid"
             )
@@ -142,14 +143,29 @@
         LIMIT 1
     </select>
 
+    <!-- 获取下一章id -->
     <select id="nextChapterid" resultType="long">
         SELECT "chapterid"
         FROM "chapter" c
         WHERE EXISTS (
                 SELECT 1 FROM  "chapter" cc
-                WHERE "chapterid" = 1387
+                WHERE "chapterid" = #{id}
                     AND c."bookid" = cc."bookid"
-                    AND c."seqid" > cc."seqid"
+                    AND c."seqid" &gt; cc."seqid"
+            )
+        ORDER BY "seqid" ASC
+        LIMIT 1
+    </select>
+
+    <!-- 获取上一章id -->
+    <select id="prevChapterid" resultType="long">
+        SELECT "chapterid"
+        FROM "chapter" c
+        WHERE EXISTS (
+                SELECT 1 FROM  "chapter" cc
+                WHERE "chapterid" = #{id}
+                    AND c."bookid" = cc."bookid"
+                    AND c."seqid" &lt; cc."seqid"
             )
         ORDER BY "seqid" ASC
         LIMIT 1

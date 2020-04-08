@@ -18,21 +18,33 @@ const tableList = table.render({
     }
     , page: true
     , text: "获取失败"
-    , height: "full-110"
+    , height: "full-145"
     , text: {none: "暂无相关数据"}
     , cols: [[
         {checkbox: true, fixed: "left"}
         , {field: "name", title: "名称"}
         , {field: "rawname", title: "原名称"}
+        , {field: "bookname", title: "书籍"}
         , {field: "configname", title: "配置"}
         , {field: "createtime", title: "创建时间"}
         , {field: "url", title: "链接"}
-        , {title: "操作", fixed: "right", minWidth: 115, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 160, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
     var data = obj.data;
-    if (obj.event === "edit") {
+    if (obj.event === "show") {
+        layer.open({
+            type: 2
+            , title: "查看"
+            , shadeClose: true
+            , maxmin: true
+            , area: computeArea() + "px"
+            // , offset: "t"
+            , content: base + "chapter/show/" + data.chapterid // [, "no"]
+        })
+        ;
+    } else if (obj.event === "edit") {
         add(data.chapterid);
     } else if (obj.event === "del") {
         layer.confirm("确认删除该信息？", function (index) {
@@ -100,8 +112,8 @@ function add(id) {
         , title: "添加"
         , shadeClose: true
         , maxmin: true
-        , area: "450px"
-        , offset: "50px"
+        , area: computeArea() + "px"
+        // , offset: "t"
         , content: base + "chapter/add/" + id // [, "no"]
     });
 }
@@ -120,4 +132,16 @@ function del(id) {
             }
         }
     });
+}
+
+function computeArea() {
+    let area = document.documentElement.clientWidth / 5 * 3;
+    if (area < 400) {
+        if (document.documentElement.clientWidth < 400) {
+            area = document.documentElement.clientWidth;
+        } else {
+            area = 400;
+        }
+    }
+    return area;
 }

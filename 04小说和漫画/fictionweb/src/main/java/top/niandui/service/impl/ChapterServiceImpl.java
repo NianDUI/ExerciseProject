@@ -138,7 +138,9 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         // 获取本章
         rv.setChapter((Chapter) iChapterDao.model(id));
         // 获取下一章id
-        rv.setNextChapterid(iChapterDao.nextChapterid(id));
+        rv.setNextid(iChapterDao.nextChapterid(id));
+        // 获取上一章id
+        rv.setPrevid(iChapterDao.prevChapterid(id));
         rv.setBook((Book) iBookDao.model(rv.getChapter().getBookid()));
         ParagraphSearchVO sv = new ParagraphSearchVO();
         sv.setChapterid(rv.getChapter().getChapterid());

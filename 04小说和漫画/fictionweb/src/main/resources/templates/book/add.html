@@ -6,80 +6,81 @@
     <link th:href="@{/webjars/layui/2.5.6/css/layui.css}" rel="stylesheet" media="all">
 </head>
 <body>
-<form class="layui-form layui-col-md11" lay-filter="form">
-    <br/>
-    <div class="layui-form-item">
-        <label class="layui-form-label">名称</label>
-        <div class="layui-input-block">
-            <input type="text" name="name" placeholder="请输入书籍名称" lay-verify="required"
-                   autocomplete="off" class="layui-input name">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">站点</label>
-        <div class="layui-input-block">
-            <select name="siteid" class="siteid" lay-verify="required">
-                <option value=""></option>
-                <option th:each="item : ${optionSite}" th:value="${item.id}" th:text="${item.name}"></option>
-            </select>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">配置</label>
-        <div class="layui-input-block">
-            <select name="configid" class="configid" lay-verify="required">
-                <option value=""></option>
-                <option th:each="item : ${optionConfig}" th:value="${item.id}" th:text="${item.name}"></option>
-            </select>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">链接</label>
-        <div class="layui-input-block">
-            <input type="text" name="url" placeholder="书籍链接" lay-verify=""
-                   autocomplete="off" class="layui-input url">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">起始链接</label>
-        <div class="layui-input-block">
-            <input type="text" name="starturl" placeholder="请输入起始章节链接" lay-verify="required|url"
-                   autocomplete="off" class="layui-input starturl">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline layui-col-md3">
-            <label class="layui-form-label">标题处理方式</label>
-            <div class="layui-input-block">
-                <select name="handleType" class="handleType" lay-verify="required" lay-filter="handleType">
-                    <option value="0">无处理</option>
-                    <option value="1">使用分隔符</option>
-                    <option value="2">数字开头无分隔符</option>
-                </select>
+<fieldset class="layui-elem-field ">
+    <div class="layui-field-box">
+        <form class="layui-form" lay-filter="form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入书籍名称" lay-verify="required"
+                           autocomplete="off" class="layui-input name">
+                </div>
             </div>
-        </div>
-        <div class="layui-inline layui-col-md3 startIndexDiv">
-            <label class="layui-form-label">处理起始索引</label>
-            <div class="layui-input-block">
-                <input type="text" name="startIndex" value="0" placeholder="请输入处理起始索引" lay-verify="startIndex"
-                       autocomplete="off" class="layui-input startIndex">
+            <div class="layui-form-item">
+                <label class="layui-form-label">站点</label>
+                <div class="layui-input-block">
+                    <select name="siteid" class="siteid" lay-verify="required">
+                        <option value=""></option>
+                        <option th:each="item : ${optionSite}" th:value="${item.id}" th:text="${item.name}"></option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="layui-inline layui-col-md3 delimiterDiv">
-            <label class="layui-form-label">分隔符</label>
-            <div class="layui-input-block">
-                <input type="text" name="delimiter" placeholder="请输入分隔符" lay-verify="delimiter"
-                       autocomplete="off" class="layui-input delimiter">
+            <div class="layui-form-item">
+                <label class="layui-form-label">配置</label>
+                <div class="layui-input-block">
+                    <select name="configid" class="configid" lay-verify="required">
+                        <option value=""></option>
+                        <option th:each="item : ${optionConfig}" th:value="${item.id}" th:text="${item.name}"></option>
+                    </select>
+                </div>
             </div>
-        </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">链接</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" placeholder="书籍链接" lay-verify=""
+                           autocomplete="off" class="layui-input url">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">起始链接</label>
+                <div class="layui-input-block">
+                    <input type="text" name="starturl" placeholder="请输入起始章节链接" lay-verify="required|url"
+                           autocomplete="off" class="layui-input starturl">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                    <label class="layui-form-label">标题处理方式</label>
+                    <div class="layui-input-block">
+                        <select name="handleType" class="handleType" lay-verify="required" lay-filter="handleType">
+                            <option value="0">无处理</option>
+                            <option value="1">使用分隔符</option>
+                            <option value="2">数字开头无分隔符</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="layui-form-item startIndexDiv" style="display: none;">
+                <label class="layui-form-label">处理起始索引</label>
+                <div class="layui-input-block">
+                    <input type="text" name="startIndex" value="0" placeholder="请输入处理起始索引" lay-verify="startIndex"
+                           autocomplete="off" class="layui-input startIndex">
+                </div>
+            </div>
+            <div class="layui-form-item delimiterDiv" style="display: none;">
+                <label class="layui-form-label">分隔符</label>
+                <div class="layui-input-block">
+                    <input type="text" name="delimiter" placeholder="请输入分隔符" lay-verify="delimiter"
+                           autocomplete="off" class="layui-input delimiter">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit lay-filter="submit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button type="submit" class="layui-btn" lay-submit lay-filter="submit">提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary reset">重置</button>
-        </div>
-    </div>
-</form>
+</fieldset>
 <script>const base = "[[@{/}]]";
 const id = [[${id}]];</script>
 <script th:src="@{/webjars/layui/2.5.6/layui.all.js}"></script>

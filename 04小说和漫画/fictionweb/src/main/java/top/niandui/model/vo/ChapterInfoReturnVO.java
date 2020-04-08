@@ -25,7 +25,9 @@ public class ChapterInfoReturnVO extends BaseModel {
     @ApiModelProperty(value = "章节")
     private Chapter chapter;
     @ApiModelProperty(value = "下一章id")
-    private Long nextChapterid;
+    private Long nextid;
+    @ApiModelProperty(value = "下上一章id")
+    private Long previd;
     @ApiModelProperty(value = "段落列表")
     private List<Paragraph> paragraphList;
 }

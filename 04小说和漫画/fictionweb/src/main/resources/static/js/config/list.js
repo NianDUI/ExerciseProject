@@ -17,7 +17,7 @@ const tableList = table.render({
     }
     , page: true
     , text: "获取失败"
-    , height: "full-110"
+    , height: "full-145"
     , text: {none: "暂无相关数据"}
     , cols: [[
         {checkbox: true, fixed: "left"}
@@ -30,7 +30,7 @@ const tableList = table.render({
         , {field: "endoffset", title: "结束偏移量"}
         , {field: "amatch", title: "跳转匹配"}
         , {field: "nexta", title: "下一页索引"}
-        , {title: "操作", fixed: "right", minWidth: 100, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 114, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
@@ -78,8 +78,8 @@ function add(id) {
         , title: "添加"
         , shadeClose: true
         , maxmin: true
-        , area: "450px"
-        , offset: "20px"
+        , area: computeArea() + "px"
+        // , offset: "t"
         , content: base + "config/add/" + id // [, "no"]
     });
 }
@@ -98,4 +98,16 @@ function del(id) {
             }
         }
     });
+}
+
+function computeArea() {
+    let area = document.documentElement.clientWidth / 5 * 3;
+    if (area < 400) {
+        if (document.documentElement.clientWidth < 400) {
+            area = document.documentElement.clientWidth;
+        } else {
+            area = 400;
+        }
+    }
+    return area;
 }

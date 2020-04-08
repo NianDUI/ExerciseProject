@@ -7,9 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import springfox.documentation.annotations.ApiIgnore;
-import top.niandui.model.Chapter;
 import top.niandui.model.vo.ChapterInfoReturnVO;
-import top.niandui.model.vo.ParagraphSearchVO;
 import top.niandui.service.IBookService;
 import top.niandui.service.IChapterService;
 import top.niandui.service.IConfigService;
@@ -108,7 +106,8 @@ public class PageController {
         ChapterInfoReturnVO rv = iChapterService.queryChapterInfo(Long.valueOf(id));
         map.put("book", rv.getBook());
         map.put("chapter", rv.getChapter());
-        map.put("nextChapterid", rv.getNextChapterid() + "");
+        map.put("previd", rv.getPrevid() + "");
+        map.put("nextid", rv.getNextid() + "");
         map.put("paragraphList", rv.getParagraphList());
         return "chapter/show";
     }

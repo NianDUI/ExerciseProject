@@ -17,7 +17,7 @@ const tableList = table.render({
     }
     , page: true
     , text: "获取失败"
-    , height: "full-110"
+    , height: "full-145"
     , text: {none: "暂无相关数据"}
     , cols: [[
         {checkbox: true, fixed: "left"}
@@ -75,8 +75,8 @@ function add(id) {
         , title: "添加"
         , shadeClose: true
         , maxmin: true
-        , area: "450px"
-        , offset: "100px"
+        , area: computeArea() + "px"
+        // , offset: "t"
         , content: base + "site/add/" + id // [, "no"]
     });
 }
@@ -95,4 +95,16 @@ function del(id) {
             }
         }
     });
+}
+
+function computeArea() {
+    let area = document.documentElement.clientWidth / 5 * 3;
+    if (area < 400) {
+        if (document.documentElement.clientWidth < 400) {
+            area = document.documentElement.clientWidth;
+        } else {
+            area = 400;
+        }
+    }
+    return area;
 }
