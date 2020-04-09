@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <link th:href="@{/webjars/layui/2.5.6/css/layui.css}" rel="stylesheet" media="all">
+</head>
+<body>
+<blockquote class="layui-elem-quote layui-quote-nm">
+    <div class="layui-btn-container" align="center">
+        <a class="layui-btn book">书籍管理</a>
+        <a class="layui-btn layui-btn-normal site">站点管理</a>
+        <a class="layui-btn layui-btn-warm config">配置管理</a>
+    </div>
+</blockquote>
+<script>
+    const base = "[[@{/}]]";
+    const bookPath = "[[@{/book/list}]]";
+    const sitePath = "[[@{/site/list}]]";
+    const configPath = "[[@{/config/list}]]";
+</script>
+<script th:src="@{/webjars/layui/2.5.6/layui.all.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

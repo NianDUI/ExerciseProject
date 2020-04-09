@@ -35,6 +35,11 @@ public class PageController {
     @Autowired
     private IChapterService iChapterService;
 
+    @GetMapping("/main")
+    public String main() {
+        return "main";
+    }
+
     /*站点*/
     @GetMapping("/site/list")
     public String siteList() {
