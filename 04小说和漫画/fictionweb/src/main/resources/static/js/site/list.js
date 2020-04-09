@@ -10,15 +10,12 @@ const tableList = table.render({
     , where: {
         name: ""
     }
-    , request: {pageName: "pageNum", limitName: "pageSize"}
-    , response: {statusCode: 200}
-    , parseData: function (res) {
-        return {"code": res.code, "msg": res.message, "count": res.data.total, "data": res.data.list}
-    }
+    , request: tableRequest
+    , response: tableReponse
+    , parseData: tableParseData
     , page: true
-    , text: "获取失败"
-    , height: "full-145"
-    , text: {none: "暂无相关数据"}
+    , height: tableHeight
+    , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
         , {field: "name", title: "名称"}
@@ -41,27 +38,7 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-$(".search").click(function () {
-    search();
-});
-$(".add").click(function () {
-    add("null");
-});
-$(".delAll").click(function () {
-    const data = table.checkStatus("table").data;
-    if (data.length == 0) {
-        layer.msg("请选择要删除的信息");
-    } else {
-        layer.confirm("确认删除已选信息？", function (index) {
-            let id = "" + data[0].siteid;
-            for (let i = 1; i < data.length; i++) {
-                id += "," + data[i].siteid;
-            }
-            del(id);
-            layer.close(index);
-        });
-    }
-});
+list();
 
 function search() {
     tableList.reload({
@@ -95,16 +72,4 @@ function del(id) {
             }
         }
     });
-}
-
-function computeArea() {
-    let area = document.documentElement.clientWidth / 5 * 3;
-    if (area < 400) {
-        if (document.documentElement.clientWidth < 400) {
-            area = document.documentElement.clientWidth;
-        } else {
-            area = 400;
-        }
-    }
-    return area;
 }
