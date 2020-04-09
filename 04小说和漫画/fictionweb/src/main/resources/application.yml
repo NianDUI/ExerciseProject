@@ -47,7 +47,7 @@ spring:
 
   # 数据库配置
   datasource:
-    url: jdbc:postgresql://localhost:5432/fiction
+    url: jdbc:postgresql://127.0.0.1:5432/fiction
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
