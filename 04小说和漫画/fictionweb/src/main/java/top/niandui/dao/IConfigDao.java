@@ -12,4 +12,6 @@ import top.niandui.common.base.IBaseDao;
  */
 @Repository
 public interface IConfigDao<T> extends IBaseDao<T> {
+    // 查询配置使用数量
+    long queryConfigUseCount(String id);
 }

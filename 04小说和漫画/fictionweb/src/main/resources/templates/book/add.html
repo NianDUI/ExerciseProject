@@ -19,7 +19,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">站点</label>
                 <div class="layui-input-block">
-                    <select name="siteid" class="siteid" lay-verify="required">
+                    <select name="siteid" class="siteid" lay-verify="required" lay-filter="siteid">
                         <option value=""></option>
                         <option th:each="item : ${optionSite}" th:value="${item.id}" th:text="${item.name}"></option>
                     </select>

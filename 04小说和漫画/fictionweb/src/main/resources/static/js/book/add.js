@@ -82,6 +82,23 @@ form.on("submit(submit)", function (data) {
     });
     return false;
 });
+form.on('select(siteid)', function (data) {
+    if (data.value.trim().length == 0) {
+        return;
+    }
+    $.ajax({
+        type: "get"
+        , contentType: "application/json"
+        , url: base + "api/modelSite/" + data.value
+        , success: function (data) {
+            if (data.code == 200) {
+                form.val("form", {configid: data.data.configid});
+            } else {
+                layer.alert(data.message);
+            }
+        }
+    });
+});
 form.on('select(handleType)', function (data) {
     setShowHide();
 });

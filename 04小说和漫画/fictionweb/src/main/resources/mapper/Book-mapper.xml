@@ -99,4 +99,11 @@
         SET "taskstatus" = #{taskstatus}
         WHERE "bookid" = #{bookid}
     </update>
+
+    <!-- 查询站点书籍数量 -->
+    <select id="querySiteBookCount" resultType="int">
+        SELECT COUNT(1)
+        FROM "book"
+        WHERE "siteid" IN (${id})
+    </select>
 </mapper>

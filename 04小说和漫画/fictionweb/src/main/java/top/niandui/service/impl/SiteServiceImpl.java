@@ -5,7 +5,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.niandui.common.base.BaseServiceImpl;
+import top.niandui.common.expection.ReStateException;
 import top.niandui.common.model.IdNameModel;
+import top.niandui.dao.IBookDao;
 import top.niandui.dao.ISiteDao;
 import top.niandui.model.Site;
 import top.niandui.model.vo.SiteListReturnVO;
@@ -25,6 +27,8 @@ import java.util.List;
 public class SiteServiceImpl extends BaseServiceImpl implements ISiteService {
     @Autowired
     private ISiteDao iSiteDao;
+    @Autowired
+    private IBookDao iBookDao;
 
     @Override
     public void create(Site site) throws Exception {
@@ -42,6 +46,10 @@ public class SiteServiceImpl extends BaseServiceImpl implements ISiteService {
 
     @Override
     public void delete(String id) throws Exception {
+        int count = iBookDao.querySiteBookCount(id);
+        if (count > 0) {
+            throw new ReStateException("站点存在书籍!");
+        }
         iSiteDao.delete(id);
     }
 

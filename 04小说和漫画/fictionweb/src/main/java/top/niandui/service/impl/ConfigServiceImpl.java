@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.niandui.common.base.BaseServiceImpl;
+import top.niandui.common.expection.ReStateException;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.dao.IConfigDao;
 import top.niandui.model.Config;
@@ -41,6 +42,10 @@ public class ConfigServiceImpl extends BaseServiceImpl implements IConfigService
 
     @Override
     public void delete(String id) throws Exception {
+        long count = iConfigDao.queryConfigUseCount(id);
+        if (count > 0) {
+            throw new ReStateException("该配置已被使用!");
+        }
         iConfigDao.delete(id);
     }
 

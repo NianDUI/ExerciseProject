@@ -14,4 +14,7 @@ import top.niandui.common.base.IBaseDao;
 public interface IBookDao<T> extends IBaseDao<T> {
     // 更新任务状态
     void updateTaskstatus(Long bookid, Integer taskstatus);
+
+    // 查询站点书籍数量
+    int querySiteBookCount(String id);
 }

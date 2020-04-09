@@ -87,4 +87,12 @@
         DELETE FROM "config"
         WHERE "configid" IN (${id})
     </delete>
+
+    <!-- 查询配置使用数量 -->
+    <select id="queryConfigUseCount" resultType="long">
+        SELECT
+            ( SELECT COUNT ( 1 ) FROM "site" WHERE "configid" IN (${id}) )
+            + ( SELECT COUNT ( 1 ) FROM "book" WHERE "configid" IN (${id}) )
+            + ( SELECT COUNT ( 1 ) FROM "chapter" WHERE "configid" IN (${id}) )
+    </select>
 </mapper>

@@ -11,21 +11,20 @@ import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IConfigDao;
 import top.niandui.dao.IParagraphDao;
-import top.niandui.model.*;
 import top.niandui.model.Book;
+import top.niandui.model.Chapter;
+import top.niandui.model.Config;
+import top.niandui.model.Paragraph;
 import top.niandui.model.vo.BookListReturnVO;
 import top.niandui.model.vo.BookSearchVO;
 import top.niandui.model.vo.ChapterSearchVO;
 import top.niandui.model.vo.ParagraphSearchVO;
 import top.niandui.service.IBookService;
-import top.niandui.service.IBookService;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -50,14 +49,14 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     @Override
     public void create(Book book) throws Exception {
         // 检查重名
-        checkName(new IdNameModel(book.getBookid(), book.getName()));
+        // checkName(new IdNameModel(book.getBookid(), book.getName()));
         iBookDao.create(book);
     }
 
     @Override
     public void update(Book book) throws Exception {
         // 检查重名
-        checkName(new IdNameModel(book.getBookid(), book.getName()));
+        // checkName(new IdNameModel(book.getBookid(), book.getName()));
         iBookDao.update(book);
     }
 
