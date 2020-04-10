@@ -25,7 +25,7 @@ const tableList = table.render({
         , {field: "configname", title: "配置"}
         , {field: "createtime", title: "创建时间"}
         , {field: "url", title: "链接"}
-        , {title: "操作", fixed: "right", minWidth: 160, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 208, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
@@ -41,6 +41,21 @@ table.on("tool(table)", function (obj) {
             , content: base + "chapter/show/" + data.chapterid // [, "no"]
         })
         ;
+    } else if (obj.event === "reacquire") {
+        const index = layer.load(2);
+        $.ajax({
+            type: "get"
+            , contentType: "application/json"
+            , url: base + "api/reacquireSingleChapter/" + data.chapterid
+            , success: function (data) {
+                layer.close(index);
+                if (data.code == 200) {
+                    layer.msg("获取成功");
+                } else {
+                    layer.alert(data.message);
+                }
+            }
+        });
     } else if (obj.event === "edit") {
         add(data.chapterid);
     } else if (obj.event === "del") {
@@ -55,7 +70,7 @@ $(".reacquire").click(function () {
     $.ajax({
         type: "get"
         , contentType: "application/json"
-        , url: base + "api/reacquireChapter/" + bookid
+        , url: base + "api/reacquireAllChapter/" + bookid
         , success: function (data) {
             if (data.code == 200) {
                 layer.msg("正在获取");

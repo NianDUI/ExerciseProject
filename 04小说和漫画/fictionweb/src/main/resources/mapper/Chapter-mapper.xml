@@ -118,7 +118,7 @@
     </delete>
 
     <!-- 查询书籍最后一章节 -->
-    <select id="queryBookAsList" resultType="top.niandui.model.Chapter">
+    <select id="queryBookAsLastChapter" resultType="top.niandui.model.Chapter">
         SELECT
             c."chapterid",c."name",c."bookid",c."configid",c."rawname",c."createtime",c."seqid",c."url"
         FROM "chapter" c

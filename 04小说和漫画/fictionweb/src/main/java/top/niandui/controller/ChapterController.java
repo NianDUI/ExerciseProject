@@ -77,11 +77,11 @@ public class ChapterController extends BaseController {
         return ResponseData.ok();
     }
 
-    @GetMapping("/reacquireChapter/{id}")
-    @ApiOperation(value = "重新获取章节", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @GetMapping("/reacquireAllChapter/{id}")
+    @ApiOperation(value = "重新获取所有章节", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
-    public ResponseData reacquireChapter(@PathVariable Long id) throws Exception {
-        iChapterService.reacquireChapter(id);
+    public ResponseData reacquireAllChapter(@PathVariable Long id) throws Exception {
+        iChapterService.reacquireAllChapter(id);
         return ResponseData.ok();
     }
 
@@ -90,6 +90,14 @@ public class ChapterController extends BaseController {
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
     public ResponseData getFollowUpChapter(@PathVariable Long id) throws Exception {
         iChapterService.getFollowUpChapter(id);
+        return ResponseData.ok();
+    }
+
+    @GetMapping("/reacquireSingleChapter/{id}")
+    @ApiOperation(value = "重新获取单个章节", notes = "<br>开发人：李永达<br>时间：2020/04/10<br>")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "章节id", dataType = "Long", required = true))
+    public ResponseData reacquireSingleChapter(@PathVariable Long id) throws Exception {
+        iChapterService.reacquireSingleChapter(id);
         return ResponseData.ok();
     }
 }

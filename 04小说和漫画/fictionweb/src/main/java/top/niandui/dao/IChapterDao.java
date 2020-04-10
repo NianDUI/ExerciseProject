@@ -17,7 +17,7 @@ public interface IChapterDao<T> extends IBaseDao<T> {
     void deleteByBookId(String id);
 
     // 查询书籍最后一章节
-    Chapter queryBookAsList(Long id);
+    Chapter queryBookAsLastChapter(Long id);
 
     // 获取下一章
     Chapter nextModel(Long id);

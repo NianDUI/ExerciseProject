@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import top.niandui.common.expection.ReStateException;
 import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IParagraphDao;
@@ -151,7 +152,6 @@ public class WebClientUtil {
      * @param config  配置信息
      * @param chapter 章节信息
      */
-    @Async
     public void getChapter(Config config, Chapter chapter) {
         try {
             // 获取开始结束时间
@@ -163,9 +163,9 @@ public class WebClientUtil {
                 // 获取标题DOM列表
                 List titleList = htmlPage.getByXPath(config.getTitlematch());
                 // 标题是否存在
+                String title;
                 try {
-                    String title = titleList.get(0).toString().trim();
-                    log.info(title);
+                    title = titleList.get(0).toString().trim();
                 } catch (Exception e) {
                     // 获取内容出错时，为服务端限制，重新拉去该页面。
                     // Index: 0, Size: 0
@@ -178,7 +178,7 @@ public class WebClientUtil {
                 }
                 // 计算使用时间
                 endTimes = System.currentTimeMillis();
-                log.info(chapter.getName() + " " + (endTimes - startTime) / 1000.0 + "s");
+                log.info(title + " " + (endTimes - startTime) / 1000.0 + "s");
                 // 删除原有段落信息
                 iParagraphDao.deleteByChapterId(chapter.getChapterid().toString());
                 // 获取段落列表
@@ -191,11 +191,10 @@ public class WebClientUtil {
         } catch (Exception e) {
             log.info("获取失败...");
             log.error(e.toString());
-            throw new RuntimeException(e);
+            throw new ReStateException("获取失败");
         }
         // 更新任务状态
         iBookDao.updateTaskstatus(chapter.getBookid(), 0);
-
     }
 
     /**

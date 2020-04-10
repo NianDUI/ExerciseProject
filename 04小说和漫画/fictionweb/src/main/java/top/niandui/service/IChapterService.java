@@ -38,11 +38,14 @@ public interface IChapterService {
     // 重名校验
     void checkName(IdNameModel checkName) throws Exception;
 
-    // 获取章节
-    void reacquireChapter(Long id) throws Exception;
+    // 重新获取所有章节
+    void reacquireAllChapter(Long id) throws Exception;
 
     // 获取后续章节
     void getFollowUpChapter(Long id) throws Exception;
+
+    // 重新获取单个章节
+    void reacquireSingleChapter(Long id) throws Exception;
 
     // 查询章节信息
     ChapterInfoReturnVO queryChapterInfo(Long id) throws Exception;

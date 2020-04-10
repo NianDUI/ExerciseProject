@@ -91,7 +91,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     }
 
     @Override
-    public void reacquireChapter(Long id) throws Exception {
+    public void reacquireAllChapter(Long id) throws Exception {
         Book book = (Book) iBookDao.model(id);
         isTaskStatus(book);
         iChapterDao.deleteByBookId(id.toString());
@@ -108,7 +108,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         Book book = (Book) iBookDao.model(id);
         isTaskStatus(book);
         Config config = (Config) iConfigDao.model(book.getConfigid());
-        Chapter chapter = iChapterDao.queryBookAsList(id);
+        Chapter chapter = iChapterDao.queryBookAsLastChapter(id);
         // 更新任务状态
         iBookDao.updateTaskstatus(book.getBookid(), 2);
         if (chapter != null) {
@@ -121,14 +121,27 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         }
     }
 
+    @Override
+    public void reacquireSingleChapter(Long id) throws Exception {
+        Chapter chapter = (Chapter) iChapterDao.model(id);
+        Book book = (Book) iBookDao.model(chapter.getBookid());
+        isTaskStatus(book);
+        Config config = (Config) iConfigDao.model(book.getConfigid());
+        // 更新任务状态
+        iBookDao.updateTaskstatus(book.getBookid(), 3);
+        webClientUtil.getChapter(config, chapter);
+    }
+
     private void isTaskStatus(Book book) throws Exception {
         if (book.getTaskstatus() == null) {
             return;
         }
         if (book.getTaskstatus() == 1) {
-            throw new ReStateException("正在执行重新获取任务");
+            throw new ReStateException("正在执行重新获取全部任务");
         } else if (book.getTaskstatus() == 2) {
-            throw new ReStateException("正在执行获取后续任务");
+            throw new ReStateException("正在执行获取后续章节任务");
+        } else if (book.getTaskstatus() == 3) {
+            throw new ReStateException("正在执行重新获取单章任务");
         }
     }
 

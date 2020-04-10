@@ -70,8 +70,9 @@
             b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus"
             ,c."name" "configname",s."name" "sitename"
             ,CASE b."taskstatus"
-                WHEN 1 THEN '重新获取'
-                WHEN 2 THEN '获取后续'
+                WHEN 1 THEN '重新获取全部'
+                WHEN 2 THEN '获取后续章节'
+                WHEN 3 THEN '重新获取单章'
                 ELSE '无'
              END "taskname"
         FROM "book" b

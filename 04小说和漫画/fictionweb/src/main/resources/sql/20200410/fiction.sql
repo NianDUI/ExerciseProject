@@ -73,7 +73,7 @@ COMMENT ON COLUMN "public"."book"."createtime" IS '创建时间';
 COMMENT ON COLUMN "public"."book"."starturl" IS '起始章节链接';
 COMMENT ON COLUMN "public"."book"."handlerinfo" IS '处理信息';
 COMMENT ON COLUMN "public"."book"."siteid" IS '站点id';
-COMMENT ON COLUMN "public"."book"."taskstatus" IS '任务状态：0无，1重新获取，2获取后续';
+COMMENT ON COLUMN "public"."book"."taskstatus" IS '任务状态：0无，1重新获取全部，2获取后续章节，3重新获取单章';
 COMMENT ON TABLE "public"."book" IS '书籍';
 
 -- ----------------------------
