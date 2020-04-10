@@ -1,10 +1,7 @@
 package top.niandui.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -19,9 +16,8 @@ import java.util.function.Supplier;
  */
 @Slf4j
 public class HandleUtils {
-    public static ObjectMapper json = new ObjectMapper();
 
-    public static BiFunction<String, String, Boolean> isEndHref = HandleUtils::isEndHrefDefaultMethod;
+    // 休眠处理器
     public static Supplier<Long> sleepHandler = () -> {
         long sleepTime = (long) (Math.random() * 4000 + 2000);
         try {
@@ -36,35 +32,59 @@ public class HandleUtils {
 
     /**
      * 获取标题处理器
+     *
+     * @param handleInfo 处理信息
+     * @return 标题处理器
      */
-    public static Function<String, String> getTitleHandler(String titleHandle) {
+    public static Function<String, String> getTitleHandler(Map handleInfo) {
         try {
-            Map handleInfo = json.readValue(titleHandle, Map.class);
-            Integer handleType = (Integer) handleInfo.get("handleType");
+            Integer titleType = (Integer) handleInfo.get("titleType");
             Integer startIndex = (Integer) handleInfo.get("startIndex");
-            if (handleType == 1) {
+            if (titleType == 1) {
                 String delimiter = (String) handleInfo.get("delimiter");
                 return title -> titleHandler(title, startIndex, delimiter, delimiter.length());
-            } else if (handleType == 2) {
+            } else if (titleType == 2) {
                 return title -> titleHandler(title, startIndex,
                         title.substring(startIndex).replaceAll("^\\d*", ""), 0);
             }
             return title -> title;
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.error(e.toString());
             return title -> title;
         }
     }
+
     /**
+     * 获取是否为最后一页判断器
      *
+     * @param handleInfo 处理信息
+     * @return 是否为最后一页判断器
+     */
+    public static BiFunction<String, String, Boolean> getIsEndHref(Map handleInfo) {
+        try {
+            Integer endType = (Integer) handleInfo.get("endType");
+            if (endType == 1) {
+                // 结束符
+                String endCharacter = (String) handleInfo.get("endCharacter");
+                return (thisLink, nextLink) -> nextLink.endsWith(endCharacter);
+            }
+            return HandleUtils::isEndHrefDefaultMethod;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.toString());
+            return HandleUtils::isEndHrefDefaultMethod;
+        }
+    }
+
+    /**
      * 标题分割处理方法1：**(开始分割索引)123(分割符)xxx -> 第123章 xxx
      *
      * @param title      标题
      * @param startIndex 开始分割索引
      * @param delimiter  分割符
      * @param delLength  分割长度
-     * @return
+     * @return 处理后的标题
      */
     public static String titleHandler(String title, int startIndex, String delimiter, int delLength) {
         int index = title.indexOf(delimiter);
@@ -76,12 +96,13 @@ public class HandleUtils {
 
     /**
      * 是否是结束路径默认判断方法
+     * 下一页链接不以html结束或下一页链接和本页链接末尾相同，视为最后一页t
      *
-     * @param thisLink   本页URL
-     * @param nextLink   下一页Href
+     * @param thisLink 本页URL
+     * @param nextLink 下一页Href
      * @return true 是最后一页，false不是最后一页
      */
     public static Boolean isEndHrefDefaultMethod(String thisLink, String nextLink) {
-        return !nextLink.toLowerCase().contains("html") || thisLink.endsWith(nextLink);
+        return !nextLink.toLowerCase().endsWith("html") || thisLink.endsWith(nextLink);
     }
 }

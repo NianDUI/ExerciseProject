@@ -3,21 +3,21 @@
 <mapper namespace="top.niandui.dao.IBookDao">
     <!--表字段-->
     <sql id="tableField">
-        "bookid","name","url","configid","createtime","starturl","titlehandler","siteid","taskstatus"
+        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus"
     </sql>
 
     <!-- 新增书籍 -->
     <insert id="create" parameterType="top.niandui.model.Book" useGeneratedKeys="true" keyProperty="bookid">
         INSERT INTO "book"
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            "name","url","configid","starturl","titlehandler","siteid",
+            "name","url","configid","starturl","handlerinfo","siteid",
         </trim>
         <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
             #{name,jdbcType=VARCHAR},
             #{url,jdbcType=VARCHAR},
             #{configid,jdbcType=BIGINT},
             #{starturl,jdbcType=VARCHAR},
-            #{titlehandler,jdbcType=VARCHAR},
+            #{handlerinfo,jdbcType=VARCHAR},
             #{siteid,jdbcType=BIGINT},
         </trim>
     </insert>
@@ -30,7 +30,7 @@
             "url" = #{url},
             "configid" = #{configid},
             "starturl" = #{starturl},
-            "titlehandler" = #{titlehandler},
+            "handlerinfo" = #{handlerinfo},
             "siteid" = #{siteid},
         </set>
         WHERE "bookid" = #{bookid};
@@ -67,7 +67,7 @@
     <!-- 查询所有书籍列表 -->
     <select id="queryList" parameterType="top.niandui.model.vo.BookSearchVO" resultType="top.niandui.model.vo.BookListReturnVO">
         SELECT
-            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."titlehandler",b."siteid",b."taskstatus"
+            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus"
             ,c."name" "configname",s."name" "sitename"
             ,CASE b."taskstatus"
                 WHEN 1 THEN '重新获取'

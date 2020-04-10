@@ -49,14 +49,14 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                    <label class="layui-form-label">标题处理方式</label>
-                    <div class="layui-input-block">
-                        <select name="handleType" class="handleType" lay-verify="required" lay-filter="handleType">
-                            <option value="0">无处理</option>
-                            <option value="1">使用分隔符</option>
-                            <option value="2">数字开头无分隔符</option>
-                        </select>
-                    </div>
+                <label class="layui-form-label">标题处理方式</label>
+                <div class="layui-input-block">
+                    <select name="titleType" class="titleType" lay-verify="required" lay-filter="titleType">
+                        <option value="0">无处理</option>
+                        <option value="1">使用分隔符</option>
+                        <option value="2">数字开头无分隔符</option>
+                    </select>
+                </div>
             </div>
             <div class="layui-form-item startIndexDiv" style="display: none;">
                 <label class="layui-form-label">处理起始索引</label>
@@ -70,6 +70,22 @@
                 <div class="layui-input-block">
                     <input type="text" name="delimiter" placeholder="请输入分隔符" lay-verify="delimiter"
                            autocomplete="off" class="layui-input delimiter">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">结束链接判断方式</label>
+                <div class="layui-input-block">
+                    <select name="endType" class="endType" lay-verify="required" lay-filter="endType">
+                        <option value="0">不以html结尾或和本页链接相同</option>
+                        <option value="1">以指定结束符结尾</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item endCharacterDiv" style="display: none;">
+                <label class="layui-form-label">结束符</label>
+                <div class="layui-input-block">
+                    <input type="text" name="endCharacter" value="" placeholder="请输入处理起始索引" lay-verify="endCharacter"
+                           autocomplete="off" class="layui-input endCharacter">
                 </div>
             </div>
             <div class="layui-form-item">

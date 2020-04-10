@@ -14,11 +14,12 @@ if (id != null) {
         , success: function (data) {
             if (data.code == 200) {
                 data = data.data;
-                let titlehandler = JSON.parse(data.titlehandler);
+                let handlerinfo = JSON.parse(data.handlerinfo);
                 $(".reset").click(function () {
                     form.val("form", data);
-                    form.val("form", titlehandler);
-                    setShowHide();
+                    form.val("form", handlerinfo);
+                    setTitleShowHide();
+                    setEndShowHide();
                     return false;
                 }).click();
             } else {
@@ -27,10 +28,11 @@ if (id != null) {
         }
     });
 }
-const handleType = $(".handleType");
+const titleType = $(".titleType");
+const endType = $(".endType");
 form.verify({
     startIndex: function (value) {
-        if (handleType.val() != 0) {
+        if (titleType.val() != 0) {
             if (isNaN(value.trim())) {
                 return "请输入数字";
             } else if (value < 0) {
@@ -39,9 +41,16 @@ form.verify({
         }
     }
     , delimiter: function (value) {
-        if (handleType.val() == 1) {
+        if (titleType.val() == 1) {
             if (value.length == 0) {
                 return "请输入分隔符";
+            }
+        }
+    }
+    , endCharacter: function (value) {
+        if (endType.val() == 1) {
+            if (value.trim().length == 0) {
+                return "请输入结束符";
             }
         }
     }
@@ -49,10 +58,12 @@ form.verify({
 form.on("submit(submit)", function (data) {
     const field = data.field;
     field.bookid = id;
-    field.titlehandler = JSON.stringify({
-        handleType: parseInt(field.handleType)
+    field.handlerinfo = JSON.stringify({
+        titleType: parseInt(field.titleType)
         , startIndex: parseInt(field.startIndex)
         , delimiter: field.delimiter
+        , endType: parseInt(field.endType)
+        , endCharacter: field.endCharacter
     });
     $.ajax({
         type: "post"
@@ -90,14 +101,18 @@ form.on('select(siteid)', function (data) {
         }
     });
 });
-form.on('select(handleType)', function (data) {
-    setShowHide();
+form.on('select(titleType)', function (data) {
+    setTitleShowHide();
+});
+form.on('select(endType)', function (data) {
+    setEndShowHide();
 });
 const startIndexDiv = $(".startIndexDiv");
 const delimiterDiv = $(".delimiterDiv");
+const endCharacterDiv = $(".endCharacterDiv");
 
-function setShowHide() {
-    let val = handleType.val();
+function setTitleShowHide() {
+    let val = titleType.val();
     if (val == 1) {
         startIndexDiv.show();
         delimiterDiv.show();
@@ -107,5 +122,14 @@ function setShowHide() {
     } else {
         startIndexDiv.hide();
         delimiterDiv.hide();
+    }
+}
+
+function setEndShowHide() {
+    let val = endType.val();
+    if (val == 1) {
+        endCharacterDiv.show();
+    } else {
+        endCharacterDiv.hide();
     }
 }

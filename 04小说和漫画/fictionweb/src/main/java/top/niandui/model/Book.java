@@ -36,9 +36,9 @@ public class Book extends BaseModel {
     @NotBlank(message = "起始章节链接不能为空")
     @ApiModelProperty(value = "起始章节链接", required = true)
     private String starturl;
-    @NotBlank(message = "标题处理信息不能为空")
-    @ApiModelProperty(value = "标题处理信息", required = true)
-    private String titlehandler;
+    @NotBlank(message = "处理信息不能为空")
+    @ApiModelProperty(value = "处理信息", required = true)
+    private String handlerinfo;
     @NotNull(message = "站点id不能为空")
     @ApiModelProperty(value = "站点id", required = true)
     private Long siteid;
