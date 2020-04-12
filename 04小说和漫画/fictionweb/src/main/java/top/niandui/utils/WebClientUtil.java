@@ -191,6 +191,8 @@ public class WebClientUtil {
         } catch (Exception e) {
             log.info("获取失败...");
             log.error(e.toString());
+            // 更新任务状态
+            iBookDao.updateTaskstatus(chapter.getBookid(), 0);
             throw new ReStateException("获取失败");
         }
         // 更新任务状态
