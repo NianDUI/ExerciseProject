@@ -140,7 +140,7 @@ public class WebClientUtil {
         } catch (Exception e) {
             log.info("获取失败...");
             log.error(e.toString());
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
         // 更新任务状态
         iBookDao.updateTaskstatus(book.getBookid(), 0);

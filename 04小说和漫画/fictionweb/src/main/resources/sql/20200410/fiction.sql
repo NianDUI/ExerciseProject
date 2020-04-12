@@ -89,10 +89,10 @@ INSERT INTO "public"."book" VALUES (23, '魔法的学术时代', 'http://www.biq
 DROP TABLE IF EXISTS "public"."chapter";
 CREATE TABLE "public"."chapter" (
   "chapterid" int8 NOT NULL DEFAULT nextval('seq_chapter'::regclass),
-  "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "name" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
   "bookid" int8 NOT NULL,
   "configid" int8,
-  "rawname" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "rawname" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
   "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   "seqid" int8 NOT NULL,
   "url" varchar(128) COLLATE "pg_catalog"."default" NOT NULL
