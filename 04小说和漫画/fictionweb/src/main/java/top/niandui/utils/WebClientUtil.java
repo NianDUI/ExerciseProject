@@ -84,6 +84,7 @@ public class WebClientUtil {
             long startTime = System.currentTimeMillis(), endTimes;
             // 获取起始页面
             HtmlPage htmlPage = WEB_CLIENT.getPage(book.getStarturl());
+            int errorNum = 0;
             while (true) {
                 String url = htmlPage.getUrl().toString().trim();
                 if (!isFirstJump) {
@@ -100,12 +101,16 @@ public class WebClientUtil {
                         // 获取内容出错时，为服务端限制，重新拉去该页面。
                         // Index: 0, Size: 0
                         log.info(e.getMessage());
+                        if (++errorNum > 10) {
+                            throw new RuntimeException("当前章节一重复获取10次错误，已停止获取");
+                        }
                         // 调用休眠处理方法
                         HandleUtils.sleepHandler.get();
                         startTime = System.currentTimeMillis();
                         htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
                         continue;
                     }
+                    errorNum = 0;
                     // 计算使用时间
                     endTimes = System.currentTimeMillis();
                     log.info(chapter.getName() + " " + (endTimes - startTime) / 1000.0 + "s");
@@ -139,6 +144,7 @@ public class WebClientUtil {
             log.info("获取结束...");
         } catch (Exception e) {
             log.info("获取失败...");
+            log.error("获取失败...");
             log.error(e.toString());
 //            throw new RuntimeException(e);
         }
