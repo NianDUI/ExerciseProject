@@ -51,8 +51,9 @@ public class GetIp {
      * @return 如果满足要求则true，否则false
      */
     private static boolean isValidInterface(NetworkInterface ni) throws SocketException {
+        String name = ni.getName();
         return !ni.isLoopback() && !ni.isPointToPoint() && ni.isUp() && !ni.isVirtual()
-                && (ni.getName().startsWith("eth") || ni.getName().startsWith("ens") || ni.getName().startsWith("wlan"));
+                && (name.startsWith("eth") || name.startsWith("ens") || name.startsWith("wlan"));
     }
 
     /**
