@@ -17,7 +17,7 @@ public class GetInfo extends PropertyDefinerBase {
     private static int i = 0;
 
     static {
-        serviceName ="fictionweb";
+        serviceName = "fictionweb";
         String hostAddress;
         try {
             hostAddress = GetIp.getLocalIp4Address().get().getHostAddress();
@@ -26,7 +26,7 @@ public class GetInfo extends PropertyDefinerBase {
         }
         serviceIp = hostAddress;
         // 动态设置日志目录
-        logDir =  new ApplicationHome(GetInfo.class).toString() + "/";
+        logDir = new ApplicationHome(GetInfo.class).toString() + "/";
     }
 
     @Override
