@@ -45,14 +45,14 @@ public class GetIp {
     }
 
     /**
-     * 过滤回环网卡、点对点网卡、非活动网卡、虚拟网卡并要求网卡名字是eth或ens开头
+     * 过滤回环网卡、点对点网卡、非活动网卡、虚拟网卡并要求网卡名字是eth或ens开头、或者为无线网卡(wlan开头)
      *
      * @param ni 网卡
      * @return 如果满足要求则true，否则false
      */
     private static boolean isValidInterface(NetworkInterface ni) throws SocketException {
         return !ni.isLoopback() && !ni.isPointToPoint() && ni.isUp() && !ni.isVirtual()
-                && (ni.getName().startsWith("eth") || ni.getName().startsWith("ens"));
+                && (ni.getName().startsWith("eth") || ni.getName().startsWith("ens") || ni.getName().startsWith("wlan"));
     }
 
     /**
