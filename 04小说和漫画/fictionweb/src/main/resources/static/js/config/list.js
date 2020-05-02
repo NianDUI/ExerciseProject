@@ -18,16 +18,16 @@ const tableList = table.render({
     , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
-        , {field: "name", title: "名称"}
-        , {field: "titlematch", title: "标题匹配"}
-        , {field: "titlelnnum", title: "标题后换行"}
-        , {field: "conmatch", title: "内容匹配"}
-        , {field: "conlnnum", title: "内容后换行"}
-        , {field: "startoffset", title: "开始偏移量"}
-        , {field: "endoffset", title: "结束偏移量"}
-        , {field: "amatch", title: "跳转匹配"}
-        , {field: "nexta", title: "下一页索引"}
-        , {title: "操作", fixed: "right", minWidth: 114, align: "center", toolbar: "#toolbar"}
+        , {field: "name", title: "名称", minWidth: 180}
+        , {field: "titlematch", title: "标题匹配", minWidth: 300}
+        , {field: "titlelnnum", title: "标题后换行", sort: true}
+        , {field: "conmatch", title: "内容匹配", minWidth: 250}
+        , {field: "conlnnum", title: "内容后换行", sort: true}
+        , {field: "startoffset", title: "开始偏移量", sort: true}
+        , {field: "endoffset", title: "结束偏移量", sort: true}
+        , {field: "amatch", title: "跳转匹配", minWidth: 280}
+        , {field: "nexta", title: "下一页索引", sort: true}
+        , {title: "操作", fixed: "right", minWidth: 120, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {

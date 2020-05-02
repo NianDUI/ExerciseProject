@@ -107,4 +107,17 @@
         FROM "book"
         WHERE "siteid" IN (${id})
     </select>
+
+    <!-- 查询章节内容下载列表 -->
+    <select id="queryChapterDownloadList" resultType="java.lang.String">
+        SELECT c."name" || #{titleNewLine} || (
+            SELECT STRING_AGG(#{contentHead} || "content", #{contentNewLine}) || #{contentNewLine} FROM (
+                SELECT "content" FROM "paragraph" p
+                WHERE p."chapterid" = c."chapterid"
+                ORDER BY "seqid"
+            ) "temp"
+        ) "chapter" from "chapter" c
+        WHERE "bookid" = #{bookid}
+        ORDER BY "seqid"
+    </select>
 </mapper>

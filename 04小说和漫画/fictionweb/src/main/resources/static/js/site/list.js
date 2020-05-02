@@ -18,11 +18,11 @@ const tableList = table.render({
     , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
-        , {field: "name", title: "名称"}
-        , {field: "configname", title: "配置"}
-        , {field: "createtime", title: "创建时间"}
-        , {field: "url", title: "链接"}
-        , {title: "操作", fixed: "right", minWidth: 160, align: "center", toolbar: "#toolbar"}
+        , {field: "name", title: "名称", minWidth: 180}
+        , {field: "configname", title: "配置", minWidth: 180}
+        , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
+        , {field: "url", title: "链接", minWidth: 250}
+        , {title: "操作", fixed: "right", minWidth: 170, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {

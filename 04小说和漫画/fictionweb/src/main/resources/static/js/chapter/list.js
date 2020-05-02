@@ -19,13 +19,13 @@ const tableList = table.render({
     , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
-        , {field: "name", title: "名称"}
-        , {field: "rawname", title: "原名称"}
-        , {field: "bookname", title: "书籍"}
-        , {field: "configname", title: "配置"}
-        , {field: "createtime", title: "创建时间"}
-        , {field: "url", title: "链接"}
-        , {title: "操作", fixed: "right", minWidth: 208, align: "center", toolbar: "#toolbar"}
+        , {field: "name", title: "名称", minWidth: 200}
+        , {field: "rawname", title: "原名称", minWidth: 200}
+        , {field: "bookname", title: "书籍", minWidth: 180}
+        , {field: "configname", title: "配置", minWidth: 180}
+        , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
+        , {field: "url", title: "链接", minWidth: 300}
+        , {title: "操作", fixed: "right", minWidth: 230, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {

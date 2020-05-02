@@ -3,6 +3,9 @@ package top.niandui.dao;
 import org.springframework.stereotype.Repository;
 import top.niandui.common.base.IBaseDao;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author 李永达
  * @version 1.0
@@ -17,4 +20,7 @@ public interface IBookDao<T> extends IBaseDao<T> {
 
     // 查询站点书籍数量
     int querySiteBookCount(String id);
+
+    // 查询章节内容下载列表
+    List<String> queryChapterDownloadList(Map params);
 }
