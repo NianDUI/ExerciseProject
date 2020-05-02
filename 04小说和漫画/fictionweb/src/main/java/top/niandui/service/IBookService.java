@@ -3,7 +3,6 @@ package top.niandui.service;
 import com.github.pagehelper.PageInfo;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.model.Book;
-import top.niandui.model.Site;
 import top.niandui.model.vo.BookListReturnVO;
 import top.niandui.model.vo.BookSearchVO;
 
@@ -42,4 +41,7 @@ public interface IBookService {
 
     // 下载书籍
     void downloadBook(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    // 下载书籍2(多次查询sql)
+    void downloadBook2(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

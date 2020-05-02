@@ -80,9 +80,16 @@ public class BookController extends BaseController {
     }
 
     @GetMapping("/downloadBook/{id}")
-    @ApiOperation(value = "下载书籍", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "下载书籍(一次查询sql)", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
     public void downloadBook(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         iBookService.downloadBook(id, request, response);
+    }
+
+    @GetMapping("/downloadBook2/{id}")
+    @ApiOperation(value = "下载书籍2(多次查询sql)", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
+    public void downloadBook2(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        iBookService.downloadBook2(id, request, response);
     }
 }

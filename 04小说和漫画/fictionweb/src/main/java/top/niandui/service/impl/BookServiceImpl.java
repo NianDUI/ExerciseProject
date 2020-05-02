@@ -12,9 +12,13 @@ import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IConfigDao;
 import top.niandui.dao.IParagraphDao;
 import top.niandui.model.Book;
+import top.niandui.model.Chapter;
 import top.niandui.model.Config;
+import top.niandui.model.Paragraph;
 import top.niandui.model.vo.BookListReturnVO;
 import top.niandui.model.vo.BookSearchVO;
+import top.niandui.model.vo.ChapterSearchVO;
+import top.niandui.model.vo.ParagraphSearchVO;
 import top.niandui.service.IBookService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -119,6 +123,44 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
             List<String> chapterList = iBookDao.queryChapterDownloadList(params);
             for (String chapter : chapterList) {
                 bw.write(chapter);
+            }
+            bw.flush();
+        }
+    }
+
+    @Override
+    public void downloadBook2(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Book book = (Book) iBookDao.model(id);
+        isTaskStatus(book);
+        Config config = (Config) iConfigDao.model(book.getConfigid());
+        String titleNewLine = "", contentNewLine = "";
+        for (int i = 0; i < config.getTitlelnnum(); i++) {
+            titleNewLine += "\n";
+        }
+        for (int i = 0; i < config.getConlnnum(); i++) {
+            contentNewLine += "\n";
+        }
+        response.reset();
+        response.setHeader("Accept-Ranges", "bytes");
+//        response.setHeader("Content-Length", String.valueOf(file.length()));
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(book.getName(), "UTF-8") + ".txt");
+        try (
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()))
+        ) {
+            ChapterSearchVO chapSeaVO = new ChapterSearchVO();
+            chapSeaVO.setBookid(book.getBookid());
+            chapSeaVO.setOrderBy("\"seqid\"");
+            chapSeaVO.setDescOrAsc("ASC");
+            List<Chapter> chapList = iChapterDao.queryList(chapSeaVO);
+            ParagraphSearchVO paraSeaVO = new ParagraphSearchVO();
+            for (Chapter chapter : chapList) {
+                paraSeaVO.setBookid(chapter.getBookid());
+                paraSeaVO.setChapterid(chapter.getChapterid());
+                bw.append(chapter.getName()).append(titleNewLine);
+                List<Paragraph> paraList = iParagraphDao.queryList(paraSeaVO);
+                for (Paragraph paragraph : paraList) {
+                    bw.append("    ").append(paragraph.getContent()).append(contentNewLine);
+                }
             }
             bw.flush();
         }

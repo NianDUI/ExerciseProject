@@ -26,7 +26,7 @@ const tableList = table.render({
         , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
         , {field: "url", title: "链接", minWidth: 250}
         , {field: "starturl", title: "起始章节链接", minWidth: 300}
-        , {title: "操作", fixed: "right", minWidth: 230, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 290, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
@@ -36,6 +36,8 @@ table.on("tool(table)", function (obj) {
     } else if (obj.event === "download") {
         layer.msg("数据整理中请稍等！");
         location.href = base + "api/downloadBook/" + data.bookid;
+    } else if (obj.event === "download2") {
+        location.href = base + "api/downloadBook2/" + data.bookid;
     } else if (obj.event === "edit") {
         add(data.bookid);
     } else if (obj.event === "del") {
