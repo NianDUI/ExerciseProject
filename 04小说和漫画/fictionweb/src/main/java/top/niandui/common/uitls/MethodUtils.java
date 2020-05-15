@@ -1,11 +1,15 @@
 package top.niandui.common.uitls;
 
+import lombok.extern.slf4j.Slf4j;
+import org.postgresql.copy.CopyManager;
+import org.postgresql.core.BaseConnection;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 import top.niandui.common.model.PageOrder;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -16,6 +20,7 @@ import java.util.function.Function;
  * @author: liyongda
  * @version: 1.0
  */
+@Slf4j
 public class MethodUtils {
     // 默认一次数据量
     public static final int DEFAULT_ONE_COUNT = 500;
@@ -270,5 +275,63 @@ public class MethodUtils {
             }
             return sb.toString();
         }
+    }
+
+    /**
+     * Postgres copy方法。默认值：列分隔符:","、编码:"UTF-8"
+     *
+     * @param jdbcTemplate SpringBoot JdbcTemplate对象
+     * @param is           文件输入流
+     * @param table        插入表信息
+     * @return 导入数据条数
+     * @throws Exception
+     */
+    public static long copyIn(JdbcTemplate jdbcTemplate, InputStream is, String table) throws Exception {
+        return copyIn(jdbcTemplate, is, table, null, null, null);
+    }
+
+    /**
+     * Postgres copy方法
+     *
+     * @param jdbcTemplate SpringBoot JdbcTemplate对象
+     * @param is           文件输入流
+     * @param table        插入表信息
+     * @param delimiter    列分隔符,默认","
+     * @param charsetName  编码,默认"UTF-8"
+     * @return 导入数据条数
+     * @throws Exception
+     */
+    public static long copyIn(JdbcTemplate jdbcTemplate, InputStream is, String table, String delimiter, String charsetName) throws Exception {
+        return copyIn(jdbcTemplate, is, table, delimiter, charsetName, null);
+    }
+
+    /**
+     * Postgres copy方法
+     *
+     * @param jdbcTemplate SpringBoot JdbcTemplate对象
+     * @param is           文件输入流
+     * @param table        插入表信息
+     * @param delimiter    列分隔符,默认","
+     * @param charsetName  编码,默认"UTF-8"
+     * @param other        其他参数,默认""
+     * @return 导入数据条数
+     * @throws Exception
+     */
+    public static long copyIn(JdbcTemplate jdbcTemplate, InputStream is, String table, String delimiter, String charsetName, String other) throws Exception {
+        if (StringUtils.isEmpty(delimiter)) {
+            delimiter = ",";
+        }
+        if (StringUtils.isEmpty(charsetName)) {
+            charsetName = "UTF-8";
+        }
+        if (other == null) {
+            other = "";
+        }
+        String sql = String.format("COPY %s FROM STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
+        CopyManager copyManager = new CopyManager((BaseConnection) jdbcTemplate.getDataSource().getConnection().getMetaData().getConnection());
+        log.info(sql);
+        long num = copyManager.copyIn(sql, is);
+        log.info("COPY 导入 " + num + " 条数据");
+        return num;
     }
 }

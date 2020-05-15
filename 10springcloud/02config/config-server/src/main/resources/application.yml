@@ -1,0 +1,21 @@
+server:
+  port: 8991
+spring:
+  application:
+    name: config-server
+#  profiles:
+#    # \u8BBE\u7F6E\u4E3A\u672C\u5730\u542F\u52A8\u7684\u65B9\u5F0F\uFF0C\u800C\u4E0D\u662F\u901A\u8FC7git
+#    active: native
+  cloud:
+    config:
+      server:
+        git:
+          # \u914D\u7F6Egit\u4ED3\u5E93\u7684\u5730\u5740
+          uri: https://github.com/NianDUI/ExerciseProject
+          # git\u4ED3\u5E93\u5730\u5740\u4E0B\u7684\u76F8\u5BF9\u5730\u5740\uFF0C\u53EF\u4EE5\u914D\u7F6E\u591A\u4E2A\uFF0C\u7528,\u5206\u5272\u3002
+          search-paths: 10springcloud/02config/comfig
+          username: 760664212@qq.com
+          password: n20110536887?
+#logging:
+#  level:
+#    root: debug
