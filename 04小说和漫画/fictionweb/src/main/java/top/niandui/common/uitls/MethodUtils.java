@@ -321,7 +321,7 @@ public class MethodUtils {
      * @throws Exception
      */
     public static long copyIn(JdbcTemplate jdbcTemplate, InputStream is, String table, String delimiter, String charsetName, String other) throws Exception {
-        if (StringUtils.isEmpty(delimiter)) {
+        if (delimiter == null) {
             delimiter = ",";
         }
         if (StringUtils.isEmpty(charsetName)) {
@@ -333,10 +333,10 @@ public class MethodUtils {
         String sql = String.format("COPY %s FROM STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
         Connection conn = jdbcTemplate.getDataSource().getConnection();
         CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
-        log.info(sql);
+        log.debug(sql);
         long num = copyManager.copyIn(sql, is);
         DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
-        log.info("COPY 导入 " + num + " 条数据");
+        log.debug("COPY 导入 " + num + " 条数据");
         return num;
     }
 
@@ -381,7 +381,7 @@ public class MethodUtils {
      * @throws Exception
      */
     public static long copyOut(JdbcTemplate jdbcTemplate, OutputStream os, String table, String delimiter, String charsetName, String other) throws Exception {
-        if (StringUtils.isEmpty(delimiter)) {
+        if (delimiter == null) {
             delimiter = ",";
         }
         if (StringUtils.isEmpty(charsetName)) {
@@ -391,12 +391,12 @@ public class MethodUtils {
             other = "";
         }
         String sql = String.format("COPY %s TO STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
-        log.info(sql);
+        log.debug(sql);
         Connection conn = jdbcTemplate.getDataSource().getConnection();
         CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
         long num = copyManager.copyOut(sql, os);
         DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
-        log.info("COPY 导出 " + num + " 条数据");
+        log.debug("COPY 导出 " + num + " 条数据");
         return num;
     }
 }
