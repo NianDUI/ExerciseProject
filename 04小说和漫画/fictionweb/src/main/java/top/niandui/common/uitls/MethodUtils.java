@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import top.niandui.common.model.PageOrder;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -278,7 +279,7 @@ public class MethodUtils {
     }
 
     /**
-     * Postgres copy方法。默认值：列分隔符:","、编码:"UTF-8"
+     * Postgres copy from方法。默认值：列分隔符:","、编码:"UTF-8"
      *
      * @param jdbcTemplate SpringBoot JdbcTemplate对象
      * @param is           文件输入流
@@ -291,7 +292,7 @@ public class MethodUtils {
     }
 
     /**
-     * Postgres copy方法
+     * Postgres copy from方法
      *
      * @param jdbcTemplate SpringBoot JdbcTemplate对象
      * @param is           文件输入流
@@ -306,7 +307,7 @@ public class MethodUtils {
     }
 
     /**
-     * Postgres copy方法
+     * Postgres copy from方法
      *
      * @param jdbcTemplate SpringBoot JdbcTemplate对象
      * @param is           文件输入流
@@ -332,6 +333,64 @@ public class MethodUtils {
         log.info(sql);
         long num = copyManager.copyIn(sql, is);
         log.info("COPY 导入 " + num + " 条数据");
+        return num;
+    }
+
+    /**
+     * Postgres copy to方法。默认值：列分隔符:","、编码:"UTF-8"
+     *
+     * @param jdbcTemplate SpringBoot JdbcTemplate对象
+     * @param os           输出流
+     * @param table        导出表信息
+     * @return 导出数据条数
+     * @throws Exception
+     */
+    public static long copyOut(JdbcTemplate jdbcTemplate, OutputStream os, String table) throws Exception {
+        return copyOut(jdbcTemplate, os, table, null, null, null);
+    }
+
+    /**
+     * Postgres copy to方法
+     *
+     * @param jdbcTemplate SpringBoot JdbcTemplate对象
+     * @param os           输出流
+     * @param table        导出表信息
+     * @param delimiter    列分隔符,默认","
+     * @param charsetName  编码,默认"UTF-8"
+     * @return 导出数据条数
+     * @throws Exception
+     */
+    public static long copyOut(JdbcTemplate jdbcTemplate, OutputStream os, String table, String delimiter, String charsetName) throws Exception {
+        return copyOut(jdbcTemplate, os, table, delimiter, charsetName, null);
+    }
+
+    /**
+     * Postgres copy to方法
+     *
+     * @param jdbcTemplate SpringBoot JdbcTemplate对象
+     * @param os           输出流
+     * @param table        导出表信息
+     * @param delimiter    列分隔符,默认","
+     * @param charsetName  编码,默认"UTF-8"
+     * @param other        其他参数,默认""
+     * @return 导出数据条数
+     * @throws Exception
+     */
+    public static long copyOut(JdbcTemplate jdbcTemplate, OutputStream os, String table, String delimiter, String charsetName, String other) throws Exception {
+        if (StringUtils.isEmpty(delimiter)) {
+            delimiter = ",";
+        }
+        if (StringUtils.isEmpty(charsetName)) {
+            charsetName = "UTF-8";
+        }
+        if (other == null) {
+            other = "";
+        }
+        String sql = String.format("COPY %s TO STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
+        CopyManager copyManager = new CopyManager((BaseConnection) jdbcTemplate.getDataSource().getConnection().getMetaData().getConnection());
+        log.info(sql);
+        long num = copyManager.copyOut(sql, os);
+        log.info("COPY 导出 " + num + " 条数据");
         return num;
     }
 }
