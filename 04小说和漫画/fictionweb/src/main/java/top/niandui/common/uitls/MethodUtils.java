@@ -4,11 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
 import top.niandui.common.model.PageOrder;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -329,9 +331,11 @@ public class MethodUtils {
             other = "";
         }
         String sql = String.format("COPY %s FROM STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
-        CopyManager copyManager = new CopyManager((BaseConnection) jdbcTemplate.getDataSource().getConnection().getMetaData().getConnection());
+        Connection conn = jdbcTemplate.getDataSource().getConnection();
+        CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
         log.info(sql);
         long num = copyManager.copyIn(sql, is);
+        DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
         log.info("COPY 导入 " + num + " 条数据");
         return num;
     }
@@ -387,9 +391,11 @@ public class MethodUtils {
             other = "";
         }
         String sql = String.format("COPY %s TO STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
-        CopyManager copyManager = new CopyManager((BaseConnection) jdbcTemplate.getDataSource().getConnection().getMetaData().getConnection());
         log.info(sql);
+        Connection conn = jdbcTemplate.getDataSource().getConnection();
+        CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
         long num = copyManager.copyOut(sql, os);
+        DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
         log.info("COPY 导出 " + num + " 条数据");
         return num;
     }
