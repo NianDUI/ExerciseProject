@@ -34,10 +34,10 @@ public interface IBookService {
     Book model(Long id) throws Exception;
 
     // 查询下拉
-    List<IdNameModel> option() throws Exception;
+    List<IdNameModel<Long>> option() throws Exception;
 
     // 重名校验
-    void checkName(IdNameModel checkName) throws Exception;
+    void checkName(IdNameModel<Long> checkName) throws Exception;
 
     // 下载书籍
     void downloadBook(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception;

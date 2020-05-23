@@ -6,6 +6,7 @@ import top.niandui.model.Chapter;
 import top.niandui.model.vo.ChapterInfoReturnVO;
 import top.niandui.model.vo.ChapterListReturnVO;
 import top.niandui.model.vo.ChapterSearchVO;
+import top.niandui.model.vo.SpecifiedFollowUpGetVO;
 
 import java.util.List;
 
@@ -33,10 +34,10 @@ public interface IChapterService {
     Chapter model(Long id) throws Exception;
 
     // 查询下拉
-    List<IdNameModel> option() throws Exception;
+    List<IdNameModel<Long>> option() throws Exception;
 
     // 重名校验
-    void checkName(IdNameModel checkName) throws Exception;
+    void checkName(IdNameModel<Long> checkName) throws Exception;
 
     // 重新获取所有章节
     void reacquireAllChapter(Long id) throws Exception;
@@ -49,4 +50,7 @@ public interface IChapterService {
 
     // 查询章节信息
     ChapterInfoReturnVO queryChapterInfo(Long id) throws Exception;
+
+    // 获取指定章节和后续章节
+    void getSpecifiedAndFollowUpChapter(SpecifiedFollowUpGetVO getVO) throws Exception;
 }

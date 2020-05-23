@@ -85,12 +85,12 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     }
 
     @Override
-    public List<IdNameModel> option() throws Exception {
+    public List<IdNameModel<Long>> option() throws Exception {
         return iBookDao.option();
     }
 
     @Override
-    public void checkName(IdNameModel checkName) throws Exception {
+    public void checkName(IdNameModel<Long> checkName) throws Exception {
         if (iBookDao.checkName(checkName) > 0) {
             throw new RuntimeException("书籍已存在");
         }

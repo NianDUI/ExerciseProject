@@ -3,6 +3,7 @@ package top.niandui.config;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @Title: BaseConfig.java
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @EnableAsync
 @Configuration
+@EnableScheduling
 @MapperScan("top.niandui.dao")
 public class BaseConfig {
 }

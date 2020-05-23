@@ -14,6 +14,7 @@ import top.niandui.common.model.ResponseData;
 import top.niandui.model.Chapter;
 import top.niandui.model.vo.ChapterListReturnVO;
 import top.niandui.model.vo.ChapterSearchVO;
+import top.niandui.model.vo.SpecifiedFollowUpGetVO;
 import top.niandui.service.IChapterService;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class ChapterController extends BaseController {
 
     @PostMapping("/checkChapterName")
     @ApiOperation(value = "章节重名校验", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
-    public ResponseData checkChapterName(@RequestBody @Validated IdNameModel checkName) throws Exception {
+    public ResponseData checkChapterName(@RequestBody @Validated IdNameModel<Long> checkName) throws Exception {
         iChapterService.checkName(checkName);
         return ResponseData.ok();
     }
@@ -65,7 +66,7 @@ public class ChapterController extends BaseController {
 
     @GetMapping("/optionChapter")
     @ApiOperation(value = "章节下拉", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
-    public ResponseData<List<IdNameModel>> optionChapter() throws Exception {
+    public ResponseData<List<IdNameModel<Long>>> optionChapter() throws Exception {
         return ResponseData.ok(iChapterService.option());
     }
 
@@ -98,6 +99,14 @@ public class ChapterController extends BaseController {
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "章节id", dataType = "Long", required = true))
     public ResponseData reacquireSingleChapter(@PathVariable Long id) throws Exception {
         iChapterService.reacquireSingleChapter(id);
+        return ResponseData.ok();
+    }
+
+    @PostMapping("/getSpecifiedAndFollowUpChapter")
+    @ApiOperation(value = "获取指定章节和后续章节", notes = "<br>开发人：李永达<br>时间：2020/04/07<br>")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
+    public ResponseData getSpecifiedAndFollowUpChapter(@RequestBody @Validated SpecifiedFollowUpGetVO getVO) throws Exception {
+        iChapterService.getSpecifiedAndFollowUpChapter(getVO);
         return ResponseData.ok();
     }
 }

@@ -94,6 +94,36 @@ $(".getFollowUp").click(function () {
         }
     });
 });
+$(".getSpecifiedAndFollowUp").click(function () {
+    layer.prompt({
+        formType: 2
+        , value: '' //初始值
+        , maxlength: 128
+        , title: '请输入章节链接'
+        , area: [computeArea() + "px", "25px"]
+    }, function(value, index, elem){
+        console.log("a:" + value + ":b")
+        return;
+        if (value.trim().length > 0) {
+            $.ajax({
+                type: "post"
+                , contentType: "application/json"
+                , url: base + "api/getSpecifiedAndFollowUpChapter"
+                , data: JSON.stringify({bookid: bookid, url: value})
+                , success: function (data) {
+                    if (data.code == 200) {
+                        layer.msg("正在获取");
+                        layer.close(index);
+                    } else {
+                        layer.alert(data.message);
+                    }
+                }
+            });
+        } else {
+            layer.msg("请输入章节连接", {time: 1000});
+        }
+    });
+});
 
 function search() {
     tableList.reload({

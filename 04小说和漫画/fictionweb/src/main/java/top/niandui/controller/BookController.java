@@ -47,7 +47,7 @@ public class BookController extends BaseController {
 
     @PostMapping("/checkBookName")
     @ApiOperation(value = "书籍重名校验", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
-    public ResponseData checkBookName(@RequestBody @Validated IdNameModel checkName) throws Exception {
+    public ResponseData checkBookName(@RequestBody @Validated IdNameModel<Long> checkName) throws Exception {
         iBookService.checkName(checkName);
         return ResponseData.ok();
     }
@@ -67,7 +67,7 @@ public class BookController extends BaseController {
 
     @GetMapping("/optionBook")
     @ApiOperation(value = "书籍下拉", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
-    public ResponseData<List<IdNameModel>> optionBook() throws Exception {
+    public ResponseData<List<IdNameModel<Long>>> optionBook() throws Exception {
         return ResponseData.ok(iBookService.option());
     }
 

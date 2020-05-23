@@ -66,12 +66,12 @@ public class SiteServiceImpl extends BaseServiceImpl implements ISiteService {
     }
 
     @Override
-    public List<IdNameModel> option() throws Exception {
+    public List<IdNameModel<Long>> option() throws Exception {
         return iSiteDao.option();
     }
 
     @Override
-    public void checkName(IdNameModel checkName) throws Exception {
+    public void checkName(IdNameModel<Long> checkName) throws Exception {
         if (iSiteDao.checkName(checkName) > 0) {
             throw new RuntimeException("站点已存在");
         }

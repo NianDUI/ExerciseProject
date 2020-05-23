@@ -6,7 +6,7 @@ import top.niandui.model.Site;
 import top.niandui.model.vo.SiteListReturnVO;
 import top.niandui.model.vo.SiteSearchVO;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * @author 李永达
@@ -32,8 +32,8 @@ public interface ISiteService {
     Site model(Long id) throws Exception;
 
     // 查询下拉
-    List<IdNameModel> option() throws Exception;
+    List<IdNameModel<Long>> option() throws Exception;
 
     // 重名校验
-    void checkName(IdNameModel checkName) throws Exception;
+    void checkName(IdNameModel<Long> checkName) throws Exception;
 }

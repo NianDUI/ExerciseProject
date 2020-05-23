@@ -16,7 +16,7 @@ import top.niandui.model.vo.SiteListReturnVO;
 import top.niandui.model.vo.SiteSearchVO;
 import top.niandui.service.ISiteService;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * @author 李永达
@@ -45,7 +45,7 @@ public class SiteController extends BaseController {
 
     @PostMapping("/checkSiteName")
     @ApiOperation(value = "站点重名校验", notes = "<br>开发人：李永达<br>时间：2020/03/22<br>")
-    public ResponseData checkSiteName(@RequestBody @Validated IdNameModel checkName) throws Exception {
+    public ResponseData checkSiteName(@RequestBody @Validated IdNameModel<Long> checkName) throws Exception {
         iSiteService.checkName(checkName);
         return ResponseData.ok();
     }
@@ -65,7 +65,7 @@ public class SiteController extends BaseController {
 
     @GetMapping("/optionSite")
     @ApiOperation(value = "站点下拉", notes = "<br>开发人：李永达<br>时间：2020/03/22<br>")
-    public ResponseData<List<IdNameModel>> optionSite() throws Exception {
+    public ResponseData<List<IdNameModel<Long>>> optionSite() throws Exception {
         return ResponseData.ok(iSiteService.option());
     }
 

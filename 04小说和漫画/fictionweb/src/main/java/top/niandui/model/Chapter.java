@@ -36,7 +36,7 @@ public class Chapter extends BaseModel {
     @NotNull(message = "排序id不能为空")
     @ApiModelProperty(value = "排序id", required = true)
     private Long seqid;
-    @NotBlank(message = "章节名称不能为空")
+    @NotBlank(message = "章节链接不能为空")
     @ApiModelProperty(value = "章节链接", required = true)
     private String url;
 }

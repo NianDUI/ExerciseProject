@@ -62,12 +62,12 @@ public class ConfigServiceImpl extends BaseServiceImpl implements IConfigService
     }
 
     @Override
-    public List<IdNameModel> option() throws Exception {
+    public List<IdNameModel<Long>> option() throws Exception {
         return iConfigDao.option();
     }
 
     @Override
-    public void checkName(IdNameModel checkName) throws Exception {
+    public void checkName(IdNameModel<Long> checkName) throws Exception {
         if (iConfigDao.checkName(checkName) > 0) {
             throw new RuntimeException("配置已存在");
         }

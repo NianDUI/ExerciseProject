@@ -14,10 +14,7 @@ import top.niandui.dao.IParagraphDao;
 import top.niandui.model.Book;
 import top.niandui.model.Chapter;
 import top.niandui.model.Config;
-import top.niandui.model.vo.ChapterInfoReturnVO;
-import top.niandui.model.vo.ChapterListReturnVO;
-import top.niandui.model.vo.ChapterSearchVO;
-import top.niandui.model.vo.ParagraphSearchVO;
+import top.niandui.model.vo.*;
 import top.niandui.service.IChapterService;
 import top.niandui.utils.WebClientUtil;
 
@@ -79,12 +76,12 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     }
 
     @Override
-    public List<IdNameModel> option() throws Exception {
+    public List<IdNameModel<Long>> option() throws Exception {
         return iChapterDao.option();
     }
 
     @Override
-    public void checkName(IdNameModel checkName) throws Exception {
+    public void checkName(IdNameModel<Long> checkName) throws Exception {
         if (iChapterDao.checkName(checkName) > 0) {
             throw new RuntimeException("章节已存在");
         }
@@ -108,7 +105,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         Book book = (Book) iBookDao.model(id);
         isTaskStatus(book);
         Config config = (Config) iConfigDao.model(book.getConfigid());
-        Chapter chapter = iChapterDao.queryBookAsLastChapter(id);
+        Chapter chapter = iChapterDao.queryBookAsLastChapter(book.getBookid());
         // 更新任务状态
         iBookDao.updateTaskstatus(book.getBookid(), 2);
         if (chapter != null) {
@@ -160,5 +157,24 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         addDefaultSort(sv, "seqid", "ASC");
         rv.setParagraphList(iParagraphDao.queryList(sv));
         return rv;
+    }
+
+    @Override
+    public void getSpecifiedAndFollowUpChapter(SpecifiedFollowUpGetVO getVO) throws Exception {
+        Book book = (Book) iBookDao.model(getVO.getBookid());
+        isTaskStatus(book);
+        Config config = (Config) iConfigDao.model(book.getConfigid());
+        Chapter chapter = iChapterDao.queryBookAsLastChapter(getVO.getBookid());
+        // 更新任务状态
+        iBookDao.updateTaskstatus(book.getBookid(), 2);
+        long seqid;
+        if (chapter != null) {
+            seqid = chapter.getSeqid() + 1;
+        } else {
+            seqid = 0;
+        }
+        book.setStarturl(getVO.getUrl());
+        // 第一次不跳过
+        webClientUtil.getBook(config, book, seqid, false);
     }
 }

@@ -44,7 +44,7 @@ public class ConfigController extends BaseController {
 
     @PostMapping("/checkConfigName")
     @ApiOperation(value = "配置重名校验", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
-    public ResponseData checkConfigName(@RequestBody @Validated IdNameModel checkName) throws Exception {
+    public ResponseData checkConfigName(@RequestBody @Validated IdNameModel<Long> checkName) throws Exception {
         iConfigService.checkName(checkName);
         return ResponseData.ok();
     }
@@ -64,7 +64,7 @@ public class ConfigController extends BaseController {
 
     @GetMapping("/optionConfig")
     @ApiOperation(value = "配置下拉", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
-    public ResponseData<List<IdNameModel>> optionConfig() throws Exception {
+    public ResponseData<List<IdNameModel<Long>>> optionConfig() throws Exception {
         return ResponseData.ok(iConfigService.option());
     }
 
