@@ -8,7 +8,7 @@ function tableParseData(res) {
     return {"code": res.code, "msg": res.message, "count": res.data.total, "data": res.data.list}
 }
 
-function list() {
+function list(idName) {
     $(".search").click(function () {
         search();
     });
@@ -21,9 +21,9 @@ function list() {
             layer.msg("请选择要删除的信息");
         } else {
             layer.confirm("确认删除已选信息？", function (index) {
-                let id = "" + data[0].bookid;
+                let id = "" + data[0][idName];
                 for (let i = 1; i < data.length; i++) {
-                    id += "," + data[i].bookid;
+                    id += "," + data[i][idName];
                 }
                 del(id);
                 layer.close(index);

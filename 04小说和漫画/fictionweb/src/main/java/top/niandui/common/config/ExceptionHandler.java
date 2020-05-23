@@ -22,10 +22,11 @@ import java.io.OutputStream;
 @Slf4j
 @ControllerAdvice
 public class ExceptionHandler {
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @org.springframework.web.bind.annotation.ExceptionHandler({Exception.class})
     public void exceptionHandler(Exception e, HttpServletResponse response) {
+        log.error("系统异常：", e);
         OutputStream os = null;
         try {
             response.reset();
@@ -42,8 +43,7 @@ public class ExceptionHandler {
             }
             mapper.writeValue(os, rd);
         } catch (IOException ex) {
-            ex.printStackTrace();
-            log.error(ex.toString());
+            log.error("错误相应异常：", ex);
         } finally {
             if (os != null) {
                 try {

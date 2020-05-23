@@ -65,7 +65,7 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list();
+list("chapterid");
 $(".reacquire").click(function () {
     $.ajax({
         type: "get"

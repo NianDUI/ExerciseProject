@@ -64,11 +64,13 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
 
     @Override
     public void delete(String id) throws Exception {
-        isTaskStatus((Book) iBookDao.model(id));
-        // 删除章节
-        iChapterDao.deleteByBookId(id);
+        for (String sId : id.split(",")) {
+            isTaskStatus((Book) iBookDao.model(Long.valueOf(sId)));
+        }
         // 删除段落
         iParagraphDao.deleteByBookId(id);
+        // 删除章节
+        iChapterDao.deleteByBookId(id);
         iBookDao.delete(id);
     }
 

@@ -58,6 +58,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
 
     @Override
     public void delete(String id) throws Exception {
+        isTaskStatus(iChapterDao.queryBookByMultiId(id));
         // 删除段落
         iParagraphDao.deleteByChapterId(id);
         iChapterDao.delete(id);

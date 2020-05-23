@@ -41,7 +41,7 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list();
+list("configid");
 
 function search() {
     tableList.reload({

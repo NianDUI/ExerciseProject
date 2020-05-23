@@ -47,7 +47,7 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list();
+list("bookid");
 
 function search() {
     tableList.reload({

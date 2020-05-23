@@ -2,6 +2,7 @@ package top.niandui.dao;
 
 import org.springframework.stereotype.Repository;
 import top.niandui.common.base.IBaseDao;
+import top.niandui.model.Book;
 import top.niandui.model.Chapter;
 
 /**
@@ -27,4 +28,7 @@ public interface IChapterDao<T> extends IBaseDao<T> {
 
     // 获取上一章id
     Long prevChapterid(Long id);
+
+    // 通过多个id查询数据
+    Book queryBookByMultiId(String id);
 }

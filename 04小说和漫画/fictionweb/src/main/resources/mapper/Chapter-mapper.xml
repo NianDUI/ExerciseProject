@@ -170,4 +170,14 @@
         ORDER BY "seqid" ASC
         LIMIT 1
     </select>
+
+    <!-- 通过多个id查询数据 -->
+    <select id="queryBookByMultiId" resultType="top.niandui.model.Book">
+        SELECT <include refid="top.niandui.dao.IBookDao.tableField"/>
+        FROM "book" b
+        WHERE EXISTS (
+            SELECT 1 FROM "chapter" c
+            WHERE c."chapterid" IN (${id}) AND c."bookid" = b."bookid"
+        )
+    </select>
 </mapper>

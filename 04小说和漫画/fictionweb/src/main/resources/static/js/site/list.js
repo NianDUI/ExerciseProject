@@ -38,7 +38,7 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list();
+list("siteid");
 
 function search() {
     tableList.reload({
