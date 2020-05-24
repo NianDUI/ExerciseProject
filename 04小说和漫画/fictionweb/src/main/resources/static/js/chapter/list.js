@@ -65,7 +65,12 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list("chapterid");
+list({
+    idName: "chapterid"
+    , addUrl: base + "chapter/add/"
+    , delUrl: base + "api/deleteChapter/"
+});
+
 $(".reacquire").click(function () {
     $.ajax({
         type: "get"
@@ -101,7 +106,7 @@ $(".getSpecifiedAndFollowUp").click(function () {
         , maxlength: 128
         , title: '请输入章节链接'
         , area: [computeArea() + "px", "25px"]
-    }, function(value, index, elem){
+    }, function (value, index, elem) {
         console.log("a:" + value + ":b")
         return;
         if (value.trim().length > 0) {
@@ -124,37 +129,3 @@ $(".getSpecifiedAndFollowUp").click(function () {
         }
     });
 });
-
-function search() {
-    tableList.reload({
-        page: {curr: 1}, where: {name: $(".searVal").val()}
-    })
-}
-
-function add(id) {
-    layer.open({
-        type: 2
-        , title: "添加"
-        , shadeClose: true
-        , maxmin: true
-        , area: computeArea() + "px"
-        // , offset: "t"
-        , content: base + "chapter/add/" + id // [, "no"]
-    });
-}
-
-function del(id) {
-    $.ajax({
-        type: "get"
-        , contentType: "application/json"
-        , url: base + "api/deleteChapter/" + id
-        , success: function (data) {
-            if (data.code == 200) {
-                layer.msg("删除成功");
-                search();
-            } else {
-                layer.alert(data.message);
-            }
-        }
-    });
-}

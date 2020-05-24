@@ -41,38 +41,8 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list("configid");
-
-function search() {
-    tableList.reload({
-        page: {curr: 1}, where: {name: $(".searVal").val()}
-    })
-}
-
-function add(id) {
-    layer.open({
-        type: 2
-        , title: "添加"
-        , shadeClose: true
-        , maxmin: true
-        , area: computeArea() + "px"
-        // , offset: "t"
-        , content: base + "config/add/" + id // [, "no"]
-    });
-}
-
-function del(id) {
-    $.ajax({
-        type: "get"
-        , contentType: "application/json"
-        , url: base + "api/deleteConfig/" + id
-        , success: function (data) {
-            if (data.code == 200) {
-                layer.msg("删除成功");
-                search();
-            } else {
-                layer.alert(data.message);
-            }
-        }
-    });
-}
+list({
+    idName: "configid"
+    , addUrl: base + "config/add/"
+    , delUrl: base + "api/deleteConfig/"
+});

@@ -8,7 +8,11 @@ function tableParseData(res) {
     return {"code": res.code, "msg": res.message, "count": res.data.total, "data": res.data.list}
 }
 
-function list(idName) {
+function list(params) {
+    const idName = params.idName;
+    table.on("rowDouble(table)", function (obj) {
+        add(obj.data[idName]);
+    });
     $(".search").click(function () {
         search();
     });
@@ -30,6 +34,43 @@ function list(idName) {
             });
         }
     });
+    let searVal = "";
+    function search() {
+        console.log(searVal)
+        const name = $(".searVal").val().trim();
+        const params = {where: {name: name}};
+        if (name != searVal) {
+            params.page = {curr: 1};
+            searVal = name;
+        }
+        tableList.reload(params);
+    }
+    function add(id) {
+        layer.open({
+            type: 2
+            , title: "添加"
+            , shadeClose: true
+            , maxmin: true
+            , area: computeArea() + "px"
+            // , offset: "t"
+            , content: params.addUrl + id // [, "no"]
+        });
+    }
+    function del(id) {
+        $.ajax({
+            type: "get"
+            , contentType: "application/json"
+            , url: params.delUrl + id
+            , success: function (data) {
+                if (data.code == 200) {
+                    layer.msg("删除成功");
+                    search();
+                } else {
+                    layer.alert(data.message);
+                }
+            }
+        });
+    }
 }
 
 function computeArea() {
