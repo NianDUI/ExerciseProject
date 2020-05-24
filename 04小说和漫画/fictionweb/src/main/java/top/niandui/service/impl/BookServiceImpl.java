@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static top.niandui.common.uitls.MethodUtils.addDefaultSort;
+
 /**
  * @author 李永达
  * @version 1.0
@@ -76,7 +78,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
 
     @Override
     public PageInfo<BookListReturnVO> queryList(BookSearchVO searchVO) throws Exception {
-//        addDefaultSort(searchVO, "createtime", "DESC");
+        addDefaultSort(searchVO, "createtime", "DESC");
         PageHelper.startPage(searchVO.getPageNum(), searchVO.getPageSize(), getOrder(searchVO));
         return new PageInfo<BookListReturnVO>(iBookDao.queryList(searchVO));
     }
