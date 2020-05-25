@@ -1,8 +1,13 @@
 package top.niandui.common.uitls;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.ParameterMapping;
+import org.apache.ibatis.session.Configuration;
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
+import org.postgresql.core.NativeQuery;
+import org.postgresql.core.Parser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
@@ -11,8 +16,12 @@ import top.niandui.common.model.PageOrder;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -27,6 +36,8 @@ import java.util.function.Function;
 public class MethodUtils {
     // 默认一次数据量
     public static final int DEFAULT_ONE_COUNT = 500;
+    // 日期格式化器：yyyy-MM-dd HH:mm:ss
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private MethodUtils() {
     }
@@ -321,7 +332,7 @@ public class MethodUtils {
      * @throws Exception
      */
     public static long copyIn(JdbcTemplate jdbcTemplate, InputStream is, String table, String delimiter, String charsetName, String other) throws Exception {
-        if (delimiter == null) {
+        if (StringUtils.isEmpty(delimiter)) {
             delimiter = ",";
         }
         if (StringUtils.isEmpty(charsetName)) {
@@ -333,10 +344,10 @@ public class MethodUtils {
         String sql = String.format("COPY %s FROM STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
         Connection conn = jdbcTemplate.getDataSource().getConnection();
         CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
-        log.debug(sql);
+        log.info(sql);
         long num = copyManager.copyIn(sql, is);
         DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
-        log.debug("COPY 导入 " + num + " 条数据");
+        log.info("COPY 导入 " + num + " 条数据");
         return num;
     }
 
@@ -381,7 +392,7 @@ public class MethodUtils {
      * @throws Exception
      */
     public static long copyOut(JdbcTemplate jdbcTemplate, OutputStream os, String table, String delimiter, String charsetName, String other) throws Exception {
-        if (delimiter == null) {
+        if (StringUtils.isEmpty(delimiter)) {
             delimiter = ",";
         }
         if (StringUtils.isEmpty(charsetName)) {
@@ -390,13 +401,80 @@ public class MethodUtils {
         if (other == null) {
             other = "";
         }
-        String sql = String.format("COPY %s TO STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
-        log.debug(sql);
+        String sql = String.format("COPY %s TO STDOUT DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
+        log.info(sql);
         Connection conn = jdbcTemplate.getDataSource().getConnection();
         CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
         long num = copyManager.copyOut(sql, os);
         DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
-        log.debug("COPY 导出 " + num + " 条数据");
+        log.info("COPY 导出 " + num + " 条数据");
         return num;
+    }
+
+    /**
+     * 获取Mapper文件中指定key的SQL，并处理成可执行SQL
+     *
+     * @param configuration Configuration对象，例如：sqlSessionFactory.getConfiguration()
+     * @param statementId   Mapper中SQL的id
+     * @param params        SQL所需参数，只允许Map类型的多层嵌套
+     * @return 可执行的SQL
+     * @throws SQLException
+     */
+    public static String getExecuteSql(Configuration configuration, String statementId, Map params) throws SQLException {
+        BoundSql boundSql = configuration.getMappedStatement(statementId).getBoundSql(params);
+        String sql = boundSql.getSql().replaceAll("\r?\n", "");
+        log.info(statementId);
+        log.info(" Preparing: " + sql);
+        List<NativeQuery> queries = Parser.parseJdbcSql(sql, false, true, true, false, "");
+        sql = queries.get(0).nativeSql;
+        StringBuilder sb = new StringBuilder();
+        for (ParameterMapping mapping : boundSql.getParameterMappings()) {
+            String property = mapping.getProperty();
+            Object mapValue = getMapValue(params, property);
+            sql = sql.replaceFirst("\\$\\d+", handleSQLParam(mapValue));
+            sb.append(mapValue).append("(").append(mapValue.getClass().getSimpleName()).append("), ");
+        }
+        if (sb.length() != 0) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        log.info("Parameters: " + sb.toString());
+        return sql;
+    }
+
+    /**
+     * 获取Map的value
+     *
+     * @param params 参数对象集合
+     * @param key    键值，例：a.b.c
+     * @return 返回键的值
+     */
+    public static Object getMapValue(Map params, String key) {
+        if (key == null) {
+            params.get(key);
+        }
+        String[] keys = key.split("\\.");
+        Object value = params;
+        for (String k : keys) {
+            value = ((Map) value).get(k);
+        }
+        return value;
+    }
+
+    /**
+     * 将SQL参数处理成字符串
+     *
+     * @param param 参数
+     * @return 处理成的字符串
+     */
+    public static String handleSQLParam(Object param) {
+        if (param == null) {
+            return "null";
+        } else if (param instanceof String) {
+            return String.format("'%s'", param);
+        } else if (param instanceof Date) {
+            return String.format("'%s'::TIMESTAMP", sdf.format(param));
+        } else {
+            return param.toString();
+        }
     }
 }

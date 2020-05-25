@@ -24,12 +24,13 @@ import top.niandui.service.IBookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static top.niandui.common.uitls.DownloadUtils.getDownloadOS;
 import static top.niandui.common.uitls.MethodUtils.addDefaultSort;
 
 /**
@@ -112,12 +113,9 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         for (int i = 0; i < config.getConlnnum(); i++) {
             contentNewLine += "\n";
         }
-        response.reset();
-        response.setHeader("Accept-Ranges", "bytes");
-//        response.setHeader("Content-Length", String.valueOf(file.length()));
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(book.getName(), "UTF-8") + ".txt");
         try (
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()))
+                OutputStream os = getDownloadOS(response, book.getName() + ".txt");
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os))
         ) {
             Map params = new HashMap<>(4, 1);
             params.put("bookid", book.getBookid());
@@ -144,12 +142,9 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         for (int i = 0; i < config.getConlnnum(); i++) {
             contentNewLine += "\n";
         }
-        response.reset();
-        response.setHeader("Accept-Ranges", "bytes");
-//        response.setHeader("Content-Length", String.valueOf(file.length()));
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(book.getName(), "UTF-8") + ".txt");
         try (
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()))
+                OutputStream os = getDownloadOS(response, book.getName() + ".txt");
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os))
         ) {
             ChapterSearchVO chapSeaVO = new ChapterSearchVO();
             chapSeaVO.setBookid(book.getBookid());
