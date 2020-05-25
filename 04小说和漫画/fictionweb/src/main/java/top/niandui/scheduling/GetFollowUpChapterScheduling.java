@@ -26,7 +26,7 @@ public class GetFollowUpChapterScheduling {
     private IChapterService iChapterService;
 
 //    @Scheduled(cron = "0 0/5 * * * ?")
-    @Scheduled(cron = "0 16 10,2 * * ?")
+    @Scheduled(cron = "0 16 0/4 * * ?")
     public void getFollowUpChapter() throws Exception {
         log.info("定时任务启动...");
         List<IdNameModel<Long>> option = iBookService.option();
