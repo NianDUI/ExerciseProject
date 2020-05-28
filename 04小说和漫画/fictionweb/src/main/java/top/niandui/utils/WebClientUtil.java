@@ -38,8 +38,6 @@ import static top.niandui.utils.HandleUtils.getIsEndHref;
 @Slf4j
 @Component
 public class WebClientUtil {
-    //新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
-    private final static WebClient WEB_CLIENT = new WebClient(BrowserVersion.CHROME);
     // json处理对象
     public final static ObjectMapper json = new ObjectMapper();
     @Autowired
@@ -49,8 +47,10 @@ public class WebClientUtil {
     @Autowired
     private IParagraphDao iParagraphDao;
 
-    static {
-        WebClientOptions webClientOptions = WEB_CLIENT.getOptions();
+    //新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
+    public static WebClient getWebClient() {
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        WebClientOptions webClientOptions = webClient.getOptions();
         //当JS执行出错的时候是否抛出异常, 这里选择不需要
         webClientOptions.setThrowExceptionOnScriptError(false);
         //当HTTP的状态非200时是否抛出异常, 这里选择不需要
@@ -63,7 +63,8 @@ public class WebClientUtil {
         //开启https
         webClientOptions.setUseInsecureSSL(true);
         //很重要，设置支持AJAX
-        WEB_CLIENT.setAjaxController(new NicelyResynchronizingAjaxController());
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+        return webClient;
     }
 
     /**
@@ -83,7 +84,7 @@ public class WebClientUtil {
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
             // 获取起始页面
-            HtmlPage htmlPage = WEB_CLIENT.getPage(book.getStarturl());
+            HtmlPage htmlPage = getWebClient().getPage(book.getStarturl());
             int errorNum = 0;
             while (true) {
                 String url = htmlPage.getUrl().toString().trim();
@@ -107,7 +108,7 @@ public class WebClientUtil {
                         // 调用休眠处理方法
                         HandleUtils.sleepHandler.get();
                         startTime = System.currentTimeMillis();
-                        htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
+                        htmlPage = getWebClient().getPage(htmlPage.getUrl());
                         continue;
                     }
                     errorNum = 0;
@@ -163,7 +164,7 @@ public class WebClientUtil {
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
             // 获取起始页面
-            HtmlPage htmlPage = WEB_CLIENT.getPage(chapter.getUrl());
+            HtmlPage htmlPage = getWebClient().getPage(chapter.getUrl());
             int num = 0;
             while (num++ < 10) {
                 // 获取标题DOM列表
@@ -179,7 +180,7 @@ public class WebClientUtil {
                     // 调用休眠处理方法
                     HandleUtils.sleepHandler.get();
                     startTime = System.currentTimeMillis();
-                    htmlPage = WEB_CLIENT.getPage(htmlPage.getUrl());
+                    htmlPage = getWebClient().getPage(htmlPage.getUrl());
                     continue;
                 }
                 // 计算使用时间

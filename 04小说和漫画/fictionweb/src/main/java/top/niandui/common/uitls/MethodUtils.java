@@ -244,6 +244,19 @@ public class MethodUtils {
     }
 
     /**
+     * 转化类型，防止为null。当类型为目标的类型时，直接返回
+     *
+     * @param param    要转换的对象
+     * @param callBack 字符串转换为目标类型的方法
+     * @param rClass   目标类型的Class类对象
+     * @param <R>      目标类型
+     * @return 类型转换后的对象
+     */
+    public static <R> R convert(Object param, Function<String, R> callBack, Class<R> rClass) {
+        return param.getClass() == rClass ? (R) param : convert(param, callBack);
+    }
+
+    /**
      * 分页查询Map参数中添加默认排序字段和方式。不影响原有排序
      *
      * @param pageOrder 分页查询参数对象
