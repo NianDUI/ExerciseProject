@@ -240,7 +240,7 @@ public class MethodUtils {
      * @return 类型转换后的对象
      */
     public static <R> R convert(Object param, Function<String, R> callBack) {
-        return param == null ? null : callBack.apply(param.toString());
+        return convert(param, callBack, null);
     }
 
     /**
@@ -253,7 +253,7 @@ public class MethodUtils {
      * @return 类型转换后的对象
      */
     public static <R> R convert(Object param, Function<String, R> callBack, Class<R> rClass) {
-        return param.getClass() == rClass ? (R) param : convert(param, callBack);
+        return param == null ? null : param.getClass() == rClass ? (R) param : callBack.apply(param.toString());
     }
 
     /**
