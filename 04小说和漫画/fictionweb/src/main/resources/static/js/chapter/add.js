@@ -1,12 +1,6 @@
-const $ = layui.$;
-const layer = layui.layer;
-const form = layui.form;
-const thisIndex = parent.layer.getFrameIndex(window.name);
-parent.layer.iframeAuto(thisIndex);
-parent.layer.style(thisIndex, getIframeStyle());
-// parent.layer.full(thisIndex);
+setAddIframeStyle();
 if (id != null) {
-    parent.layer.title("修改", thisIndex);
+    parent.layer.title("修改", baseParams.thisIndex);
     $.ajax({
         type: "get"
         , contentType: "application/json"

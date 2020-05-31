@@ -167,7 +167,7 @@
                     AND c."bookid" = cc."bookid"
                     AND c."seqid" &lt; cc."seqid"
             )
-        ORDER BY "seqid" ASC
+        ORDER BY "seqid" DESC
         LIMIT 1
     </select>
 

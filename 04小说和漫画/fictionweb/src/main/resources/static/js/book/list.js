@@ -1,6 +1,3 @@
-const table = layui.table;
-const $ = layui.$;
-const layer = layui.layer;
 const tableList = table.render({
     elem: "#table"
     , id: "table"
@@ -47,8 +44,9 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list({
+setBaseParams({
     idName: "bookid"
     , addUrl: base + "book/add/"
     , delUrl: base + "api/deleteBook/"
 });
+list();
