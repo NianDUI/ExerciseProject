@@ -1,6 +1,3 @@
-const table = layui.table;
-const $ = layui.$;
-const layer = layui.layer;
 const tableList = table.render({
     elem: "#table"
     , id: "table"
@@ -65,11 +62,12 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list({
+setBaseParams({
     idName: "chapterid"
     , addUrl: base + "chapter/add/"
     , delUrl: base + "api/deleteChapter/"
 });
+list();
 
 $(".reacquire").click(function () {
     $.ajax({

@@ -1,6 +1,3 @@
-const table = layui.table;
-const $ = layui.$;
-const layer = layui.layer;
 const tableList = table.render({
     elem: "#table"
     , id: "table"
@@ -41,8 +38,9 @@ table.on("tool(table)", function (obj) {
         });
     }
 });
-list({
+setBaseParams({
     idName: "configid"
     , addUrl: base + "config/add/"
     , delUrl: base + "api/deleteConfig/"
 });
+list();
