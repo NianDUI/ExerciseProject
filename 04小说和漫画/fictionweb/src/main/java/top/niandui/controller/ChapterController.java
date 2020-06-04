@@ -104,7 +104,6 @@ public class ChapterController extends BaseController {
 
     @PostMapping("/getSpecifiedAndFollowUpChapter")
     @ApiOperation(value = "获取指定章节和后续章节", notes = "<br>开发人：李永达<br>时间：2020/04/07<br>")
-    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
     public ResponseData getSpecifiedAndFollowUpChapter(@RequestBody @Validated SpecifiedFollowUpGetVO getVO) throws Exception {
         iChapterService.getSpecifiedAndFollowUpChapter(getVO);
         return ResponseData.ok();

@@ -1,6 +1,7 @@
 setAddIframeStyle();
+const thisIndex = baseParams.thisIndex;
 if (id != null) {
-    parent.layer.title("修改", baseParams.thisIndex);
+    parent.layer.title("修改", thisIndex);
     $.ajax({
         type: "get"
         , contentType: "application/json"

@@ -13,8 +13,7 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
 import top.niandui.common.model.PageOrder;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -33,13 +32,13 @@ import java.util.function.Function;
  * @version: 1.0
  */
 @Slf4j
-public class MethodUtils {
+public class MethodUtil {
     // 默认一次数据量
     public static final int DEFAULT_ONE_COUNT = 500;
     // 日期格式化器：yyyy-MM-dd HH:mm:ss
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private MethodUtils() {
+    private MethodUtil() {
     }
 
     /**
@@ -488,6 +487,31 @@ public class MethodUtils {
             return String.format("'%s'::TIMESTAMP", sdf.format(param));
         } else {
             return param.toString();
+        }
+    }
+
+    /**
+     * 将字符串保存为text文件
+     *
+     * @param fileName 文件名称
+     * @param content  文件内容
+     * @param path     保存的文件夹
+     * @param append   是否追加写入
+     * @throws Exception
+     */
+    public static void saveText(String fileName, String content, String path, boolean append) throws Exception {
+        if (!fileName.endsWith(".txt")) {
+            fileName = fileName + ".txt";
+        }
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        try (OutputStreamWriter os = new FileWriter(path + "/" + fileName, append)) {
+            os.write(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("写入到文件错误", e);
         }
     }
 }

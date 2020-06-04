@@ -105,8 +105,6 @@ $(".getSpecifiedAndFollowUp").click(function () {
         , title: '请输入章节链接'
         , area: [computeArea() + "px", "25px"]
     }, function (value, index, elem) {
-        console.log("a:" + value + ":b")
-        return;
         if (value.trim().length > 0) {
             $.ajax({
                 type: "post"

@@ -20,7 +20,7 @@ import top.niandui.utils.WebClientUtil;
 
 import java.util.List;
 
-import static top.niandui.common.uitls.MethodUtils.addDefaultSort;
+import static top.niandui.common.uitls.MethodUtil.addDefaultSort;
 
 /**
  * @author 李永达

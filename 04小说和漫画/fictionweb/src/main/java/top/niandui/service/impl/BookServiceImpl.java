@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static top.niandui.common.uitls.DownloadUtils.getDownloadOS;
-import static top.niandui.common.uitls.MethodUtils.addDefaultSort;
+import static top.niandui.common.uitls.MethodUtil.addDefaultSort;
+import static top.niandui.common.uitls.file.DownloadUtil.getDownloadOS;
 
 /**
  * @author 李永达
