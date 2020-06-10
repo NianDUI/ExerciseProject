@@ -65,10 +65,10 @@ public class MethodUtil {
      * @return 回调处理方法返回对象列表
      */
     public static <T, R> List<R> createBatch(List<T> list, Function<List<T>, R> callBack, int oneCount) {
-        List<R> rvList = new ArrayList<>();
         if (list == null) {
-            return rvList;
+            return new ArrayList<>();
         }
+        List<R> rvList = new ArrayList<>(list.size());
         if (oneCount <= 0) {
             oneCount = DEFAULT_ONE_COUNT;
         }
@@ -115,10 +115,10 @@ public class MethodUtil {
      * @return 回调处理方法返回对象列表
      */
     public static <T, U, R> List<R> createBatch(List<T> list, U u, BiFunction<List<T>, U, R> callBack, int oneCount) {
-        List<R> rvList = new ArrayList<>();
         if (list == null) {
-            return rvList;
+            return new ArrayList<>();
         }
+        List<R> rvList = new ArrayList<>(list.size());
         if (oneCount <= 0) {
             oneCount = DEFAULT_ONE_COUNT;
         }
@@ -164,10 +164,10 @@ public class MethodUtil {
      * @return 回调处理方法返回对象列表
      */
     public static <T, U, R> List<R> createBatch(T t, List<U> list, BiFunction<T, List<U>, R> callBack, int oneCount) {
-        List<R> rvList = new ArrayList<>();
         if (list == null) {
-            return rvList;
+            return new ArrayList<>();
         }
+        List<R> rvList = new ArrayList<>(list.size());
         if (oneCount <= 0) {
             oneCount = DEFAULT_ONE_COUNT;
         }
