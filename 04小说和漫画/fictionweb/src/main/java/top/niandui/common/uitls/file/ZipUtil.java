@@ -110,9 +110,6 @@ public class ZipUtil {
      * @throws FileNotFoundException
      */
     public static ZipOutputStream getZipOutputStream(String filePath) throws FileNotFoundException {
-        if (!filePath.endsWith(".zip")) {
-            filePath += ".zip";
-        }
         return new ZipOutputStream(new FileOutputStream(filePath));
     }
 
