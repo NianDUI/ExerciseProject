@@ -13,7 +13,8 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.StringUtils;
 import top.niandui.common.model.PageOrder;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -487,30 +488,6 @@ public class MethodUtil {
             return String.format("'%s'::TIMESTAMP", sdf.format(param));
         } else {
             return param.toString();
-        }
-    }
-
-    /**
-     * 将字符串保存为text文件
-     *
-     * @param fileName 文件名称
-     * @param content  文件内容
-     * @param path     保存的文件夹
-     * @param append   是否追加写入
-     */
-    public static void saveText(String fileName, String content, String path, boolean append) {
-        if (!fileName.endsWith(".txt")) {
-            fileName = fileName + ".txt";
-        }
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        try (OutputStreamWriter os = new FileWriter(path + "/" + fileName, append)) {
-            os.write(content);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("写入到文件错误", e);
         }
     }
 }

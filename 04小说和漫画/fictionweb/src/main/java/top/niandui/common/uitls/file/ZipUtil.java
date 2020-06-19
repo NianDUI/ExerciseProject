@@ -1,6 +1,7 @@
 package top.niandui.common.uitls.file;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -66,94 +67,127 @@ public class ZipUtil {
         }
     }
 
-    /*
-     * @title createZip
-     * @description 压缩文件夹
-     * @param [sourcePath, zipName, zipPath]
-     * @return java.lang.String
-     * @author huangwx
-     * @date 2020/5/14 22:07
-     */
-    public static String createZip(String sourcePath, String zipName, String zipPath) {
-        FileOutputStream fos = null;
-        ZipOutputStream zos = null;
-        try {
-            zipPath = zipPath + "/" + zipName + ".zip";
-            fos = new FileOutputStream(zipPath);
-            zos = new ZipOutputStream(fos);
-            //((Object) zos).setEncoding("gbk");//此处修改字节码方式。
-            //createXmlFile(sourcePath,"293.xml");
-            writeZip(new File(sourcePath), "", zos);
-            return zipPath;
-        } catch (FileNotFoundException e) {
-            log.error("创建ZIP文件失败", e);
-        } finally {
-            try {
-                if (zos != null) {
-                    zos.close();
-                }
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                log.error("创建ZIP文件失败", e);
-            }
 
+    /**
+     * 创建压缩文件
+     *
+     * @param source  压缩原目录
+     * @param zipName 压缩文件名称
+     * @param zipPath 压缩文件路径
+     * @return 压缩文件全路径
+     */
+    public static String createZip(String source, String zipName, String zipPath) {
+        File file = new File(zipPath);
+        if (!file.exists()) {
+            file.mkdirs();
         }
-        return sourcePath;
+        String name = file.getAbsolutePath() + File.separator + zipName;
+        if (!name.endsWith(".zip")) {
+            name += ".zip";
+        }
+        try (ZipOutputStream zos = getZipOutputStream(name)) {
+            writeZipRoot(source, zos);
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("创建ZIP文件失败", e);
+        }
+        return name;
+    }
+
+    public static ZipOutputStream getZipOutputStream(String zipPath, String zipName) throws FileNotFoundException {
+        File file = new File(zipPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return getZipOutputStream(file.getAbsolutePath() + File.separator + zipName);
     }
 
     /**
-     * @return void
-     * @Title
-     * @Description 处理文件夹
-     * @author lvl
-     * @date 2017-9-19 下午12:58:08
+     * 获取压缩文件输出流对象
+     *
+     * @param filePath 文件路径
+     * @return 压缩文件输出流对象
+     * @throws FileNotFoundException
      */
-    private static void writeZip(File file, String parentPath, ZipOutputStream zos) {
-        if (file.exists()) {
-            if (file.isDirectory()) {
-                //处理文件夹
-                parentPath += file.getName() + File.separator;
-                File[] files = file.listFiles();
-                if (files.length != 0) {
-                    for (File f : files) {
-                        writeZip(f, parentPath, zos);
-                    }
-                } else {
-                    //空目录则创建当前目录
-                    try {
-                        zos.putNextEntry(new ZipEntry(parentPath));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                FileInputStream fis = null;
-                try {
-                    fis = new FileInputStream(file);
-                    ZipEntry ze = new ZipEntry(parentPath + file.getName());
-                    zos.putNextEntry(ze);
-                    byte[] content = new byte[1024];
-                    int len;
-                    while ((len = fis.read(content)) != -1) {
-                        zos.write(content, 0, len);
-                        zos.flush();
-                    }
+    public static ZipOutputStream getZipOutputStream(String filePath) throws FileNotFoundException {
+        if (!filePath.endsWith(".zip")) {
+            filePath += ".zip";
+        }
+        return new ZipOutputStream(new FileOutputStream(filePath));
+    }
 
-                } catch (FileNotFoundException e) {
-                    log.error("创建ZIP文件失败", e);
-                } catch (IOException e) {
-                    log.error("创建ZIP文件失败", e);
-                } finally {
-                    try {
-                        if (fis != null) {
-                            fis.close();
-                        }
-                    } catch (IOException e) {
-                        log.error("创建ZIP文件失败", e);
-                    }
-                }
+    /**
+     * 将文件或文件里的文件写到压缩包的根目录
+     *
+     * @param filePath 文件路径
+     * @param zos      压缩文件输出流
+     */
+    public static void writeZipRoot(String filePath, ZipOutputStream zos) {
+        writeZipRoot(new File(filePath), zos);
+    }
+
+    /**
+     * 将文件或文件里的文件写到压缩包的根目录
+     *
+     * @param file File对象
+     * @param zos  压缩文件输出流
+     */
+    public static void writeZipRoot(File file, ZipOutputStream zos) {
+        if (file.exists()) {
+            String parent = "";
+            if (file.isDirectory()) {
+                writeZip(file.listFiles(), parent, zos);
+            } else {
+                fileWriteZip(file, parent, zos);
+            }
+        }
+    }
+
+    /**
+     * 将文件夹写到压缩包
+     *
+     * @param dir    要压缩的文件夹对象
+     * @param parent 压缩包中的父目录
+     * @param zos    压缩文件输出流
+     */
+    public static void dirWriteZip(File dir, String parent, ZipOutputStream zos) {
+        if (dir.exists() && dir.isDirectory()) {
+            writeZip(dir.listFiles(), parent.concat(dir.getName()).concat(File.separator), zos);
+        }
+    }
+
+    /**
+     * 将文件写到压缩包
+     *
+     * @param file   要压缩的文件对象
+     * @param parent 压缩包中的父目录
+     * @param zos    压缩文件输出流
+     */
+    public static void fileWriteZip(File file, String parent, ZipOutputStream zos) {
+        try {
+            if (file.exists() && file.isFile()) {
+                zos.putNextEntry(new ZipEntry(parent.concat(file.getName())));
+                FileUtils.copyFile(file, zos);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("创建ZIP文件失败", e);
+        }
+    }
+
+    /**
+     * 将File对象数组中的File对象写到压缩包
+     *
+     * @param files  File对象数组
+     * @param parent 压缩包中的父目录
+     * @param zos    压缩文件输出流
+     */
+    public static void writeZip(File[] files, String parent, ZipOutputStream zos) {
+        for (File file : files) {
+            if (file.isDirectory()) {
+                dirWriteZip(file, parent, zos);
+            } else {
+                fileWriteZip(file, parent, zos);
             }
         }
     }
