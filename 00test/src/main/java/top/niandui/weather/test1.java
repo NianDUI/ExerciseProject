@@ -20,7 +20,7 @@ public class test1 {
     public static void main(String[] args) throws Exception{
         Map paramsMap = new LinkedHashMap<String, String>();
 //        paramsMap.put("district_id", "110114");
-        paramsMap.put("district_id", "130109");
+        paramsMap.put("district_id", "110100");
         paramsMap.put("data_type", "all");
         paramsMap.put("output", "json");
         paramsMap.put("ak", "ak");

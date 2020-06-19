@@ -497,9 +497,8 @@ public class MethodUtil {
      * @param content  文件内容
      * @param path     保存的文件夹
      * @param append   是否追加写入
-     * @throws Exception
      */
-    public static void saveText(String fileName, String content, String path, boolean append) throws Exception {
+    public static void saveText(String fileName, String content, String path, boolean append) {
         if (!fileName.endsWith(".txt")) {
             fileName = fileName + ".txt";
         }
