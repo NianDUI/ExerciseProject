@@ -94,6 +94,14 @@ public class ZipUtil {
         return name;
     }
 
+    /**
+     * 获取压缩文件输出流对象
+     *
+     * @param zipPath 压缩文件路径
+     * @param zipName 压缩文件名称
+     * @return 压缩文件输出流对象
+     * @throws FileNotFoundException
+     */
     public static ZipOutputStream getZipOutputStream(String zipPath, String zipName) throws FileNotFoundException {
         File file = new File(zipPath);
         if (!file.exists()) {
