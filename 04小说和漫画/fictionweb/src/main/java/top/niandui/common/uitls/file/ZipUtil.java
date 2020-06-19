@@ -85,7 +85,7 @@ public class ZipUtil {
         if (!name.endsWith(".zip")) {
             name += ".zip";
         }
-        try (ZipOutputStream zos = getZipOutputStream(name)) {
+        try (ZipOutputStream zos = getZipOutputStream(file.getAbsolutePath() + File.separator + zipName)) {
             writeZipRoot(source, zos);
         } catch (IOException e) {
             e.printStackTrace();
