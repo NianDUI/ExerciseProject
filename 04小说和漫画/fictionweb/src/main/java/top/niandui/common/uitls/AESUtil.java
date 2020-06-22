@@ -75,7 +75,7 @@ public class AESUtil {
             return Base64.getEncoder().encodeToString(cipher.doFinal(src.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("加密");
+            throw new RuntimeException("加密失败");
         }
     }
 
