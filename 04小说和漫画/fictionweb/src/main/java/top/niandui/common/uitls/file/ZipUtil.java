@@ -3,9 +3,14 @@ package top.niandui.common.uitls.file;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -19,52 +24,35 @@ import java.util.zip.ZipOutputStream;
  */
 @Slf4j
 public class ZipUtil {
+
     /**
      * 解压文件到指定目录
      *
-     * @return
+     * @param zipPath   压缩文件路径
+     * @param unzipPath 解压目录
+     * @return 解压出的文件列表
      */
-    public static void unZipFiles(String zipDir, String descDir) {
+    public static List<File> unZip(String zipPath, String unzipPath) {
+        List<File> fileList = new ArrayList<>();
         try {
-            File zipFile = new File(zipDir);
-            ZipFile zip = new ZipFile(zipFile, Charset.forName("GBK"));//解决中文文件夹乱码
-
-            File pathFile = new File(descDir);
-            if (!pathFile.exists()) {
-                pathFile.mkdirs();
-            }
-
-            for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements(); ) {
-                ZipEntry entry = entries.nextElement();
-                String zipEntryName = entry.getName();
-                InputStream in = zip.getInputStream(entry);
-                String outPath = (descDir + "/" + zipEntryName).replaceAll("\\*", "/");
-
-                // 判断路径是否存在,不存在则创建文件路径
-                File file = new File(outPath.substring(0, outPath.lastIndexOf('/')));
-                if (!file.exists()) {
+            unzipPath = new File(unzipPath).getAbsolutePath();
+            ZipFile zipFile = new ZipFile(zipPath, Charset.forName("GBK"));
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry zipEntry = entries.nextElement();
+                File file = new File(unzipPath + File.separator + zipEntry.getName());
+                if (zipEntry.isDirectory()) {
                     file.mkdirs();
+                } else {
+                    FileUtils.copyInputStreamToFile(zipFile.getInputStream(zipEntry), file);
+                    fileList.add(file);
                 }
-                // 判断文件全路径是否为文件夹,如果是上面已经上传,不需要解压
-                if (new File(outPath).isDirectory()) {
-                    continue;
-                }
-                // 输出文件路径信息
-                //			System.out.println(outPath);
-
-                FileOutputStream out = new FileOutputStream(outPath);
-                byte[] buf1 = new byte[1024];
-                int len;
-                while ((len = in.read(buf1)) > 0) {
-                    out.write(buf1, 0, len);
-                }
-                out.close();
-                in.close();
             }
-            zip.close();
-        } catch (Exception e) {
-            throw new RuntimeException("压缩文件异常");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("文件解压失败");
         }
+        return fileList;
     }
 
 
@@ -89,7 +77,7 @@ public class ZipUtil {
             writeZipRoot(source, zos);
         } catch (IOException e) {
             e.printStackTrace();
-            log.error("创建ZIP文件失败", e);
+            throw new RuntimeException("创建ZIP文件失败");
         }
         return name;
     }
