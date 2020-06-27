@@ -16,6 +16,7 @@ import top.niandui.model.vo.ChapterListReturnVO;
 import top.niandui.model.vo.ChapterSearchVO;
 import top.niandui.model.vo.SpecifiedFollowUpGetVO;
 import top.niandui.service.IChapterService;
+import top.niandui.utils.WebClientUtil;
 
 import java.util.List;
 
@@ -106,6 +107,21 @@ public class ChapterController extends BaseController {
     @ApiOperation(value = "获取指定章节和后续章节", notes = "<br>开发人：李永达<br>时间：2020/04/07<br>")
     public ResponseData getSpecifiedAndFollowUpChapter(@RequestBody @Validated SpecifiedFollowUpGetVO getVO) throws Exception {
         iChapterService.getSpecifiedAndFollowUpChapter(getVO);
+        return ResponseData.ok();
+    }
+
+    @GetMapping("/queryGetStatus/{id}")
+    @ApiOperation(value = "查询获取状态", notes = "<br>开发人：李永达<br>时间：2020/06/27<br>")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
+    public ResponseData<Boolean> queryGetStatus(@PathVariable Long id) throws Exception {
+        return ResponseData.ok(WebClientUtil.GET_STATUS.get(id));
+    }
+
+    @GetMapping("/stopGet/{id}")
+    @ApiOperation(value = "停止获取", notes = "<br>开发人：李永达<br>时间：2020/06/27<br>")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
+    public ResponseData stopGet(@PathVariable Long id) throws Exception {
+        WebClientUtil.GET_STATUS.remove(id);
         return ResponseData.ok();
     }
 }

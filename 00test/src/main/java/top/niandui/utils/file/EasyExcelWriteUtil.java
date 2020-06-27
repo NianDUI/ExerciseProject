@@ -17,11 +17,8 @@ import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
-import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 
 import javax.servlet.http.HttpServletResponse;
@@ -136,13 +133,13 @@ public class EasyExcelWriteUtil {
     // 定制写处理器
     private static class CustomizeWriteHandler implements SheetWriteHandler, RowWriteHandler, CellWriteHandler, NotRepeatExecutor {
         // 临时信息
-        private TempInfo tempInfo;
+        private final TempInfo tempInfo;
         // 头部单元格样式
         private CellStyle headCellStyle;
         // 最大列宽度
         private static final int MAX_COLUMN_WIDTH = 255 * 256;
         // sheet中的各列最大宽度
-        private Map<Integer, Integer> columnMaxWidthMap = new HashMap<>();
+        private final Map<Integer, Integer> columnMaxWidthMap = new HashMap<>();
 
         public CustomizeWriteHandler(TempInfo tempInfo) {
             this.tempInfo = tempInfo;
@@ -230,6 +227,10 @@ public class EasyExcelWriteUtil {
                     writeSheetHolder.getSheet().setColumnWidth(entry.getKey(), entry.getValue());
                 }
             }
+        }
+
+        @Override
+        public void afterCellDataConverted(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, CellData cellData, Cell cell, Head head, Integer integer, Boolean aBoolean) {
         }
 
         // 获取数据的长度

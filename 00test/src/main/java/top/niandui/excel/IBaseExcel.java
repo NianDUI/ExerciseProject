@@ -76,4 +76,8 @@ public interface IBaseExcel extends SheetWriteHandler, RowWriteHandler, CellWrit
     @Override
     default void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
     }
+
+    @Override
+    default void afterCellDataConverted(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, CellData cellData, Cell cell, Head head, Integer integer, Boolean aBoolean) {
+    }
 }

@@ -21,6 +21,7 @@ import top.niandui.model.Config;
 import top.niandui.model.Paragraph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -38,6 +39,19 @@ import static top.niandui.utils.HandleUtils.getIsEndHref;
 @Slf4j
 @Component
 public class WebClientUtil {
+    // 获取状态
+    public final static Map<Long, Boolean> GET_STATUS = new HashMap<Long, Boolean>(){
+        @Override
+        public Boolean get(Object key) {
+            return getOrDefault(key, false);
+        }
+
+        @Override
+        public Boolean getOrDefault(Object key, Boolean defaultValue) {
+            Boolean value = super.get(key);
+            return value == null ? defaultValue : value;
+        }
+    };
     // json处理对象
     public final static ObjectMapper json = new ObjectMapper();
     @Autowired
@@ -86,7 +100,8 @@ public class WebClientUtil {
             // 获取起始页面
             HtmlPage htmlPage = getWebClient().getPage(book.getStarturl());
             int errorNum = 0;
-            while (true) {
+            GET_STATUS.put(book.getBookid(), true);
+            while (GET_STATUS.get(book.getBookid())) {
                 String url = htmlPage.getUrl().toString().trim();
                 if (!isFirstJump) {
                     Chapter chapter = new Chapter();
@@ -149,6 +164,7 @@ public class WebClientUtil {
             log.error(e.toString());
 //            throw new RuntimeException(e);
         }
+        GET_STATUS.remove(book.getBookid());
         // 更新任务状态
         iBookDao.updateTaskstatus(book.getBookid(), 0);
     }

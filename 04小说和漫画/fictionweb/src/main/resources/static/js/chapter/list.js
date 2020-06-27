@@ -69,6 +69,40 @@ setBaseParams({
 });
 list();
 
+const stopGet = $(".stopGet");
+function queryGetStatus() {
+    $.ajax({
+        type: "get"
+        , contentType: "application/json"
+        , url: base + "api/queryGetStatus/" + bookid
+        , success: function (data) {
+            if (data.code == 200) {
+                if (data.data) {
+                    stopGet.show();
+                } else {
+                    stopGet.hide();
+                }
+            } else {
+                layer.alert(data.message);
+            }
+        }
+    });
+}
+$(".search").click(queryGetStatus);
+stopGet.click(function () {
+    $.ajax({
+        type: "get"
+        , contentType: "application/json"
+        , url: base + "api/stopGet/" + bookid
+        , success: function (data) {
+            if (data.code == 200) {
+                layer.msg("停止获取");
+            } else {
+                layer.alert(data.message);
+            }
+        }
+    });
+});
 $(".reacquire").click(function () {
     $.ajax({
         type: "get"

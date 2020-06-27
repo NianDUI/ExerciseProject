@@ -29,6 +29,13 @@ function list() {
     $(".search").click(function () {
         search();
     });
+    // 按键弹起事件
+    $(".searVal").keyup(function (e) {
+        // 回车
+        if (e.keyCode == 13) {
+            search();
+        }
+    });
     $(".add").click(function () {
         add("null");
     });
