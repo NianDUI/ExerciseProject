@@ -23,4 +23,7 @@ public interface IBookDao<T> extends IBaseDao<T> {
 
     // 查询章节内容下载列表
     List<String> queryChapterDownloadList(Map params);
+
+    // 查询书籍任务状态
+    Integer queryBookTaskstatus(Long id);
 }

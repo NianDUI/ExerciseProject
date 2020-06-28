@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.niandui.common.base.BaseServiceImpl;
-import top.niandui.common.expection.ReStateException;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
@@ -58,7 +57,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
 
     @Override
     public void delete(String id) throws Exception {
-        isTaskStatus(iChapterDao.queryBookByMultiId(id));
+        checkTaskStatus(iChapterDao.queryBookByMultiId(id).getTaskstatus());
         // 删除段落
         iParagraphDao.deleteByChapterId(id);
         iChapterDao.delete(id);
@@ -91,12 +90,11 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     @Override
     public void reacquireAllChapter(Long id) throws Exception {
         Book book = (Book) iBookDao.model(id);
-        isTaskStatus(book);
+        checkTaskStatus(book.getTaskstatus());
         iChapterDao.deleteByBookId(id.toString());
         iParagraphDao.deleteByBookId(id.toString());
         Config config = (Config) iConfigDao.model(book.getConfigid());
-        // 更新任务状态
-        iBookDao.updateTaskstatus(book.getBookid(), 1);
+        book.setTaskstatus(1);
         // 第一次不跳过
         webClientUtil.getBook(config, book, 0, false);
     }
@@ -104,11 +102,10 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     @Override
     public void getFollowUpChapter(Long id) throws Exception {
         Book book = (Book) iBookDao.model(id);
-        isTaskStatus(book);
+        checkTaskStatus(book.getTaskstatus());
         Config config = (Config) iConfigDao.model(book.getConfigid());
         Chapter chapter = iChapterDao.queryBookAsLastChapter(book.getBookid());
-        // 更新任务状态
-        iBookDao.updateTaskstatus(book.getBookid(), 2);
+        book.setTaskstatus(2);
         if (chapter != null) {
             book.setStarturl(chapter.getUrl());
             // 第一次跳过
@@ -123,24 +120,9 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     public void reacquireSingleChapter(Long id) throws Exception {
         Chapter chapter = (Chapter) iChapterDao.model(id);
         Book book = (Book) iBookDao.model(chapter.getBookid());
-        isTaskStatus(book);
+        checkTaskStatus(book.getTaskstatus());
         Config config = (Config) iConfigDao.model(book.getConfigid());
-        // 更新任务状态
-        iBookDao.updateTaskstatus(book.getBookid(), 3);
         webClientUtil.getChapter(config, chapter);
-    }
-
-    private void isTaskStatus(Book book) throws Exception {
-        if (book.getTaskstatus() == null) {
-            return;
-        }
-        if (book.getTaskstatus() == 1) {
-            throw new ReStateException("正在执行重新获取全部任务");
-        } else if (book.getTaskstatus() == 2) {
-            throw new ReStateException("正在执行获取后续章节任务");
-        } else if (book.getTaskstatus() == 3) {
-            throw new ReStateException("正在执行重新获取单章任务");
-        }
     }
 
     @Override
@@ -163,11 +145,10 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     @Override
     public void getSpecifiedAndFollowUpChapter(SpecifiedFollowUpGetVO getVO) throws Exception {
         Book book = (Book) iBookDao.model(getVO.getBookid());
-        isTaskStatus(book);
+        checkTaskStatus(book.getTaskstatus());
         Config config = (Config) iConfigDao.model(book.getConfigid());
         Chapter chapter = iChapterDao.queryBookAsLastChapter(getVO.getBookid());
-        // 更新任务状态
-        iBookDao.updateTaskstatus(book.getBookid(), 2);
+        book.setTaskstatus(2);
         long seqid;
         if (chapter != null) {
             seqid = chapter.getSeqid() + 1;
@@ -177,5 +158,15 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         book.setStarturl(getVO.getUrl());
         // 第一次不跳过
         webClientUtil.getBook(config, book, seqid, false);
+    }
+
+    @Override
+    public Integer queryGetStatus(Long id) throws Exception {
+        return iBookDao.queryBookTaskstatus(id);
+    }
+
+    @Override
+    public void stopGet(Long id) throws Exception {
+        iBookDao.updateTaskstatus(id, 0);
     }
 }

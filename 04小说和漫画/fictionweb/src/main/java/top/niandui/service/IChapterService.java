@@ -53,4 +53,10 @@ public interface IChapterService {
 
     // 获取指定章节和后续章节
     void getSpecifiedAndFollowUpChapter(SpecifiedFollowUpGetVO getVO) throws Exception;
+
+    // 查询获取状态
+    Integer queryGetStatus(Long id) throws Exception;
+
+    // 停止获取
+    void stopGet(Long id) throws Exception;
 }

@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.niandui.common.base.BaseServiceImpl;
-import top.niandui.common.expection.ReStateException;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
@@ -68,7 +67,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     @Override
     public void delete(String id) throws Exception {
         for (String sId : id.split(",")) {
-            isTaskStatus((Book) iBookDao.model(Long.valueOf(sId)));
+            checkTaskStatus(((Book) iBookDao.model(Long.valueOf(sId))).getTaskstatus());
         }
         // 删除段落
         iParagraphDao.deleteByBookId(id);
@@ -104,7 +103,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     @Override
     public void downloadBook(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Book book = (Book) iBookDao.model(id);
-        isTaskStatus(book);
+        checkTaskStatus(book.getTaskstatus());
         Config config = (Config) iConfigDao.model(book.getConfigid());
         String titleNewLine = "", contentNewLine = "";
         for (int i = 0; i < config.getTitlelnnum(); i++) {
@@ -133,7 +132,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     @Override
     public void downloadBook2(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Book book = (Book) iBookDao.model(id);
-        isTaskStatus(book);
+        checkTaskStatus(book.getTaskstatus());
         Config config = (Config) iConfigDao.model(book.getConfigid());
         String titleNewLine = "", contentNewLine = "";
         for (int i = 0; i < config.getTitlelnnum(); i++) {
@@ -162,17 +161,6 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
                 }
             }
             bw.flush();
-        }
-    }
-
-    private void isTaskStatus(Book book) throws Exception {
-        if (book.getTaskstatus() == null) {
-            return;
-        }
-        if (book.getTaskstatus() == 1) {
-            throw new ReStateException("正在执行重新获取任务,请稍后!");
-        } else if (book.getTaskstatus() == 2) {
-            throw new ReStateException("正在执行获取后续任务,请稍后!");
         }
     }
 }

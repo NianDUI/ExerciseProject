@@ -77,7 +77,7 @@ function queryGetStatus() {
         , url: base + "api/queryGetStatus/" + bookid
         , success: function (data) {
             if (data.code == 200) {
-                if (data.data) {
+                if (data.data != 0) {
                     stopGet.show();
                 } else {
                     stopGet.hide();
