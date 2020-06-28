@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +115,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         }
         try (
                 OutputStream os = getDownloadOS(response, book.getName() + ".txt");
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os))
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))
         ) {
             Map params = new HashMap<>(4, 1);
             params.put("bookid", book.getBookid());
@@ -143,7 +144,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         }
         try (
                 OutputStream os = getDownloadOS(response, book.getName() + ".txt");
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os))
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))
         ) {
             ChapterSearchVO chapSeaVO = new ChapterSearchVO();
             chapSeaVO.setBookid(book.getBookid());
@@ -151,16 +152,18 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
             chapSeaVO.setDescOrAsc("ASC");
             List<Chapter> chapList = iChapterDao.queryList(chapSeaVO);
             ParagraphSearchVO paraSeaVO = new ParagraphSearchVO();
+            paraSeaVO.setBookid(book.getBookid());
+            paraSeaVO.setOrderBy(chapSeaVO.getOrderBy());
+            paraSeaVO.setDescOrAsc(chapSeaVO.getDescOrAsc());
             for (Chapter chapter : chapList) {
-                paraSeaVO.setBookid(chapter.getBookid());
                 paraSeaVO.setChapterid(chapter.getChapterid());
                 bw.append(chapter.getName()).append(titleNewLine);
                 List<Paragraph> paraList = iParagraphDao.queryList(paraSeaVO);
                 for (Paragraph paragraph : paraList) {
                     bw.append("    ").append(paragraph.getContent()).append(contentNewLine);
                 }
+                bw.flush();
             }
-            bw.flush();
         }
     }
 }
