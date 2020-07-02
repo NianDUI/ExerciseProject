@@ -22,10 +22,7 @@ import top.niandui.common.base.IBaseExcel;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,13 +41,30 @@ public class EasyExcelWriteUtil {
      * 写单个Sheet到Excel
      *
      * @param response 请求响应对象
-     * @param data     写出数据的list对象
      * @param fileName 写出文件名
+     * @param data     写出数据的list对象
      * @param <T>      泛型
      */
     public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, List<T> data) {
+        write(response, fileName, null, data);
+    }
+
+    /**
+     * 写单个Sheet到Excel
+     *
+     * @param response  请求响应对象
+     * @param fileName  写出文件名
+     * @param dataClass 写出数据的class对象
+     * @param data      写出数据的list对象
+     * @param <T>       泛型
+     */
+    public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, Class<T> dataClass, List<T> data) {
         String[] sheets = {"数据"};
-        write(response, fileName, sheets, Collections.singletonMap(sheets[0], data));
+        Class<T>[] classes = null;
+        if (dataClass != null) {
+            classes = new Class[]{dataClass};
+        }
+        write(response, fileName, sheets, classes, Collections.singletonMap(sheets[0], data));
     }
 
     /**
@@ -61,8 +75,24 @@ public class EasyExcelWriteUtil {
      * @param <T>  泛型
      */
     public static <T extends IBaseExcel> void write(OutputStream os, List<T> data) {
+        write(os, null, data);
+    }
+
+    /**
+     * 写单个Sheet到Excel
+     *
+     * @param os        输出流
+     * @param dataClass 写出数据的class对象
+     * @param data      写出数据的list对象
+     * @param <T>       泛型
+     */
+    public static <T extends IBaseExcel> void write(OutputStream os, Class<T> dataClass, List<T> data) {
         String[] sheets = {"数据"};
-        write(os, sheets, Collections.singletonMap(sheets[0], data));
+        Class<T>[] classes = null;
+        if (dataClass != null) {
+            classes = new Class[]{dataClass};
+        }
+        write(os, sheets, classes, Collections.singletonMap(sheets[0], data));
     }
 
     /**
@@ -75,10 +105,24 @@ public class EasyExcelWriteUtil {
      * @param <T>      IBaseExcel及其子类
      */
     public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, String[] sheets, Map<String, List<T>> data) {
+        write(response, fileName, sheets, null, data);
+    }
+
+    /**
+     * 写多个不同Sheet到Excel
+     *
+     * @param response 请求响应对象
+     * @param fileName 写出文件名
+     * @param sheets   写到Excel的Sheet名称数组
+     * @param classes  写到Excel的Sheet名称对应Class对象数组
+     * @param data     写到Excel的Sheet名称和数据列表映射Map
+     * @param <T>      IBaseExcel及其子类
+     */
+    public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, String[] sheets, Class<T>[] classes, Map<String, List<T>> data) {
         try {
             int index = fileName.lastIndexOf(".");
             fileName = (index > 0 ? fileName.substring(0, index) : fileName) + ".xlsx";
-            write(getDownloadOS(response, fileName), sheets, data);
+            write(getDownloadOS(response, fileName), sheets, classes, data);
         } catch (IOException e) {
             // 重置response
             response.reset();
@@ -95,11 +139,28 @@ public class EasyExcelWriteUtil {
      * @param <T>    IBaseExcel及其子类
      */
     public static <T extends IBaseExcel> void write(OutputStream os, String[] sheets, Map<String, List<T>> data) {
+        write(os, sheets, null, data);
+    }
+
+    /**
+     * 写多个不同Sheet到Excel
+     *
+     * @param sheets  写到Excel的Sheet名称数组
+     * @param classes 写到Excel的Sheet名称对应Class对象数组
+     * @param data    写到Excel的Sheet名称和数据列表映射Map
+     * @param <T>     IBaseExcel及其子类
+     */
+    public static <T extends IBaseExcel> void write(OutputStream os, String[] sheets, Class<T>[] classes, Map<String, List<T>> data) {
+        if (sheets != null && classes != null && sheets.length != classes.length) {
+            throw new RuntimeException("sheets和classes长度不相等请检查");
+        }
         // 指定写到哪
         ExcelWriterBuilder writerBuilder = EasyExcel.write(os);
         // 自定义的公共策略，设置自定义头部样式 和 自适应列宽
         writerBuilder.registerWriteHandler(new CustomizeWriteHandler());
         ExcelWriter excelWriter = writerBuilder.build();
+        List<List<String>> emptyHead = Collections.singletonList(Collections.singletonList("暂无数据"));
+        int i = 0;
         int[] num = {0};
         for (String key : sheets) {
             num[0] = 0;
@@ -113,10 +174,18 @@ public class EasyExcelWriteUtil {
                 return ts.size();
             }, 1048575);
             if (num[0] == 0) {
-                List<List<String>> head = Collections.singletonList(Collections.singletonList("暂无数据"));
-                WriteSheet writeSheet = EasyExcel.writerSheet(key).head(head).build();
-                excelWriter.write(data.get(key), writeSheet);
+                WriteSheet writeSheet;
+                if (classes == null || classes[i] == null) {
+                    writeSheet = EasyExcel.writerSheet(key).head(emptyHead).build();
+                } else {
+                    writeSheet = EasyExcel.writerSheet(key).head(classes[i]).build();
+                }
+                excelWriter.write(new ArrayList(0), writeSheet);
             }
+            i++;
+        }
+        if (i == 0) {
+            excelWriter.write(new ArrayList(0), EasyExcel.writerSheet("数据").head(emptyHead).build());
         }
         // 关闭流
         excelWriter.finish();
