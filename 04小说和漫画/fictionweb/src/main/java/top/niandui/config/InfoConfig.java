@@ -54,13 +54,4 @@ public class InfoConfig {
     public String addContextPath(String path) {
         return contextPath != null ? contextPath + path : path;
     }
-
-    public void setJqueryBasePath(String jqueryBasePath) {
-        if (contextPath != null) {
-            jqueryBasePath = contextPath + jqueryBasePath;
-        }
-        this.jqueryBasePath = jqueryBasePath;
-        this.jqueryJs = jqueryBasePath + "/jquery.js";
-        this.jqueryMinJs = jqueryBasePath + "/jquery.min.js";
-    }
 }
