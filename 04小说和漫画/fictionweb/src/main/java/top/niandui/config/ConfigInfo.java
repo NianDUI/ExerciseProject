@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.servlet.ServletContext;
 
 /**
- * @Title: InfoConfig.java
+ * @Title: ConfigInfo.java
  * @description: 信息配置类
  * @time: 2020/7/3 14:12
  * @author: liyongda
@@ -17,7 +17,7 @@ import javax.servlet.ServletContext;
 @Data
 @Configuration
 @ConfigurationProperties("config-info")
-public class InfoConfig {
+public class ConfigInfo {
     private String contextPath = null;
     private String webjars = "/webjars";
     // layui
@@ -32,7 +32,7 @@ public class InfoConfig {
     private String jqueryMinJs;
 
     @Autowired
-    public InfoConfig(ServletContext servletContext) {
+    public ConfigInfo(ServletContext servletContext) {
         String contextPath = servletContext.getContextPath();
         if (contextPath != null && contextPath.trim().length() != 0) {
             this.contextPath = contextPath;

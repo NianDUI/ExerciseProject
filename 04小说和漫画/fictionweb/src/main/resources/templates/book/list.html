@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>书籍</title>
-    <link th:href="${@infoConfig.layuiCss}" rel="stylesheet" media="all">
+    <link th:href="${@configInfo.layuiCss}" rel="stylesheet" media="all">
 </head>
 <body>
 <blockquote class="layui-elem-quote layui-quote-nm">
@@ -36,7 +36,7 @@
 </script>
 <script>const base = "[[@{/}]]";
 const siteid = [[${siteid}]]</script>
-<script th:src="${@infoConfig.layuiJs}"></script>
+<script th:src="${@configInfo.layuiJs}"></script>
 <script th:src="@{/js/common/common.js}"></script>
 <script th:src="@{/js/book/list.js}"></script>
 </body>
