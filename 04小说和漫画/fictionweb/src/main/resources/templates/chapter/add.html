@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>添加</title>
-    <link th:href="@{/webjars/layui/2.5.6/css/layui.css}" rel="stylesheet" media="all">
+    <link th:href="${@infoConfig.layuiCss}" rel="stylesheet" media="all">
 </head>
 <body>
 <fieldset class="layui-elem-field ">
@@ -70,7 +70,7 @@
 </fieldset>
 <script>const base = "[[@{/}]]";
 const id = [[${id}]];</script>
-<script th:src="@{/webjars/layui/2.5.6/layui.all.js}"></script>
+<script th:src="${@infoConfig.layuiJs}"></script>
 <script th:src="@{/js/common/common.js}"></script>
 <script th:src="@{/js/chapter/add.js}"></script>
 </body>

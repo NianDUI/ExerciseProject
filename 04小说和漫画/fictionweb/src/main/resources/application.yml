@@ -1,5 +1,13 @@
 server:
   port: 8001
+  servlet:
+    # encoding配置
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+
+#    context-path: /v1.0
 
 # 忽略swagger赋值错误
 logging:
@@ -21,13 +29,13 @@ pagehelper:
   reasonable: 'true' #分页合理化参数 pageNum<=0时会查询第一页 pageNum>pages(超过总数时) 会查询最后一页
   support-methods-arguments: 'true'
 
+#配置信息
+config-info:
+  layui-version: 2.5.6
+  jquery-version: 3.5.1
+
+#spring配置
 spring:
-  # http配置
-  http:
-    encoding:
-      force: true
-      charset: UTF-8
-      enabled: true
   servlet:
     multipart:
       # 单个文件上传最大值
