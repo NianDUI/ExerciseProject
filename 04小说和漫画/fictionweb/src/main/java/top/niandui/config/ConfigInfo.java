@@ -18,7 +18,7 @@ import javax.servlet.ServletContext;
 @Configuration
 @ConfigurationProperties("config-info")
 public class ConfigInfo {
-    private String contextPath = null;
+    private String contextPath;
     private String webjars = "/webjars";
     // layui
     private String layuiVersion;
@@ -36,6 +36,8 @@ public class ConfigInfo {
         String contextPath = servletContext.getContextPath();
         if (contextPath != null && contextPath.trim().length() != 0) {
             this.contextPath = contextPath;
+        } else {
+            this.contextPath = null;
         }
     }
 
@@ -48,7 +50,9 @@ public class ConfigInfo {
 
     public void setJqueryVersion(String jqueryVersion) {
         this.jqueryVersion = jqueryVersion;
-        this.jqueryBasePath = addContextPath(webjars + "/layui/" + layuiVersion);
+        this.jqueryBasePath = addContextPath(webjars + "/jquery/" + jqueryVersion);
+        this.jqueryJs = this.jqueryBasePath + "/jquery.js";
+        this.jqueryMinJs = this.jqueryBasePath + "/jquery.min.js";
     }
 
     public String addContextPath(String path) {
