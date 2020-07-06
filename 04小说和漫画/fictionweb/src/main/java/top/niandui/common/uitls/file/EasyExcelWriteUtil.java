@@ -60,11 +60,7 @@ public class EasyExcelWriteUtil {
      */
     public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, Class<T> dataClass, List<T> data) {
         String[] sheets = {"数据"};
-        Class<T>[] classes = null;
-        if (dataClass != null) {
-            classes = new Class[]{dataClass};
-        }
-        write(response, fileName, sheets, classes, Collections.singletonMap(sheets[0], data));
+        write(response, fileName, sheets, new Class[]{dataClass}, Collections.singletonMap(sheets[0], data));
     }
 
     /**
@@ -88,11 +84,7 @@ public class EasyExcelWriteUtil {
      */
     public static <T extends IBaseExcel> void write(OutputStream os, Class<T> dataClass, List<T> data) {
         String[] sheets = {"数据"};
-        Class<T>[] classes = null;
-        if (dataClass != null) {
-            classes = new Class[]{dataClass};
-        }
-        write(os, sheets, classes, Collections.singletonMap(sheets[0], data));
+        write(os, sheets, new Class[]{dataClass}, Collections.singletonMap(sheets[0], data));
     }
 
     /**
