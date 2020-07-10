@@ -16,11 +16,5 @@ public class TestVar {
         System.out.println("a = " + a);
         var b = 156L;
         System.out.println("b = " + b);
-        var c = """
-                <html>
-                    <a>asdfa</a>
-                </html>
-                """;
-        System.out.println("c = " + c);
     }
 }

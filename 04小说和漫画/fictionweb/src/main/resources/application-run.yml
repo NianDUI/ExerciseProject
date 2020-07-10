@@ -1,0 +1,4 @@
+# run环境配置
+spring:
+  redis:
+    password: 'root'

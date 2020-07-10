@@ -1,0 +1,4 @@
+# dev环境配置
+spring:
+  redis:
+    password: ''
