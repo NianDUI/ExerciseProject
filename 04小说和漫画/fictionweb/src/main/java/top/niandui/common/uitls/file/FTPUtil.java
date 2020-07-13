@@ -64,19 +64,22 @@ public class FTPUtil {
      * @return 是否成功
      */
     public static boolean closeFTP(FTPClient ftp) {
+        if (ftp == null) {
+            return false;
+        }
         try {
             ftp.logout();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (ftp.isConnected()) {
-                try {
+            try {
+                if (ftp.isConnected()) {
                     ftp.disconnect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("FTP关闭失败");
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("FTP关闭失败");
             }
         }
         return false;
@@ -91,6 +94,9 @@ public class FTPUtil {
      * @throws Exception
      */
     public static void download(FTPClient ftp, String sourcePath, String targetPath) throws Exception {
+        if (ftp == null) {
+            throw new RuntimeException("FTP文件下载失败");
+        }
         File targetFile = new File(targetPath);
         if (!targetFile.exists()) {
             targetFile.mkdirs();
