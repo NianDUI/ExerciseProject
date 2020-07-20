@@ -121,8 +121,16 @@
         ORDER BY "seqid"
     </select>
 
+    <!-- 查询书籍任务状态 -->
     <select id="queryBookTaskstatus" resultType="int">
         SELECT "taskstatus" FROM "book"
         WHERE "bookid" = #{id}
     </select>
+
+    <!-- 更新指定状态任务的任务状态 -->
+    <update id="updateTaskstatusBy">
+        UPDATE "book"
+        SET "taskstatus" = #{newStatus}
+        WHERE "bookid" = #{bookid} AND "taskstatus" = #{rawStatus}
+    </update>
 </mapper>

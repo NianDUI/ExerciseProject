@@ -47,6 +47,28 @@ public class WebClientUtil {
     @Autowired
     private IParagraphDao iParagraphDao;
 
+    /**
+     * 获取任务状态说明
+     *
+     * @param taskstatus 任务状态
+     * @return 任务状态说明
+     */
+    public static String getTaskStatus(Integer taskstatus) {
+        if (taskstatus == null) {
+            return null;
+        }
+        switch (taskstatus) {
+            case 1:
+                return "重新获取全部任务";
+            case 2:
+                return "获取后续章节任务";
+            case 3:
+                return "重新获取单章任务";
+            default:
+                return "无该任务状态";
+        }
+    }
+
     //新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
     public static WebClient getWebClient() {
         WebClient webClient = new WebClient(BrowserVersion.CHROME);
@@ -78,10 +100,10 @@ public class WebClientUtil {
     @Async
     public void getBook(Config config, Book book, long seqid, boolean isFirstJump) {
         try {
-            Integer status = iBookDao.queryBookTaskstatus(book.getBookid());
-            if (status != null && status != 0) return;
             // 更新任务状态
-            iBookDao.updateTaskstatus(book.getBookid(), book.getTaskstatus());
+            if (iBookDao.updateTaskstatusBy(book.getBookid(), book.getTaskstatus(), 0) == 0) {
+                log.info(book.getName() + getTaskStatus(book.getTaskstatus()) + "已被其他服务处理");
+            }
             Map handleInfo = json.readValue(book.getHandlerinfo(), Map.class);
             Function<String, String> titleHandler = HandleUtils.getTitleHandler(handleInfo);
             BiFunction<String, String, Boolean> isEndHref = getIsEndHref(handleInfo);
@@ -166,7 +188,9 @@ public class WebClientUtil {
     public void getChapter(Config config, Chapter chapter) {
         try {
             // 更新任务状态
-            iBookDao.updateTaskstatus(chapter.getBookid(), 3);
+            if (iBookDao.updateTaskstatusBy(chapter.getBookid(), 3, 0) == 0) {
+                log.info(chapter.getName() + getTaskStatus(3) + "已被其他服务处理");
+            }
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
             // 获取起始页面

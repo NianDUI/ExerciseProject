@@ -1,5 +1,6 @@
 package top.niandui.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import top.niandui.common.base.IBaseDao;
 
@@ -26,4 +27,8 @@ public interface IBookDao<T> extends IBaseDao<T> {
 
     // 查询书籍任务状态
     Integer queryBookTaskstatus(Long id);
+
+    // 更新指定状态任务的任务状态
+    int updateTaskstatusBy(@Param("bookid") Long bookid
+            , @Param("newStatus") Integer newStatus, @Param("rawStatus") Integer rawStatus);
 }

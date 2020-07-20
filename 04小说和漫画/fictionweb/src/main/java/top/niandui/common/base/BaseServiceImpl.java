@@ -43,9 +43,12 @@ public class BaseServiceImpl {
             return;
         }
         switch (taskstatus) {
-            case 1 : throw new ReStateException("正在执行重新获取全部任务");
-            case 2 : throw new ReStateException("正在执行获取后续章节任务");
-            case 3 : throw new ReStateException("正在执行重新获取单章任务");
+            case 1:
+                throw new ReStateException("正在执行重新获取全部任务");
+            case 2:
+                throw new ReStateException("正在执行获取后续章节任务");
+            case 3:
+                throw new ReStateException("正在执行重新获取单章任务");
         }
     }
 }
