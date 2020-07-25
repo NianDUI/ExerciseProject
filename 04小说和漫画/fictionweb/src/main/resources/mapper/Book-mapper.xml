@@ -124,7 +124,7 @@
     <!-- 查询内容列表 -->
     <select id="queryContentList" resultType="map">
         SELECT t.* FROM (
-            SELECT "name" "content","chapterid", -1 "seqid",0 "type" FROM "chapter"
+            SELECT "name" "content","chapterid",-1 "seqid",0 "type" FROM "chapter"
             UNION ALL
             SELECT '    ' || "content","chapterid","seqid",1 "type" FROM "paragraph"
         ) t INNER JOIN "chapter" c ON c."chapterid" = t."chapterid"
