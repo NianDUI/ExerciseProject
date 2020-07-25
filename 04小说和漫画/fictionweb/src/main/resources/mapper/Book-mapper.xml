@@ -108,19 +108,6 @@
         WHERE "siteid" IN (${id})
     </select>
 
-    <!-- 查询章节内容下载列表 -->
-    <select id="queryChapterDownloadList" resultType="java.lang.String">
-        SELECT c."name" || #{titleNewLine} || (
-            SELECT STRING_AGG(#{contentHead} || "content", #{contentNewLine}) || #{contentNewLine} FROM (
-                SELECT "content" FROM "paragraph" p
-                WHERE p."chapterid" = c."chapterid"
-                ORDER BY "seqid"
-            ) "temp"
-        ) "chapter" from "chapter" c
-        WHERE "bookid" = #{bookid}
-        ORDER BY "seqid"
-    </select>
-
     <!-- 查询书籍任务状态 -->
     <select id="queryBookTaskstatus" resultType="int">
         SELECT "taskstatus" FROM "book"
@@ -133,4 +120,15 @@
         SET "taskstatus" = #{newStatus}
         WHERE "bookid" = #{bookid} AND "taskstatus" = #{rawStatus}
     </update>
+
+    <!-- 查询内容列表 -->
+    <select id="queryContentList" resultType="map">
+        SELECT t.* FROM (
+            SELECT "name" "content","chapterid", -1 "seqid",0 "type" FROM "chapter"
+            UNION ALL
+            SELECT '    ' || "content","chapterid","seqid",1 "type" FROM "paragraph"
+        ) t INNER JOIN "chapter" c ON c."chapterid" = t."chapterid"
+        WHERE c."bookid" = #{bookid}
+        ORDER BY c."seqid",t."seqid"
+    </select>
 </mapper>

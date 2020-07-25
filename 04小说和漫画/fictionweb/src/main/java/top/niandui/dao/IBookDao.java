@@ -22,13 +22,13 @@ public interface IBookDao<T> extends IBaseDao<T> {
     // 查询站点书籍数量
     int querySiteBookCount(String id);
 
-    // 查询章节内容下载列表
-    List<String> queryChapterDownloadList(Map params);
-
     // 查询书籍任务状态
     Integer queryBookTaskstatus(Long id);
 
     // 更新指定状态任务的任务状态
     int updateTaskstatusBy(@Param("bookid") Long bookid
             , @Param("newStatus") Integer newStatus, @Param("rawStatus") Integer rawStatus);
+
+    // 查询内容列表
+    List<Map> queryContentList(@Param("bookid") Long bookid);
 }

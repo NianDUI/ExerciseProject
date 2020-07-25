@@ -436,7 +436,7 @@ public class MethodUtil {
     public static String getExecuteSql(Configuration configuration, String statementId, Map params) throws SQLException {
         BoundSql boundSql = configuration.getMappedStatement(statementId).getBoundSql(params);
         String sql = boundSql.getSql().replaceAll("\r?\n", "");
-        log.info(statementId);
+        log.info("getExecuteSql: statementId = " + statementId);
         log.info(" Preparing: " + sql);
         List<NativeQuery> queries = Parser.parseJdbcSql(sql, false, true, true, false, "");
         sql = queries.get(0).nativeSql;

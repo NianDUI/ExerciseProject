@@ -248,7 +248,9 @@ public class WebClientUtil {
         // 获取内容DOM列表
         List list = htmlPage.getByXPath(config.getConmatch());
         List<Paragraph> paragraphList = new ArrayList<>();
-        for (int i = config.getStartoffset(); i < list.size() + config.getEndoffset(); i++) {
+        long seqid = 0;
+        int end = list.size() + config.getEndoffset();
+        for (int i = config.getStartoffset(); i < end; i++, seqid++) {
             String line = list.get(i).toString().trim();
             int start = 0;
             while (line.startsWith("　", start)) {
@@ -262,7 +264,7 @@ public class WebClientUtil {
             paragraph.setBookid(chapter.getBookid());
             paragraph.setChapterid(chapter.getChapterid());
             paragraph.setContent(line);
-            paragraph.setSeqid((long) i);
+            paragraph.setSeqid(seqid);
             paragraphList.add(paragraph);
         }
         return paragraphList;

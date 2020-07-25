@@ -2,7 +2,9 @@ package top.niandui.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import top.niandui.common.base.BaseServiceImpl;
 import top.niandui.common.model.IdNameModel;
@@ -11,13 +13,9 @@ import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IConfigDao;
 import top.niandui.dao.IParagraphDao;
 import top.niandui.model.Book;
-import top.niandui.model.Chapter;
 import top.niandui.model.Config;
-import top.niandui.model.Paragraph;
 import top.niandui.model.vo.BookListReturnVO;
 import top.niandui.model.vo.BookSearchVO;
-import top.niandui.model.vo.ChapterSearchVO;
-import top.niandui.model.vo.ParagraphSearchVO;
 import top.niandui.service.IBookService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,11 +24,12 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
-import static top.niandui.common.uitls.MethodUtil.addDefaultSort;
+import static top.niandui.common.uitls.MethodUtil.*;
 import static top.niandui.common.uitls.file.DownloadUtil.getDownloadOS;
 
 /**
@@ -50,6 +49,10 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     private IChapterDao iChapterDao;
     @Autowired
     private IParagraphDao iParagraphDao;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
 
     @Override
     public void create(Book book) throws Exception {
@@ -101,33 +104,19 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         }
     }
 
+    // 书籍copy导出外部SQL
+    public static final String COPY_OUT_SQL = "(SELECT CASE ROW_NUMBER() OVER() % 2 WHEN 1 THEN t.\"content\" WHEN 0 THEN '' END " +
+            " FROM ([contentSql]) t,(VALUES (0),(1)) repeat(\"repeat\"))";
+
     @Override
     public void downloadBook(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Book book = (Book) iBookDao.model(id);
-        checkTaskStatus(book.getTaskstatus());
-        Config config = (Config) iConfigDao.model(book.getConfigid());
-        String titleNewLine = "", contentNewLine = "";
-        for (int i = 0; i < config.getTitlelnnum(); i++) {
-            titleNewLine += "\n";
-        }
-        for (int i = 0; i < config.getConlnnum(); i++) {
-            contentNewLine += "\n";
-        }
-        try (
-                OutputStream os = getDownloadOS(response, book.getName() + ".txt");
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))
-        ) {
-            Map params = new HashMap<>(4, 1);
-            params.put("bookid", book.getBookid());
-            params.put("titleNewLine", titleNewLine);
-            params.put("contentNewLine", contentNewLine);
-            params.put("contentHead", "    ");
-            List<String> chapterList = iBookDao.queryChapterDownloadList(params);
-            for (String chapter : chapterList) {
-                bw.write(chapter);
-            }
-            bw.flush();
-        }
+        OutputStream os = getDownloadOS(response, book.getName() + ".txt");
+        String statementId = "queryContentList";
+        Map params = Collections.singletonMap("bookid", book.getBookid());
+        String contentSql = getExecuteSql(sqlSessionFactory.getConfiguration(), statementId, params);
+        String table = COPY_OUT_SQL.replace("[contentSql]", contentSql);
+        copyOut(jdbcTemplate, os, table, "^", "UTF-8");
     }
 
     @Override
@@ -135,35 +124,29 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         Book book = (Book) iBookDao.model(id);
         checkTaskStatus(book.getTaskstatus());
         Config config = (Config) iConfigDao.model(book.getConfigid());
-        String titleNewLine = "", contentNewLine = "";
+        String titleWrap = "", contentWrap = "";
         for (int i = 0; i < config.getTitlelnnum(); i++) {
-            titleNewLine += "\n";
+            titleWrap += "\n";
         }
         for (int i = 0; i < config.getConlnnum(); i++) {
-            contentNewLine += "\n";
+            contentWrap += "\n";
         }
         try (
                 OutputStream os = getDownloadOS(response, book.getName() + ".txt");
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))
         ) {
-            ChapterSearchVO chapSeaVO = new ChapterSearchVO();
-            chapSeaVO.setBookid(book.getBookid());
-            chapSeaVO.setOrderBy("\"seqid\"");
-            chapSeaVO.setDescOrAsc("ASC");
-            List<Chapter> chapList = iChapterDao.queryList(chapSeaVO);
-            ParagraphSearchVO paraSeaVO = new ParagraphSearchVO();
-            paraSeaVO.setBookid(book.getBookid());
-            paraSeaVO.setOrderBy(chapSeaVO.getOrderBy());
-            paraSeaVO.setDescOrAsc(chapSeaVO.getDescOrAsc());
-            for (Chapter chapter : chapList) {
-                paraSeaVO.setChapterid(chapter.getChapterid());
-                bw.append(chapter.getName()).append(titleNewLine);
-                List<Paragraph> paraList = iParagraphDao.queryList(paraSeaVO);
-                for (Paragraph paragraph : paraList) {
-                    bw.append("    ").append(paragraph.getContent()).append(contentNewLine);
+            List<Map> list = iBookDao.queryContentList(book.getBookid());
+            for (Map map : list) {
+                String content = convert(map.get("content"), Function.identity(), String.class);
+                bw.append(content);
+                Integer type = convert(map.get("type"), Integer::valueOf, Integer.class);
+                if (type == 0) {
+                    bw.append(titleWrap);
+                } else {
+                    bw.append(contentWrap);
                 }
-                bw.flush();
             }
+            bw.flush();
         }
     }
 }
