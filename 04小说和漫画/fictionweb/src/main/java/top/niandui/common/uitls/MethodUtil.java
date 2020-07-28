@@ -485,7 +485,7 @@ public class MethodUtil {
         } else if (param instanceof String) {
             return String.format("'%s'", param);
         } else if (param instanceof Date) {
-            return String.format("'%s'::TIMESTAMP", sdf.format(param));
+            return String.format("'%tF %<tT'::TIMESTAMP", param);
         } else {
             return param.toString();
         }
