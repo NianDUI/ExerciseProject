@@ -15,7 +15,7 @@ import java.util.function.Supplier;
  * @version: 1.0
  */
 @Slf4j
-public class HandleUtils {
+public class HandleUtil {
 
     // 休眠处理器
     public static Supplier<Long> sleepHandler = () -> {
@@ -69,11 +69,11 @@ public class HandleUtils {
                 String endCharacter = (String) handleInfo.get("endCharacter");
                 return (thisLink, nextLink) -> nextLink.endsWith(endCharacter);
             }
-            return HandleUtils::isEndHrefDefaultMethod;
+            return HandleUtil::isEndHrefDefaultMethod;
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.toString());
-            return HandleUtils::isEndHrefDefaultMethod;
+            return HandleUtil::isEndHrefDefaultMethod;
         }
     }
 

@@ -31,6 +31,7 @@ import java.util.function.Function;
 
 import static top.niandui.common.uitls.MethodUtil.*;
 import static top.niandui.common.uitls.file.DownloadUtil.getDownloadOS;
+import static top.niandui.utils.TaskStateUtil.checkTaskStatus;
 
 /**
  * @author 李永达

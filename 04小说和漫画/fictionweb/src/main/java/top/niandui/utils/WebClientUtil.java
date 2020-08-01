@@ -26,7 +26,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static top.niandui.utils.HandleUtils.getIsEndHref;
+import static top.niandui.utils.HandleUtil.getIsEndHref;
+import static top.niandui.utils.TaskStateUtil.getTaskStatus;
 
 /**
  * @Title: WebClientUtil.java
@@ -46,28 +47,6 @@ public class WebClientUtil {
     private IChapterDao iChapterDao;
     @Autowired
     private IParagraphDao iParagraphDao;
-
-    /**
-     * 获取任务状态说明
-     *
-     * @param taskstatus 任务状态
-     * @return 任务状态说明
-     */
-    public static String getTaskStatus(Integer taskstatus) {
-        if (taskstatus == null) {
-            return null;
-        }
-        switch (taskstatus) {
-            case 1:
-                return "重新获取全部任务";
-            case 2:
-                return "获取后续章节任务";
-            case 3:
-                return "重新获取单章任务";
-            default:
-                return "无该任务状态";
-        }
-    }
 
     //新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
     public static WebClient getWebClient() {
@@ -105,7 +84,7 @@ public class WebClientUtil {
                 log.info(book.getName() + getTaskStatus(book.getTaskstatus()) + "已被其他服务处理");
             }
             Map handleInfo = json.readValue(book.getHandlerinfo(), Map.class);
-            Function<String, String> titleHandler = HandleUtils.getTitleHandler(handleInfo);
+            Function<String, String> titleHandler = HandleUtil.getTitleHandler(handleInfo);
             BiFunction<String, String, Boolean> isEndHref = getIsEndHref(handleInfo);
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
@@ -132,7 +111,7 @@ public class WebClientUtil {
                             throw new RuntimeException("当前章节一重复获取10次错误，已停止获取");
                         }
                         // 调用休眠处理方法
-                        HandleUtils.sleepHandler.get();
+                        HandleUtil.sleepHandler.get();
                         startTime = System.currentTimeMillis();
                         htmlPage = getWebClient().getPage(htmlPage.getUrl());
                         continue;
@@ -208,7 +187,7 @@ public class WebClientUtil {
                     // Index: 0, Size: 0
                     log.info(e.getMessage());
                     // 调用休眠处理方法
-                    HandleUtils.sleepHandler.get();
+                    HandleUtil.sleepHandler.get();
                     startTime = System.currentTimeMillis();
                     htmlPage = getWebClient().getPage(htmlPage.getUrl());
                     continue;

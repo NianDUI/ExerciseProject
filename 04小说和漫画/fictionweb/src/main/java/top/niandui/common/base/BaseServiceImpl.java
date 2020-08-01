@@ -1,7 +1,6 @@
 package top.niandui.common.base;
 
 import org.springframework.util.StringUtils;
-import top.niandui.common.expection.ReStateException;
 import top.niandui.common.model.PageOrder;
 
 /**
@@ -30,25 +29,5 @@ public class BaseServiceImpl {
             }
         }
         return order.toString();
-    }
-
-    /**
-     * 检查书籍任务状态
-     *
-     * @param taskstatus 任务状态
-     * @throws Exception
-     */
-    public static void checkTaskStatus(Integer taskstatus) throws Exception {
-        if (taskstatus == null) {
-            return;
-        }
-        switch (taskstatus) {
-            case 1:
-                throw new ReStateException("正在执行重新获取全部任务");
-            case 2:
-                throw new ReStateException("正在执行获取后续章节任务");
-            case 3:
-                throw new ReStateException("正在执行重新获取单章任务");
-        }
     }
 }
