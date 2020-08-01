@@ -2,6 +2,9 @@ package top.niandui.utils;
 
 import top.niandui.common.expection.ReStateException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Title: TaskStateUtil.java
  * @description: 任务状态工具
@@ -10,6 +13,14 @@ import top.niandui.common.expection.ReStateException;
  * @version: 1.0
  */
 public class TaskStateUtil {
+    // 任务状态映射
+    public static final Map<Integer, String> TASK_STATUS_MAP = new HashMap<>(3, 1);
+    // 初始化
+    static {
+        TASK_STATUS_MAP.put(1, "重新获取全部任务");
+        TASK_STATUS_MAP.put(2, "获取后续章节任务");
+        TASK_STATUS_MAP.put(3, "重新获取单章任务");
+    }
 
     /**
      * 检查书籍任务状态
@@ -21,13 +32,9 @@ public class TaskStateUtil {
         if (taskstatus == null) {
             return;
         }
-        switch (taskstatus) {
-            case 1:
-                throw new ReStateException("正在执行重新获取全部任务");
-            case 2:
-                throw new ReStateException("正在执行获取后续章节任务");
-            case 3:
-                throw new ReStateException("正在执行重新获取单章任务");
+        String status = TASK_STATUS_MAP.get(taskstatus);
+        if (status != null) {
+            throw new ReStateException("正在执行" + status);
         }
     }
 
@@ -41,15 +48,7 @@ public class TaskStateUtil {
         if (taskstatus == null) {
             return null;
         }
-        switch (taskstatus) {
-            case 1:
-                return "重新获取全部任务";
-            case 2:
-                return "获取后续章节任务";
-            case 3:
-                return "重新获取单章任务";
-            default:
-                return "无该" + taskstatus + "任务状态";
-        }
+        String status = TASK_STATUS_MAP.get(taskstatus);
+        return status == null ? "无 " + taskstatus + " 任务状态" :status;
     }
 }
