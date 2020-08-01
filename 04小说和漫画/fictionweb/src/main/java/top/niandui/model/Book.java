@@ -44,4 +44,6 @@ public class Book extends BaseModel {
     private Long siteid;
     @ApiModelProperty(value = "任务状态：0无，1重新获取全部，2获取后续章节，3重新获取单章")
     private Integer taskstatus;
+    @ApiModelProperty(value = "任务开关：0关闭，1开启")
+    private Integer taskswitch;
 }

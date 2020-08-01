@@ -21,6 +21,7 @@ import java.util.List;
 
 import static top.niandui.common.uitls.MethodUtil.addDefaultSort;
 import static top.niandui.utils.TaskStateUtil.checkTaskStatus;
+import static top.niandui.utils.TaskStateUtil.checkTaskSwitch;
 
 /**
  * @author 李永达
@@ -92,6 +93,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     public void reacquireAllChapter(Long id) throws Exception {
         Book book = (Book) iBookDao.model(id);
         checkTaskStatus(book.getTaskstatus());
+        checkTaskSwitch(book.getTaskswitch());
         iChapterDao.deleteByBookId(id.toString());
         iParagraphDao.deleteByBookId(id.toString());
         Config config = (Config) iConfigDao.model(book.getConfigid());
@@ -104,6 +106,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     public void getFollowUpChapter(Long id) throws Exception {
         Book book = (Book) iBookDao.model(id);
         checkTaskStatus(book.getTaskstatus());
+        checkTaskSwitch(book.getTaskswitch());
         Config config = (Config) iConfigDao.model(book.getConfigid());
         Chapter chapter = iChapterDao.queryBookAsLastChapter(book.getBookid());
         book.setTaskstatus(2);
@@ -122,6 +125,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         Chapter chapter = (Chapter) iChapterDao.model(id);
         Book book = (Book) iBookDao.model(chapter.getBookid());
         checkTaskStatus(book.getTaskstatus());
+        checkTaskSwitch(book.getTaskswitch());
         Config config = (Config) iConfigDao.model(book.getConfigid());
         webClientUtil.getChapter(config, chapter);
     }
@@ -147,6 +151,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
     public void getSpecifiedAndFollowUpChapter(SpecifiedFollowUpGetVO getVO) throws Exception {
         Book book = (Book) iBookDao.model(getVO.getBookid());
         checkTaskStatus(book.getTaskstatus());
+        checkTaskSwitch(book.getTaskswitch());
         Config config = (Config) iConfigDao.model(book.getConfigid());
         Chapter chapter = iChapterDao.queryBookAsLastChapter(getVO.getBookid());
         book.setTaskstatus(2);

@@ -3,14 +3,14 @@
 <mapper namespace="top.niandui.dao.IBookDao">
     <!--表字段-->
     <sql id="tableField">
-        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus"
+        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus","taskswitch"
     </sql>
 
     <!-- 新增书籍 -->
     <insert id="create" parameterType="top.niandui.model.Book" useGeneratedKeys="true" keyProperty="bookid">
         INSERT INTO "book"
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            "name","url","configid","starturl","handlerinfo","siteid",
+            "name","url","configid","starturl","handlerinfo","siteid","taskswitch"
         </trim>
         <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
             #{name,jdbcType=VARCHAR},
@@ -19,6 +19,7 @@
             #{starturl,jdbcType=VARCHAR},
             #{handlerinfo,jdbcType=VARCHAR},
             #{siteid,jdbcType=BIGINT},
+            #{taskswitch,jdbcType=INTEGER},
         </trim>
     </insert>
 
@@ -32,6 +33,7 @@
             "starturl" = #{starturl},
             "handlerinfo" = #{handlerinfo},
             "siteid" = #{siteid},
+            "taskswitch" = #{taskswitch},
         </set>
         WHERE "bookid" = #{bookid};
     </update>
@@ -67,14 +69,18 @@
     <!-- 查询所有书籍列表 -->
     <select id="queryList" parameterType="top.niandui.model.vo.BookSearchVO" resultType="top.niandui.model.vo.BookListReturnVO">
         SELECT
-            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus"
+            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus",b."taskswitch"
             ,c."name" "configname",s."name" "sitename"
             ,CASE b."taskstatus"
                 WHEN 1 THEN '重新获取全部'
                 WHEN 2 THEN '获取后续章节'
                 WHEN 3 THEN '重新获取单章'
                 ELSE '无'
-             END "taskname"
+             END "taskstatusname"
+            ,CASE b."taskswitch"
+                WHEN 0 THEN '关闭'
+                WHEN 1 THEN '开启'
+             END "taskswitchname"
         FROM "book" b
             LEFT JOIN "config" c ON c."configid" = b."configid"
             LEFT JOIN "site" s ON s."siteid" = b."siteid"

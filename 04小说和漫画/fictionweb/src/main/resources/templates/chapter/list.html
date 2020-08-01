@@ -22,11 +22,11 @@
             <a class="layui-btn search">搜索</a>
         </div>
         <div class="layui-inline" style="float: right;">
-            <a class="layui-btn layui-btn-checked stopGet"
+            <a class="layui-btn layui-btn-checked stopGet" th:if="${book.taskswitch != 0}"
                th:styleappend="${book.taskstatus == 0} ? 'display:none;'">停止获取</a>
-            <a class="layui-btn layui-btn-normal reacquire">重新获取</a>
-            <a class="layui-btn layui-btn-warm getFollowUp">获取后续</a>
-            <a class="layui-btn getSpecifiedAndFollowUp">获取指定和后续</a>
+            <a class="layui-btn layui-btn-normal reacquire" th:if="${book.taskswitch != 0}">重新获取</a>
+            <a class="layui-btn layui-btn-warm getFollowUp" th:if="${book.taskswitch != 0}">获取后续</a>
+            <a class="layui-btn getSpecifiedAndFollowUp" th:if="${book.taskswitch != 0}">获取指定和后续</a>
             <a class="layui-btn layui-btn-danger layui-btn-normal delAll">删除</a>
         </div>
     </div>
@@ -39,7 +39,8 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>const base = "[[@{/}]]";
-const bookid = [[${book.bookid}]]</script>
+const bookid = [[${book.bookid}]];
+const taskswitch = [[${book.taskswitch}]];</script>
 <script th:src="${@configInfo.layuiJs}"></script>
 <script th:src="@{/js/common/common.js}"></script>
 <script th:src="@{/js/chapter/list.js}"></script>

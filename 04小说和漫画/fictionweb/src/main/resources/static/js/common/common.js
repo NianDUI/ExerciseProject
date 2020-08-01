@@ -26,9 +26,7 @@ function list() {
     table.on("rowDouble(table)", function (obj) {
         add(obj.data[idName]);
     });
-    $(".search").click(function () {
-        search();
-    });
+    $(".search").click(search);
     // 按键弹起事件
     $(".searVal").keyup(function (e) {
         // 回车

@@ -69,93 +69,98 @@ setBaseParams({
 });
 list();
 
-const stopGet = $(".stopGet");
-function queryGetStatus() {
-    $.ajax({
-        type: "get"
-        , contentType: "application/json"
-        , url: base + "api/queryGetStatus/" + bookid
-        , success: function (data) {
-            if (data.code == 200) {
-                if (data.data != 0) {
+if (taskswitch != 0) {
+    const stopGet = $(".stopGet");
+    $(".search").click(function () {
+        $.ajax({
+            type: "get"
+            , contentType: "application/json"
+            , url: base + "api/queryGetStatus/" + bookid
+            , success: function (data) {
+                if (data.code == 200) {
+                    if (data.data != 0) {
+                        stopGet.show();
+                    } else {
+                        stopGet.hide();
+                    }
+                } else {
+                    layer.alert(data.message);
+                }
+            }
+        });
+    });
+    stopGet.click(function () {
+        $.ajax({
+            type: "get"
+            , contentType: "application/json"
+            , url: base + "api/stopGet/" + bookid
+            , success: function (data) {
+                if (data.code == 200) {
+                    layer.msg("停止获取");
+                    stopGet.hide();
+                } else {
+                    layer.alert(data.message);
+                }
+            }
+        });
+    });
+    $(".reacquire").click(function () {
+        $.ajax({
+            type: "get"
+            , contentType: "application/json"
+            , url: base + "api/reacquireAllChapter/" + bookid
+            , success: function (data) {
+                if (data.code == 200) {
+                    layer.msg("正在获取");
                     stopGet.show();
                 } else {
-                    stopGet.hide();
+                    layer.alert(data.message);
                 }
-            } else {
-                layer.alert(data.message);
             }
-        }
+        });
+    });
+    $(".getFollowUp").click(function () {
+        $.ajax({
+            type: "get"
+            , contentType: "application/json"
+            , url: base + "api/getFollowUpChapter/" + bookid
+            , success: function (data) {
+                if (data.code == 200) {
+                    layer.msg("正在获取");
+                    stopGet.show();
+                } else {
+                    layer.alert(data.message);
+                }
+            }
+        });
+    });
+    $(".getSpecifiedAndFollowUp").click(function () {
+        layer.prompt({
+            formType: 2
+            , value: '' //初始值
+            , maxlength: 128
+            , title: '请输入章节链接'
+            , area: [computeArea() + "px", "25px"]
+        }, function (value, index, elem) {
+            if (value.trim().length > 0) {
+                $.ajax({
+                    type: "post"
+                    , contentType: "application/json"
+                    , url: base + "api/getSpecifiedAndFollowUpChapter"
+                    , data: JSON.stringify({bookid: bookid, url: value})
+                    , success: function (data) {
+                        if (data.code == 200) {
+                            layer.msg("正在获取");
+                            stopGet.show();
+                            layer.close(index);
+                        } else {
+                            layer.alert(data.message);
+                        }
+                    }
+                });
+            } else {
+                layer.msg("请输入章节连接", {time: 1000});
+            }
+        });
     });
 }
-$(".search").click(queryGetStatus);
-stopGet.click(function () {
-    $.ajax({
-        type: "get"
-        , contentType: "application/json"
-        , url: base + "api/stopGet/" + bookid
-        , success: function (data) {
-            if (data.code == 200) {
-                layer.msg("停止获取");
-            } else {
-                layer.alert(data.message);
-            }
-        }
-    });
-});
-$(".reacquire").click(function () {
-    $.ajax({
-        type: "get"
-        , contentType: "application/json"
-        , url: base + "api/reacquireAllChapter/" + bookid
-        , success: function (data) {
-            if (data.code == 200) {
-                layer.msg("正在获取");
-            } else {
-                layer.alert(data.message);
-            }
-        }
-    });
-});
-$(".getFollowUp").click(function () {
-    $.ajax({
-        type: "get"
-        , contentType: "application/json"
-        , url: base + "api/getFollowUpChapter/" + bookid
-        , success: function (data) {
-            if (data.code == 200) {
-                layer.msg("正在获取");
-            } else {
-                layer.alert(data.message);
-            }
-        }
-    });
-});
-$(".getSpecifiedAndFollowUp").click(function () {
-    layer.prompt({
-        formType: 2
-        , value: '' //初始值
-        , maxlength: 128
-        , title: '请输入章节链接'
-        , area: [computeArea() + "px", "25px"]
-    }, function (value, index, elem) {
-        if (value.trim().length > 0) {
-            $.ajax({
-                type: "post"
-                , contentType: "application/json"
-                , url: base + "api/getSpecifiedAndFollowUpChapter"
-                , data: JSON.stringify({bookid: bookid, url: value})
-                , success: function (data) {
-                    if (data.code == 200) {
-                        layer.msg("正在获取");
-                        layer.close(index);
-                    } else {
-                        layer.alert(data.message);
-                    }
-                }
-            });
-        } else {
-            layer.msg("请输入章节连接", {time: 1000});
-        }
-    });
-});

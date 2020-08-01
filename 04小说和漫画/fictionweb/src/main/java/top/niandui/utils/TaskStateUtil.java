@@ -51,4 +51,17 @@ public class TaskStateUtil {
         String status = TASK_STATUS_MAP.get(taskstatus);
         return status == null ? "无 " + taskstatus + " 任务状态" :status;
     }
+
+
+    /**
+     * 检查书籍任务开关
+     *
+     * @param taskswitch 任务开关
+     * @throws Exception
+     */
+    public static void checkTaskSwitch(Integer taskswitch) throws ReStateException {
+        if (taskswitch == null || taskswitch == 0) {
+            throw new ReStateException("任务开关已关闭");
+        }
+    }
 }
