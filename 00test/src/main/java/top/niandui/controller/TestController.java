@@ -1,6 +1,5 @@
 package top.niandui.controller;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -17,9 +16,9 @@ import java.util.Map;
 
 @RestController
 public class TestController {
-    @Value("${baseUrl}")
+//    @Value("${baseUrl}")
     private String baseUrl;
-    @Value("${urlThreadCommandFileTrans}")
+//    @Value("${urlThreadCommandFileTrans}")
     private String urlThreadCommandFileTrans;
 
     @GetMapping("/testDate")

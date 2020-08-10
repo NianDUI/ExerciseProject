@@ -50,6 +50,17 @@ CREATE SEQUENCE "public"."seq_site"
     CACHE 1;
 
 -- ----------------------------
+-- Sequence structure for seq_config
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "public"."seq_config";
+CREATE SEQUENCE "public"."seq_config"
+    INCREMENT 1
+    MINVALUE  1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+-- ----------------------------
 -- Table structure for book
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."book";
@@ -57,7 +68,7 @@ CREATE TABLE "public"."book" (
     "bookid" int8 NOT NULL DEFAULT nextval('seq_book'::regclass),
     "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
     "url" varchar(128) COLLATE "pg_catalog"."default",
-    "configid" int8 NOT NULL DEFAULT nextval('seq_book'::regclass),
+    "configid" int8 NOT NULL,
     "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     "starturl" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
     "handlerinfo" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
@@ -150,7 +161,7 @@ COMMENT ON TABLE "public"."chapter" IS '章节';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."config";
 CREATE TABLE "public"."config" (
-    "configid" int8 NOT NULL DEFAULT nextval('seq_book'::regclass),
+    "configid" int8 NOT NULL DEFAULT nextval('seq_config'::regclass),
     "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
     "titlematch" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
     "titlelnnum" int4 NOT NULL,
@@ -327,6 +338,11 @@ SELECT setval('"public"."seq_book"', 71, true);
 -- Alter sequences owned by
 -- ----------------------------
 SELECT setval('"public"."seq_site"', 37, true);
+
+-- ----------------------------
+-- Alter sequences owned by
+-- ----------------------------
+SELECT setval('"public"."seq_config"', 23, true);
 
 -- ----------------------------
 -- Primary Key structure for table book
