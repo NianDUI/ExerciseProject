@@ -33,7 +33,7 @@ public class RedisUtilByte {
 		}
 	}
 
-	private RedisTemplate<String, byte[]> redisTemplateByte;
+	private final RedisTemplate<String, byte[]> redisTemplateByte;
 
 	public RedisUtilByte(RedisConnectionFactory factory) {
 		RedisTemplate<String, byte[]> template = new RedisTemplate<>();
@@ -146,6 +146,22 @@ public class RedisUtilByte {
 	 */
 	public byte[] get(String key) {
 		return key == null ? null : redisTemplateByte.opsForValue().get(key);
+	}
+
+	/**
+	 * 以原子方式设置key为value并返回存储在key中的旧值
+	 *
+	 * @param key   键
+	 * @param value 新值
+	 * @return 旧值
+	 */
+	public byte[] getSet(String key, byte[] value) {
+		try {
+			return redisTemplateByte.opsForValue().getAndSet(key, value);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	/**
