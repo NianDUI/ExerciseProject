@@ -126,7 +126,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         Book book = (Book) iBookDao.model(chapter.getBookid());
         checkTaskStatus(book.getTaskstatus());
         checkTaskSwitch(book.getTaskswitch());
-        Config config = (Config) iConfigDao.model(book.getConfigid());
+        Config config = (Config) iConfigDao.model(chapter.getConfigid());
         webClientUtil.getChapter(config, chapter);
     }
 
