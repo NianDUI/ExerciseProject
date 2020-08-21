@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 @Configuration
 @ConfigurationProperties("config-info")
 public class ConfigInfo {
+    public static final boolean IS_WIN = System.getProperty("os.name").contains("Windows");
     private String contextPath;
     private String webjars = "/webjars";
     // layui
@@ -30,6 +31,10 @@ public class ConfigInfo {
     private String jqueryBasePath;
     private String jqueryJs;
     private String jqueryMinJs;
+    // 文件路径
+    private String filePath;
+    private String winFilePath;
+    private String linuxFilePath;
 
     @Autowired
     public ConfigInfo(ServletContext servletContext) {
@@ -57,5 +62,19 @@ public class ConfigInfo {
 
     public String addContextPath(String path) {
         return contextPath != null ? contextPath + path : path;
+    }
+
+    public void setWinFilePath(String winFilePath) {
+        this.winFilePath = winFilePath;
+        if (IS_WIN) {
+            filePath = winFilePath;
+        }
+    }
+
+    public void setLinuxFilePath(String linuxFilePath) {
+        this.linuxFilePath = linuxFilePath;
+        if (!IS_WIN) {
+            filePath = linuxFilePath;
+        }
     }
 }
