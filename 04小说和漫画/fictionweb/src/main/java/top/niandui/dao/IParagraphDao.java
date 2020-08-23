@@ -1,5 +1,6 @@
 package top.niandui.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import top.niandui.common.base.IBaseDao;
 
@@ -17,4 +18,7 @@ public interface IParagraphDao<T> extends IBaseDao<T> {
 
     // 通过书籍id删除
     void deleteByBookId(String id);
+
+    // 通过书籍和章节id删除
+    void deleteByBookAndChapterId(@Param("bookid") Long bookid, @Param("chapterid") String chapterid);
 }

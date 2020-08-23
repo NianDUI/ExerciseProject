@@ -196,7 +196,7 @@ public class WebClientUtil {
                 endTimes = System.currentTimeMillis();
                 log.info(title + " " + (endTimes - startTime) / 1000.0 + "s");
                 // 删除原有段落信息
-                iParagraphDao.deleteByChapterId(chapter.getChapterid().toString());
+                iParagraphDao.deleteByBookAndChapterId(chapter.getBookid(), chapter.getChapterid().toString());
                 // 获取段落列表
                 List<Paragraph> paragraphList = getParagraphList(config, chapter, htmlPage);
                 // 创建段落列表
@@ -207,12 +207,11 @@ public class WebClientUtil {
         } catch (Exception e) {
             log.info("获取失败...");
             log.error(e.toString());
+            throw new ReStateException("获取失败");
+        } finally {
             // 更新任务状态
             iBookDao.updateTaskstatus(chapter.getBookid(), 0);
-            throw new ReStateException("获取失败");
         }
-        // 更新任务状态
-        iBookDao.updateTaskstatus(chapter.getBookid(), 0);
     }
 
     /**

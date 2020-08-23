@@ -59,10 +59,13 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
 
     @Override
     public void delete(String id) throws Exception {
-        checkTaskStatus(iChapterDao.queryBookByMultiId(id).getTaskstatus());
+        Book book = iChapterDao.queryBookByMultiId(id);
+        checkTaskStatus(book.getTaskstatus());
         // 删除段落
-        iParagraphDao.deleteByChapterId(id);
-        iChapterDao.delete(id);
+//        iParagraphDao.deleteByChapterId(id);
+        iParagraphDao.deleteByBookAndChapterId(book.getBookid(), id);
+//        iChapterDao.delete(id);
+        iChapterDao.deleteByBookAndChapterId(book.getBookid(), id);
     }
 
     @Override
@@ -141,6 +144,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         rv.setPrevid(iChapterDao.prevChapterid(id));
         rv.setBook((Book) iBookDao.model(rv.getChapter().getBookid()));
         ParagraphSearchVO sv = new ParagraphSearchVO();
+        sv.setBookid(rv.getChapter().getBookid());
         sv.setChapterid(rv.getChapter().getChapterid());
         addDefaultSort(sv, "seqid", "ASC");
         rv.setParagraphList(iParagraphDao.queryList(sv));

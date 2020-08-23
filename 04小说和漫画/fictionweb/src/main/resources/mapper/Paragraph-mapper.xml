@@ -114,4 +114,10 @@
         DELETE FROM "paragraph"
         WHERE "bookid" IN (${id})
     </delete>
+
+    <!-- 通过书籍和章节id删除 -->
+    <delete id="deleteByBookAndChapterId">
+        DELETE FROM "paragraph"
+        WHERE "bookid" = #{bookid} AND "chapterid" IN (${chapterid})
+    </delete>
 </mapper>
