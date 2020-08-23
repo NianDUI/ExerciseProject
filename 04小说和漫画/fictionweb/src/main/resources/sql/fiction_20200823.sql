@@ -3,16 +3,16 @@
 
  Source Server         : 192.168.3.10_5432
  Source Server Type    : PostgreSQL
- Source Server Version : 120003
+ Source Server Version : 120004
  Source Host           : 192.168.3.10:5432
  Source Catalog        : fiction
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 120003
+ Target Server Version : 120004
  File Encoding         : 65001
 
- Date: 07/08/2020 21:47:41
+ Date: 23/08/2020 09:47:12
 */
 
 
@@ -21,60 +21,60 @@
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "public"."seq_book";
 CREATE SEQUENCE "public"."seq_book"
-    INCREMENT 1
-    MINVALUE  1
-    MAXVALUE 9223372036854775807
-    START 1
-    CACHE 1;
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
 
 -- ----------------------------
 -- Sequence structure for seq_chapter
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "public"."seq_chapter";
 CREATE SEQUENCE "public"."seq_chapter"
-    INCREMENT 1
-    MINVALUE  1
-    MAXVALUE 9223372036854775807
-    START 1
-    CACHE 1;
-
--- ----------------------------
--- Sequence structure for seq_site
--- ----------------------------
-DROP SEQUENCE IF EXISTS "public"."seq_site";
-CREATE SEQUENCE "public"."seq_site"
-    INCREMENT 1
-    MINVALUE  1
-    MAXVALUE 9223372036854775807
-    START 1
-    CACHE 1;
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
 
 -- ----------------------------
 -- Sequence structure for seq_config
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "public"."seq_config";
 CREATE SEQUENCE "public"."seq_config"
-    INCREMENT 1
-    MINVALUE  1
-    MAXVALUE 9223372036854775807
-    START 1
-    CACHE 1;
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+-- ----------------------------
+-- Sequence structure for seq_site
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "public"."seq_site";
+CREATE SEQUENCE "public"."seq_site"
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
 
 -- ----------------------------
 -- Table structure for book
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."book";
 CREATE TABLE "public"."book" (
-    "bookid" int8 NOT NULL DEFAULT nextval('seq_book'::regclass),
-    "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-    "url" varchar(128) COLLATE "pg_catalog"."default",
-    "configid" int8 NOT NULL,
-    "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    "starturl" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
-    "handlerinfo" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
-    "siteid" int8 NOT NULL,
-    "taskstatus" int4 NOT NULL DEFAULT 0,
-    "taskswitch" int4 NOT NULL DEFAULT 1
+  "bookid" int8 NOT NULL DEFAULT nextval('seq_book'::regclass),
+  "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "url" varchar(128) COLLATE "pg_catalog"."default",
+  "configid" int8 NOT NULL,
+  "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  "starturl" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
+  "handlerinfo" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
+  "siteid" int8 NOT NULL,
+  "taskstatus" int4 NOT NULL DEFAULT 0,
+  "taskswitch" int4 NOT NULL DEFAULT 1
 )
 ;
 COMMENT ON COLUMN "public"."book"."bookid" IS '书籍id';
@@ -92,54 +92,55 @@ COMMENT ON TABLE "public"."book" IS '书籍';
 -- ----------------------------
 -- Records of book
 -- ----------------------------
-INSERT INTO "public"."book" VALUES (63, '面向阵法修仙', 'https://www.boquge.com/book/120686', 20, '2020-07-20 21:37:56', 'https://www.boquge.com/book/120686/170069677.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 25, 0, 1);
-INSERT INTO "public"."book" VALUES (66, '重生之网络争霸', 'http://www.biquge.info/75_75928', 13, '2020-07-28 12:38:07', 'http://www.biquge.info/75_75928/15136955.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
-INSERT INTO "public"."book" VALUES (65, '魔法塔的星空', 'http://www.biquge.se/21078', 19, '2020-07-25 09:45:03', 'http://www.biquge.se/21078/38538728.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":"/"}', 34, 0, 1);
-INSERT INTO "public"."book" VALUES (67, '变身大小姐', 'http://www.biquger.com/biquge/92056', 14, '2020-07-30 23:41:49', 'http://www.biquger.com/biquge/92056/25488105', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"/"}', 18, 0, 1);
-INSERT INTO "public"."book" VALUES (38, '我的代码分身', 'https://www.biquge.tw/522_522678/', 8, '2020-05-10 15:55:23', 'https://www.biquge.tw/522_522678/2660223.html', '{"titleType":1,"startIndex":0,"delimiter":" ","endType":0,"endCharacter":""}', 10, 0, 1);
-INSERT INTO "public"."book" VALUES (23, '魔法的学术时代', 'http://www.biquger.com/biquge/112679/', 14, '2020-04-10 10:39:09', 'http://www.biquger.com/biquge/112679/45424996', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"/"}', 18, 0, 1);
-INSERT INTO "public"."book" VALUES (49, '妞非在下', 'http://www.biquge.info/3_3320/', 13, '2020-06-02 23:47:06', 'http://www.biquge.info/3_3320/1763403.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
 INSERT INTO "public"."book" VALUES (64, '奥术之主', 'https://www.78zw.com/31_31962/', 19, '2020-07-23 22:24:55', 'https://www.78zw.com/31_31962/21365215.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 33, 0, 1);
-INSERT INTO "public"."book" VALUES (34, '回眸1991', 'http://www.biquwo.org/bqw101958/', 8, '2020-04-25 16:45:31', 'http://www.biquwo.org/bqw101958/6063396.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 30, 0, 1);
-INSERT INTO "public"."book" VALUES (56, '仙界科技', 'http://www.biquge.info/40_40201/', 13, '2020-06-13 17:29:15', 'http://www.biquge.info/40_40201/1166140.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
+INSERT INTO "public"."book" VALUES (7, '沧元图', 'https://www.biquge.lu/book/49717/', 5, '2020-04-06 19:50:53', 'https://www.biquge.lu/book/49717/525134674.html', '{"titleType":0,"startIndex":1,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 0);
 INSERT INTO "public"."book" VALUES (60, '魔幻科技工业', 'https://www.boquge.com/book/121068/', 20, '2020-07-12 20:42:51', 'https://www.boquge.com/book/121068/169871249.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 25, 0, 1);
-INSERT INTO "public"."book" VALUES (35, '我真是修炼天才', 'https://www.biqubao.com/book/34827/', 8, '2020-04-26 20:06:25', 'https://www.biqubao.com/book/34827/17581587.html', '{"titleType":1,"startIndex":0,"delimiter":" ","endType":0,"endCharacter":""}', 31, 0, 1);
-INSERT INTO "public"."book" VALUES (43, '科技巫师', 'https://www.biquge.lu/book/44014/', 5, '2020-05-30 00:10:09', 'https://www.biquge.lu/book/44014/16591510.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 1);
-INSERT INTO "public"."book" VALUES (40, '信息全知者', 'https://www.biqugexx.com/127_127399/', 15, '2020-05-15 00:03:50', 'https://www.biqugexx.com/127_127399/33738497.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 19, 0, 1);
-INSERT INTO "public"."book" VALUES (59, '佛系科技', 'http://www.biquge.info/86_86788', 13, '2020-06-26 22:33:41', 'http://www.biquge.info/86_86788/18530447.html', '{"titleType":1,"startIndex":0,"delimiter":" ","endType":0,"endCharacter":""}', 14, 0, 1);
-INSERT INTO "public"."book" VALUES (61, '太乙', 'http://www.biquge.info/2_2801', 13, '2020-07-15 21:23:53', 'http://www.biquge.info/2_2801/9468276.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
-INSERT INTO "public"."book" VALUES (36, '炮台法师', 'https://www.biqubao.com/book/32998/', 8, '2020-05-02 15:10:38', 'https://www.biqubao.com/book/32998/16669021.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 31, 0, 1);
-INSERT INTO "public"."book" VALUES (9, '重写科技格局', 'https://www.biquge.tw/489_489326/', 8, '2020-04-07 08:58:49', 'https://www.biquge.tw/489_489326/2594513.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 10, 0, 1);
+INSERT INTO "public"."book" VALUES (62, '末世之黑暗召唤师', 'http://www.biquge.info/3_3398/', 13, '2020-07-18 23:14:00', 'http://www.biquge.info/3_3398/1809204.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 0);
+INSERT INTO "public"."book" VALUES (24, '奥术起源', 'http://www.mcmssc.com/41_41538/', 22, '2020-04-12 18:19:13', 'http://www.mcmssc.com/41_41538/20899313.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 27, 0, 1);
+INSERT INTO "public"."book" VALUES (65, '魔法塔的星空', 'http://www.biquge.se/21078', 19, '2020-07-25 09:45:03', 'http://www.biquge.se/21078/38538728.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":"/"}', 34, 0, 1);
 INSERT INTO "public"."book" VALUES (55, '咸鱼的科技直播间', 'https://www.boquge.com/book/118730/', 20, '2020-06-06 23:57:02', 'https://www.boquge.com/book/118730/168936226.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 25, 0, 1);
+INSERT INTO "public"."book" VALUES (51, '我有超体U盘', 'https://www.biquge.lu/book/67863/', 5, '2020-06-04 12:45:08', 'https://www.biquge.lu/book/67863/499829444.html', '{"titleType":1,"startIndex":0,"delimiter":"-","endType":0,"endCharacter":""}', 2, 0, 1);
+INSERT INTO "public"."book" VALUES (57, '最初的巫师', 'https://www.biquge.lu/book/62758', 5, '2020-06-15 23:49:09', 'https://www.biquge.lu/book/62758/463905595.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 1);
+INSERT INTO "public"."book" VALUES (38, '我的代码分身', 'https://www.biquge.tw/522_522678/', 8, '2020-05-10 15:55:23', 'https://www.biquge.tw/522_522678/2660223.html', '{"titleType":1,"startIndex":0,"delimiter":" ","endType":0,"endCharacter":""}', 10, 0, 0);
 INSERT INTO "public"."book" VALUES (42, '重生过去当传奇', 'http://www.biquge.info/71_71007/', 13, '2020-05-24 10:28:36', 'http://www.biquge.info/71_71007/13420799.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
 INSERT INTO "public"."book" VALUES (54, '咸鱼的科技直播间', 'https://www.biquge.lu/book/67081/?ivk_sa=1023337b', 5, '2020-06-06 23:52:23', 'https://www.biquge.lu/book/67081/24254224.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 1);
-INSERT INTO "public"."book" VALUES (57, '最初的巫师', 'https://www.biquge.lu/book/62758', 5, '2020-06-15 23:49:09', 'https://www.biquge.lu/book/62758/463905595.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 1);
-INSERT INTO "public"."book" VALUES (51, '我有超体U盘', 'https://www.biquge.lu/book/67863/', 5, '2020-06-04 12:45:08', 'https://www.biquge.lu/book/67863/499829444.html', '{"titleType":1,"startIndex":0,"delimiter":"-","endType":0,"endCharacter":""}', 2, 0, 1);
-INSERT INTO "public"."book" VALUES (58, '小阁老', 'https://www.booktxt.com/28_28228/', 16, '2020-06-20 22:04:49', 'https://www.booktxt.com/28_28228/15630.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 28, 0, 1);
-INSERT INTO "public"."book" VALUES (7, '沧元图', 'https://www.biquge.lu/book/49717/', 5, '2020-04-06 19:50:53', 'https://www.biquge.lu/book/49717/525134674.html', '{"titleType":0,"startIndex":1,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 1);
-INSERT INTO "public"."book" VALUES (31, '修仙从沙漠开始', 'https://www.biquge.lu/book/67051', 5, '2020-04-19 23:31:36', 'https://www.biquge.lu/book/67051/502801184.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 1);
-INSERT INTO "public"."book" VALUES (29, '泡面首富', 'http://www.biquges.com/49_49188/index.html', 19, '2020-04-16 16:48:33', 'http://www.biquges.com/49_49188/24396943.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"index.html"}', 29, 0, 1);
-INSERT INTO "public"."book" VALUES (62, '末世之黑暗召唤师', 'http://www.biquge.info/3_3398/', 13, '2020-07-18 23:14:00', 'http://www.biquge.info/3_3398/1809204.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
-INSERT INTO "public"."book" VALUES (32, '给女装大佬递茶', 'http://www.biquger.com/biquge/109593', 14, '2020-04-20 22:19:54', 'http://www.biquger.com/biquge/109593/41361767', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"/"}', 18, 0, 1);
-INSERT INTO "public"."book" VALUES (24, '奥术起源', 'http://www.mcmssc.com/41_41538/', 22, '2020-04-12 18:19:13', 'http://www.mcmssc.com/41_41538/20899313.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 27, 0, 1);
+INSERT INTO "public"."book" VALUES (35, '我真是修炼天才', 'https://www.biqubao.com/book/34827/', 8, '2020-04-26 20:06:25', 'https://www.biqubao.com/book/34827/17581587.html', '{"titleType":1,"startIndex":0,"delimiter":" ","endType":0,"endCharacter":""}', 31, 0, 1);
 INSERT INTO "public"."book" VALUES (37, '法爷永远是你大爷', 'https://www.biquge.lu/book/59464', 5, '2020-05-05 15:56:32', 'https://www.biquge.lu/book/59464/487314482.html', '{"titleType":1,"startIndex":0,"delimiter":" ","endType":0,"endCharacter":""}', 2, 0, 1);
+INSERT INTO "public"."book" VALUES (36, '炮台法师', 'https://www.biqubao.com/book/32998/', 8, '2020-05-02 15:10:38', 'https://www.biqubao.com/book/32998/16669021.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 31, 0, 1);
+INSERT INTO "public"."book" VALUES (9, '重写科技格局', 'https://www.biquge.tw/489_489326/', 8, '2020-04-07 08:58:49', 'https://www.biquge.tw/489_489326/2594513.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 10, 0, 1);
+INSERT INTO "public"."book" VALUES (58, '小阁老', 'https://www.booktxt.com/28_28228/', 16, '2020-06-20 22:04:49', 'https://www.booktxt.com/28_28228/15630.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 28, 0, 1);
+INSERT INTO "public"."book" VALUES (23, '魔法的学术时代', 'http://www.biquger.com/biquge/112679/', 14, '2020-04-10 10:39:09', 'http://www.biquger.com/biquge/112679/45424996', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"/"}', 18, 0, 1);
+INSERT INTO "public"."book" VALUES (43, '科技巫师', 'https://www.biquge.lu/book/44014/', 5, '2020-05-30 00:10:09', 'https://www.biquge.lu/book/44014/16591510.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 0);
+INSERT INTO "public"."book" VALUES (34, '回眸1991', 'http://www.biquwo.org/bqw101958/', 8, '2020-04-25 16:45:31', 'http://www.biquwo.org/bqw101958/6063396.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 30, 0, 1);
+INSERT INTO "public"."book" VALUES (40, '信息全知者', 'https://www.biqugexx.com/127_127399/', 15, '2020-05-15 00:03:50', 'https://www.biqugexx.com/127_127399/33738497.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 19, 0, 1);
 INSERT INTO "public"."book" VALUES (68, '绝世人妖养成系统', 'http://www.biquge.info/12_12112', 13, '2020-07-31 00:10:16', 'http://www.biquge.info/12_12112/5442063.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 0);
-INSERT INTO "public"."book" VALUES (69, '重生之网络争霸', 'http://www.biquge.info/75_75928/', 13, '2020-08-07 21:33:36', 'http://www.biquge.info/75_75928/15136955.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
+INSERT INTO "public"."book" VALUES (32, '给女装大佬递茶', 'http://www.biquger.com/biquge/109593', 14, '2020-04-20 22:19:54', 'http://www.biquger.com/biquge/109593/41361767', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"/"}', 18, 0, 0);
+INSERT INTO "public"."book" VALUES (71, '大唐第一长子', 'https://www.booktxt.com/35_35812', 16, '2020-08-17 18:53:47', 'https://www.booktxt.com/35_35812/258946.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 28, 0, 1);
 INSERT INTO "public"."book" VALUES (70, '重生异界做游戏', 'http://www.biquge.se/55965', 19, '2020-08-07 21:34:50', 'http://www.biquge.se/55965/69888060.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 34, 0, 1);
+INSERT INTO "public"."book" VALUES (29, '泡面首富', 'http://www.biquges.com/49_49188/index.html', 19, '2020-04-16 16:48:33', 'http://www.biquges.com/49_49188/24396943.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"index.html"}', 29, 0, 1);
+INSERT INTO "public"."book" VALUES (67, '变身大小姐', 'http://www.biquger.com/biquge/92056', 14, '2020-07-30 23:41:49', 'http://www.biquger.com/biquge/92056/25488105', '{"titleType":0,"startIndex":0,"delimiter":"","endType":1,"endCharacter":"/"}', 18, 0, 0);
+INSERT INTO "public"."book" VALUES (61, '太乙', 'http://www.biquge.info/2_2801', 13, '2020-07-15 21:23:53', 'http://www.biquge.info/2_2801/9468276.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
+INSERT INTO "public"."book" VALUES (73, '芯片产业帝国', 'https://www.5atxt.com/27_27803', 19, '2020-08-23 09:42:09', 'https://www.5atxt.com/27_27803/24320024.html', '{"titleType":1,"startIndex":1,"delimiter":"节 ","endType":0,"endCharacter":""}', 38, 0, 1);
+INSERT INTO "public"."book" VALUES (69, '重生之网络争霸', 'http://www.biquge.info/75_75928/', 13, '2020-08-07 21:33:36', 'http://www.biquge.info/75_75928/15136955.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 1);
+INSERT INTO "public"."book" VALUES (31, '修仙从沙漠开始', 'https://www.biquge.lu/book/67051', 5, '2020-04-19 23:31:36', 'https://www.biquge.lu/book/67051/502801184.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 2, 0, 1);
+INSERT INTO "public"."book" VALUES (59, '佛系科技', 'http://www.biquge.info/86_86788', 13, '2020-06-26 22:33:41', 'http://www.biquge.info/86_86788/18530447.html', '{"titleType":1,"startIndex":0,"delimiter":" ","endType":0,"endCharacter":""}', 14, 0, 1);
+INSERT INTO "public"."book" VALUES (56, '仙界科技', 'http://www.biquge.info/40_40201/', 13, '2020-06-13 17:29:15', 'http://www.biquge.info/40_40201/1166140.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 0);
+INSERT INTO "public"."book" VALUES (49, '妞非在下', 'http://www.biquge.info/3_3320/', 13, '2020-06-02 23:47:06', 'http://www.biquge.info/3_3320/1763403.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 14, 0, 0);
+INSERT INTO "public"."book" VALUES (63, '面向阵法修仙', 'https://www.boquge.com/book/120686', 20, '2020-07-20 21:37:56', 'https://www.boquge.com/book/120686/170069677.html', '{"titleType":0,"startIndex":0,"delimiter":"","endType":0,"endCharacter":""}', 25, 0, 1);
 
 -- ----------------------------
 -- Table structure for chapter
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."chapter";
 CREATE TABLE "public"."chapter" (
-    "chapterid" int8 NOT NULL DEFAULT nextval('seq_chapter'::regclass),
-    "name" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-    "bookid" int8 NOT NULL,
-    "configid" int8,
-    "rawname" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-    "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    "seqid" int8 NOT NULL,
-    "url" varchar(128) COLLATE "pg_catalog"."default" NOT NULL
+  "chapterid" int8 NOT NULL DEFAULT nextval('seq_chapter'::regclass),
+  "name" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "bookid" int8 NOT NULL,
+  "configid" int8,
+  "rawname" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  "seqid" int8 NOT NULL,
+  "url" varchar(128) COLLATE "pg_catalog"."default" NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."chapter"."chapterid" IS '章节id';
@@ -161,16 +162,16 @@ COMMENT ON TABLE "public"."chapter" IS '章节';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."config";
 CREATE TABLE "public"."config" (
-    "configid" int8 NOT NULL DEFAULT nextval('seq_config'::regclass),
-    "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-    "titlematch" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
-    "titlelnnum" int4 NOT NULL,
-    "conmatch" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
-    "conlnnum" int4 NOT NULL,
-    "startoffset" int4 NOT NULL,
-    "endoffset" int4 NOT NULL,
-    "amatch" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
-    "nexta" int4 NOT NULL
+  "configid" int8 NOT NULL DEFAULT nextval('seq_config'::regclass),
+  "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "titlematch" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
+  "titlelnnum" int4 NOT NULL,
+  "conmatch" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
+  "conlnnum" int4 NOT NULL,
+  "startoffset" int4 NOT NULL,
+  "endoffset" int4 NOT NULL,
+  "amatch" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
+  "nexta" int4 NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."config"."configid" IS '配置id';
@@ -208,11 +209,11 @@ INSERT INTO "public"."config" VALUES (15, 'BiQuGexx_COM', '//div[@class=''bookna
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."paragraph";
 CREATE TABLE "public"."paragraph" (
-    "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    "seqid" int8 NOT NULL,
-    "content" text COLLATE "pg_catalog"."default" NOT NULL,
-    "bookid" int8 NOT NULL,
-    "chapterid" int8 NOT NULL
+  "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  "seqid" int8 NOT NULL,
+  "content" text COLLATE "pg_catalog"."default" NOT NULL,
+  "bookid" int8 NOT NULL,
+  "chapterid" int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."paragraph"."createtime" IS '创建时间';
@@ -223,15 +224,20 @@ COMMENT ON COLUMN "public"."paragraph"."chapterid" IS '章节id';
 COMMENT ON TABLE "public"."paragraph" IS '段落';
 
 -- ----------------------------
+-- Records of paragraph
+-- ----------------------------
+
+
+-- ----------------------------
 -- Table structure for site
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."site";
 CREATE TABLE "public"."site" (
-    "siteid" int8 NOT NULL DEFAULT nextval('seq_site'::regclass),
-    "name" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-    "url" varchar(128) COLLATE "pg_catalog"."default",
-    "configid" int8,
-    "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
+  "siteid" int8 NOT NULL DEFAULT nextval('seq_site'::regclass),
+  "name" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "url" varchar(128) COLLATE "pg_catalog"."default",
+  "configid" int8,
+  "createtime" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
 )
 ;
 COMMENT ON COLUMN "public"."site"."siteid" IS '站点id';
@@ -271,13 +277,15 @@ INSERT INTO "public"."site" VALUES (33, '78ZW_COM', 'https://www.78zw.com', 19, 
 INSERT INTO "public"."site" VALUES (34, 'BiQuGe_SE', 'http://www.biquge.se/', 19, '2020-07-25 10:05:58');
 INSERT INTO "public"."site" VALUES (35, 'BiQu_LA', 'http://www.biqu.la', 8, '2020-08-07 21:34:17');
 INSERT INTO "public"."site" VALUES (36, 'BiQuGeTv_COM', 'https://www.biqugetv.com/', 8, '2020-08-07 21:36:36');
+INSERT INTO "public"."site" VALUES (37, 'DingDiann_COM', 'https://www.dingdiann.com/', 19, '2020-08-23 09:09:22');
+INSERT INTO "public"."site" VALUES (38, '5ATXT_COM', 'https://www.5atxt.com/', 19, '2020-08-23 09:41:15');
 
 -- ----------------------------
 -- Function structure for AUTO_INSERT_INTO_TD_AI
 -- ----------------------------
 DROP FUNCTION IF EXISTS "public"."AUTO_INSERT_INTO_TD_AI"();
 CREATE OR REPLACE FUNCTION "public"."AUTO_INSERT_INTO_TD_AI"()
-    RETURNS "pg_catalog"."trigger" AS $BODY$
+  RETURNS "pg_catalog"."trigger" AS $BODY$
 DECLARE
     time_column_name 	text ;			-- 父表中用于分区的时间字段的名称[必须首先初始化!!]
     curMM 		varchar(6);		-- 'YYYYMM'字串,用做分区子表的后缀
@@ -302,13 +310,13 @@ BEGIN
         endTime := to_char( startTime::timestamp + interval '1 month', 'YYYY-MM-DD HH24:MI:SS.MS');
         strSQL := 'CREATE TABLE IF NOT EXISTS '||TG_RELNAME||'_'||curMM||
                   ' ( CHECK('||time_column_name||'>='''|| startTime ||''' AND '
-                      ||time_column_name||'< '''|| endTime ||''' )
+                             ||time_column_name||'< '''|| endTime ||''' )
                           ) INHERITS ('||TG_RELNAME||') ;'  ;
         EXECUTE strSQL;
 
         -- 创建索引
         strSQL := 'CREATE INDEX '||TG_RELNAME||'_'||curMM||'_INDEX_'||time_column_name||' ON '
-                      ||TG_RELNAME||'_'||curMM||' ('||time_column_name||');' ;
+                  ||TG_RELNAME||'_'||curMM||' ('||time_column_name||');' ;
         EXECUTE strSQL;
 
     END IF;
@@ -319,30 +327,23 @@ BEGIN
     RETURN NULL;
 END
 $BODY$
-    LANGUAGE plpgsql VOLATILE
-                     COST 100;
-
--- ----------------------------
--- Triggers structure for table paragraph
--- ----------------------------
-CREATE TRIGGER "AUTO_INSERT_INTO_TD_AI" BEFORE INSERT ON "public"."paragraph"
-    FOR EACH ROW
-EXECUTE PROCEDURE "public"."AUTO_INSERT_INTO_TD_AI"();
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
 
 -- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
-SELECT setval('"public"."seq_book"', 71, true);
+SELECT setval('"public"."seq_book"', 74, true);
 
 -- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
-SELECT setval('"public"."seq_site"', 37, true);
+SELECT setval('"public"."seq_config"', 24, true);
 
 -- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
-SELECT setval('"public"."seq_config"', 23, true);
+SELECT setval('"public"."seq_site"', 39, true);
 
 -- ----------------------------
 -- Primary Key structure for table book
@@ -358,6 +359,13 @@ ALTER TABLE "public"."chapter" ADD CONSTRAINT "chapter_pkey" PRIMARY KEY ("chapt
 -- Primary Key structure for table config
 -- ----------------------------
 ALTER TABLE "public"."config" ADD CONSTRAINT "config_pkey" PRIMARY KEY ("configid");
+
+-- ----------------------------
+-- Triggers structure for table paragraph
+-- ----------------------------
+CREATE TRIGGER "AUTO_INSERT_INTO_TD_AI" BEFORE INSERT ON "public"."paragraph"
+FOR EACH ROW
+EXECUTE PROCEDURE "public"."AUTO_INSERT_INTO_TD_AI"();
 
 -- ----------------------------
 -- Primary Key structure for table site
