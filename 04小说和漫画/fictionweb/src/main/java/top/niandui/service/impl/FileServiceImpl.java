@@ -56,10 +56,10 @@ public class FileServiceImpl implements IFileService {
         String path = request.getRequestURI();
         path = URLDecoder.decode(path, "UTF-8").trim();
         path = path.substring(path.indexOf("list") + 4).replace("..", ".");
-        if (path.startsWith("/")) {
-            path = path.substring(1);
+        if (!path.startsWith("/")) {
+            path = "/" + path;
         }
-        if (path.endsWith("/")) {
+        if (path.length() > 1 && path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);
         }
         if (pathHolder != null) {
@@ -71,7 +71,7 @@ public class FileServiceImpl implements IFileService {
             Papers.filePathLength = configInfo.getFilePath().length();
             File[] files = file.listFiles();
             list = new ArrayList<>(files.length + 1);
-            if (path.length() != 0) {
+            if (!"/".equals(path)) {
                 Papers papers = new Papers(file.getParentFile());
                 papers.setName("..");
                 papers.setIsDir(true);
