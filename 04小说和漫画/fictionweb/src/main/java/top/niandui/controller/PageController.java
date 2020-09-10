@@ -7,12 +7,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import springfox.documentation.annotations.ApiIgnore;
+import top.niandui.config.ConfigInfo;
 import top.niandui.model.vo.ChapterInfoReturnVO;
 import top.niandui.service.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Holder;
+import java.io.File;
+import java.util.Base64;
 import java.util.Map;
+
+import static top.niandui.service.impl.FileServiceImpl.getPath;
 
 /**
  * @Title: PageController.java
@@ -35,6 +39,8 @@ public class PageController {
     private IChapterService iChapterService;
     @Autowired
     private IFileService iFileService;
+    @Autowired
+    private ConfigInfo configInfo;
 
     @GetMapping("/main")
     public String main() {
@@ -57,7 +63,7 @@ public class PageController {
 
     /*书籍*/
     @GetMapping("/book/list/{id}")
-    public String bookList(@PathVariable String id, Map map){
+    public String bookList(@PathVariable String id, Map map) {
         map.put("siteid", id);
         return "book/list";
     }
@@ -122,15 +128,32 @@ public class PageController {
     @SneakyThrows
     @GetMapping("/file/list/**")
     public String fileList(HttpServletRequest request, Map map) {
-        Holder<String> path = new Holder<>();
-        map.put("list", iFileService.list(request, path));
-        map.put("path", path.value);
-        return "file/list";
+        String path = getPath(request, "list");
+        File file = new File(configInfo.getFilePath() + path);
+        if (file.isFile()) {
+            String name = file.getName();
+            map.put("name", name);
+            int i = name.lastIndexOf(".");
+            if (i > 0) {
+                map.put("form", name.substring(i + 1).toLowerCase());
+            } else {
+                map.put("form", name);
+            }
+            path = Base64.getUrlEncoder().encodeToString(path.getBytes());
+            map.put("path", path);
+            return "file/video";
+        } else {
+            map.put("list", iFileService.list(path));
+            map.put("pathName", path);
+            path = Base64.getUrlEncoder().encodeToString(path.getBytes());
+            map.put("path", path);
+            return "file/list";
+        }
     }
 
     @SneakyThrows
-    @GetMapping("/file/video/**")
-    public String fileVideo(HttpServletRequest request, Map map) {
-        return "file/video";
+    @GetMapping("/file/video1")
+    public String fileVideo() {
+        return "file/video1";
     }
 }

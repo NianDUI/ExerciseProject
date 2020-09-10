@@ -4,7 +4,6 @@ import top.niandui.model.Papers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Holder;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ public interface IFileService {
     List<Papers> list(HttpServletRequest request) throws Exception;
 
     // 列表
-    List<Papers> list(HttpServletRequest request, Holder<String> pathHolder) throws Exception;
+    List<Papers> list(String path) throws Exception;
 
     // 下载文件
     void download(HttpServletRequest request, HttpServletResponse response) throws Exception;

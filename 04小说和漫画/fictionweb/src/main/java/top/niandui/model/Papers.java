@@ -6,6 +6,7 @@ import lombok.Data;
 import top.niandui.common.base.BaseModel;
 
 import java.io.File;
+import java.util.Base64;
 
 import static top.niandui.common.uitls.DateUtil.dateFormat;
 import static top.niandui.common.uitls.file.FileUtil.unitConvert;
@@ -48,8 +49,10 @@ public class Papers extends BaseModel {
     public Papers(File file) {
         this.file = file;
         if (file != null) {
+            Base64.Encoder encoder = Base64.getUrlEncoder();
             this.name = file.getName();
-            this.path = file.getAbsolutePath().substring(filePathLength).replace("\\", "/");
+            this.path = file.getAbsolutePath().substring(filePathLength + 1).replace("\\", "/");
+            path = encoder.encodeToString(path.getBytes());
             String[] sizeUnit = unitConvert(file.length());
             this.size = Double.valueOf(sizeUnit[0]);
             this.unit = sizeUnit[1];

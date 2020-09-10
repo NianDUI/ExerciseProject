@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'索引：' + ${path}">索引：/</title>
+    <title th:text="'索引：' + ${pathName}">索引：/</title>
     <style>
         .name {
             min-width: 200px;
@@ -22,14 +22,14 @@
 </head>
 <body>
 <h1>
-    <a th:href="@{'/file/list' + ${path}}" th:text="'索引：' + ${path}">索引：/</a>
+    <a th:href="@{'/file/list/' + ${path}}" th:text="'索引：' + ${pathName}">索引：/</a>
 </h1>
 <hr>
 <!--<pre></pre>-->
 <table>
     <tr th:each="item : ${list}">
         <td class="name">
-            <a th:href="@{'/file/list' + ${item.path}}" th:text="${item.name + (item.isDir ? '/' : '')}"></a>
+            <a th:href="@{'/file/list/' + ${item.path}}" th:text="${item.name + (item.isDir ? '/' : '')}"></a>
         </td>
         <td th:text="${item.lastModified}"></td>
         <td class="size" th:text="${item.isDir ? '-' : item.size + item.unit}"></td>

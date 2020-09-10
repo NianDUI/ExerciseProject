@@ -2,11 +2,11 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${name}"></title>
 </head>
 <body>
-<video autoplay controls name="media" style="width: 100%; height: 100%;">
-    <source th:src="@{/api/file/download/aa.mp4}" type="video/mp4"/>
+<video controls preload="metadata" fluid="false" name="media" style="width: 100%; height: 100%;">
+    <source th:src="@{'/api/file/download/' + ${path}}" th:type="'video/' + ${form}"/>
 </video>
 </body>
 </html>

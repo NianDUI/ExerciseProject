@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${name}"></title>
+    <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+</head>
+<body>
+<video
+        class="video-js vjs-default-skin vjs-big-play-centered"
+        style="width: 100%; height: 100%;"
+        controls
+        preload="metadata"
+        fluid="false"
+        data-setup='{}'>
+    <source src="http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8" type="application/x-mpegURL">
+    <source th:src="@{'/api/file/download/' + ${path}}" th:type="'video/' + ${form}"/>
+</video>
+<script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+</body>
+</html>
