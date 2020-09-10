@@ -51,7 +51,7 @@ public class Papers extends BaseModel {
         if (file != null) {
             Base64.Encoder encoder = Base64.getUrlEncoder();
             this.name = file.getName();
-            this.path = file.getAbsolutePath().substring(filePathLength + 1).replace("\\", "/");
+            this.path = file.getAbsolutePath().substring(filePathLength).replace("\\", "/");
             path = encoder.encodeToString(path.getBytes());
             String[] sizeUnit = unitConvert(file.length());
             this.size = Double.valueOf(sizeUnit[0]);
