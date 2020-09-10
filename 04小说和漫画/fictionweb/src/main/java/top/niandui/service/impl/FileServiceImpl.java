@@ -81,6 +81,7 @@ public class FileServiceImpl implements IFileService {
             }
             Arrays.stream(files).filter(File::isDirectory).forEach(f -> list.add(new Papers(f)));
             Arrays.stream(files).filter(File::isFile).forEach(f -> list.add(new Papers(f)));
+            log.info("读取目录：" + file.getAbsolutePath());
         } else {
             list = Collections.emptyList();
         }
