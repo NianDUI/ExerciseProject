@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static top.niandui.common.uitls.file.DownloadUtil.downloadFile;
+
 /**
  * @Title: FileServiceImpl.java
  * @description: 文件Service实现类
@@ -53,15 +55,7 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public List<Papers> list(HttpServletRequest request, Holder<String> pathHolder) throws Exception {
-        String path = request.getRequestURI();
-        path = URLDecoder.decode(path, "UTF-8").trim();
-        path = path.substring(path.indexOf("list") + 4).replace("..", ".");
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        if (path.length() > 1 && path.endsWith("/")) {
-            path = path.substring(0, path.length() - 1);
-        }
+        String path = getPath(request, "list");
         if (pathHolder != null) {
             pathHolder.value = path;
         }
@@ -86,5 +80,25 @@ public class FileServiceImpl implements IFileService {
             list = Collections.emptyList();
         }
         return list;
+    }
+
+    @Override
+    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String path = getPath(request, "download");
+        downloadFile(request, response, configInfo.getFilePath() + path);
+    }
+
+    // 获取路径
+    public static String getPath(HttpServletRequest request, String endStr) throws Exception {
+        String path = request.getRequestURI();
+        path = URLDecoder.decode(path, "UTF-8").trim();
+        path = path.substring(path.indexOf(endStr) + endStr.length()).replace("..", ".");
+        if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+        if (path.length() > 1 && path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        return path;
     }
 }

@@ -127,4 +127,10 @@ public class PageController {
         map.put("path", path.value);
         return "file/list";
     }
+
+    @SneakyThrows
+    @GetMapping("/file/video/**")
+    public String fileVideo(HttpServletRequest request, Map map) {
+        return "file/video";
+    }
 }

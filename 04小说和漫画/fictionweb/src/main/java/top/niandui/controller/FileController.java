@@ -40,8 +40,14 @@ public class FileController {
     }
 
     @GetMapping("/list/**")
-    @ApiOperation(value = "文件列表", notes = "<br>开发人：李永达<br>时间：2020/08/21<br>")
+    @ApiOperation(value = "文件列表", notes = "<br>开发人：李永达<br>时间：2020/09/09<br>")
     public ResponseData<List<Papers>> list(HttpServletRequest request) throws Exception {
         return ResponseData.ok(iFileService.list(request));
+    }
+
+    @GetMapping("/download/**")
+    @ApiOperation(value = "下载文件", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>支持断点续传", produces = "application/octet-stream")
+    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        iFileService.download(request, response);
     }
 }

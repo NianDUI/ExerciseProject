@@ -1,11 +1,8 @@
 package top.niandui.config;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import javax.servlet.ServletContext;
 
 /**
  * @Title: ConfigInfo.java
@@ -19,7 +16,7 @@ import javax.servlet.ServletContext;
 @ConfigurationProperties("config-info")
 public class ConfigInfo {
     public static final boolean IS_WIN = System.getProperty("os.name").contains("Windows");
-    private String contextPath;
+//    private String contextPath;
     private String webjars = "/webjars";
     // layui
     private String layuiVersion;
@@ -36,15 +33,15 @@ public class ConfigInfo {
     private String winFilePath;
     private String linuxFilePath;
 
-    @Autowired
-    public ConfigInfo(ServletContext servletContext) {
-        String contextPath = servletContext.getContextPath();
-        if (contextPath != null && contextPath.trim().length() != 0) {
-            this.contextPath = contextPath;
-        } else {
-            this.contextPath = null;
-        }
-    }
+//    @Autowired
+//    public ConfigInfo(ServletContext servletContext) {
+//        String contextPath = servletContext.getContextPath();
+//        if (contextPath != null && contextPath.trim().length() != 0) {
+//            this.contextPath = contextPath;
+//        } else {
+//            this.contextPath = null;
+//        }
+//    }
 
     public void setLayuiVersion(String layuiVersion) {
         this.layuiVersion = layuiVersion;
@@ -61,7 +58,8 @@ public class ConfigInfo {
     }
 
     public String addContextPath(String path) {
-        return contextPath != null ? contextPath + path : path;
+//        return contextPath != null ? contextPath + path : path;
+        return path;
     }
 
     public void setWinFilePath(String winFilePath) {

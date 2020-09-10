@@ -23,4 +23,7 @@ public interface IFileService {
 
     // 列表
     List<Papers> list(HttpServletRequest request, Holder<String> pathHolder) throws Exception;
+
+    // 下载文件
+    void download(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }
