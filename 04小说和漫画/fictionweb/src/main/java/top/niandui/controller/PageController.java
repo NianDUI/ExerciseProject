@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import springfox.documentation.annotations.ApiIgnore;
 import top.niandui.model.vo.ChapterInfoReturnVO;
-import top.niandui.service.IBookService;
-import top.niandui.service.IChapterService;
-import top.niandui.service.IConfigService;
-import top.niandui.service.ISiteService;
+import top.niandui.service.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.Holder;
 import java.util.Map;
 
 /**
@@ -34,6 +33,8 @@ public class PageController {
     private IBookService iBookService;
     @Autowired
     private IChapterService iChapterService;
+    @Autowired
+    private IFileService iFileService;
 
     @GetMapping("/main")
     public String main() {
@@ -115,5 +116,15 @@ public class PageController {
         map.put("nextid", rv.getNextid() + "");
         map.put("paragraphList", rv.getParagraphList());
         return "chapter/show";
+    }
+
+    /*文件*/
+    @SneakyThrows
+    @GetMapping("/file/list/**")
+    public String fileList(HttpServletRequest request, Map map) {
+        Holder<String> path = new Holder<>();
+        map.put("list", iFileService.list(request, path));
+        map.put("path", path.value);
+        return "file/list";
     }
 }

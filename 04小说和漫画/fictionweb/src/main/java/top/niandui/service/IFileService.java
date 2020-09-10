@@ -1,0 +1,26 @@
+package top.niandui.service;
+
+import top.niandui.model.Papers;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Holder;
+import java.util.List;
+
+/**
+ * @Title: IFileService.java
+ * @description: 文件Service
+ * @time: 2020/9/9 11:07
+ * @author: liyongda
+ * @version: 1.0
+ */
+public interface IFileService {
+    // 读取文件
+    void read(String path, HttpServletResponse response) throws Exception;
+
+    // 列表
+    List<Papers> list(HttpServletRequest request) throws Exception;
+
+    // 列表
+    List<Papers> list(HttpServletRequest request, Holder<String> pathHolder) throws Exception;
+}

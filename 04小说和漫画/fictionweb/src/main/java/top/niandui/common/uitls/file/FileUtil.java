@@ -13,6 +13,14 @@ import java.io.*;
  */
 @Slf4j
 public class FileUtil {
+    // 大小
+    public static final long KB = 1024;
+    public static final long MB = KB * 1024;
+    public static final long GB = MB * 1024;
+    public static final long TB = GB * 1024;
+    public static final long PB = TB * 1024;
+    public static final long EB = PB * 1024;
+    public static final long ZB = EB * 1024;
 
     /**
      * 获取文件编码格式
@@ -112,5 +120,41 @@ public class FileUtil {
             e.printStackTrace();
             log.error("写入到文件错误", e);
         }
+    }
+
+    /**
+     * 文件大小单位转换
+     *
+     * @param size 文件大小，单位：B
+     * @return 转换后的大小(0)和单位(1)
+     */
+    public static String[] unitConvert(long size) {
+        String length, unit;
+        if (size < KB) {
+            length = String.format("%.2f", size * 1.0);
+            unit = "B";
+        } else if (size < MB) {
+            length = String.format("%.2f", size * 1.0 / KB);
+            unit = "KB";
+        } else if (size < GB) {
+            length = String.format("%.2f", size * 1.0 / MB);
+            unit = "MB";
+        } else if (size < TB) {
+            length = String.format("%.2f", size * 1.0 / GB);
+            unit = "GB";
+        } else if (size < PB) {
+            length = String.format("%.2f", size * 1.0 / TB);
+            unit = "TB";
+        } else if (size < EB) {
+            length = String.format("%.2f", size * 1.0 / PB);
+            unit = "PB";
+        } else if (size < ZB) {
+            length = String.format("%.2f", size * 1.0 / EB);
+            unit = "EB";
+        } else {
+            length = size + "";
+            unit = "B";
+        }
+        return new String[]{length, unit};
     }
 }

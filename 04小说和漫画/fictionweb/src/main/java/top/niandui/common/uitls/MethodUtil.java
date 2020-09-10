@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,8 +35,6 @@ import java.util.function.Function;
 public class MethodUtil {
     // 默认一次数据量
     public static final int DEFAULT_ONE_COUNT = 500;
-    // 日期格式化器：yyyy-MM-dd HH:mm:ss
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private MethodUtil() {
     }
