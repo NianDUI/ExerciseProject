@@ -39,8 +39,8 @@ import static top.niandui.utils.TaskStateUtil.getTaskStatus;
 @Slf4j
 @Component
 public class WebClientUtil {
-    // json处理对象
-    public final static ObjectMapper json = new ObjectMapper();
+    @Autowired
+    private ObjectMapper json;
     @Autowired
     private IBookDao iBookDao;
     @Autowired
