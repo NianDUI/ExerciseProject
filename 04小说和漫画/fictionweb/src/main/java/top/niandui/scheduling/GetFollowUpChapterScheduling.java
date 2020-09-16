@@ -26,11 +26,10 @@ public class GetFollowUpChapterScheduling {
     private IChapterService iChapterService;
 
 //    @Scheduled(cron = "0 0/5 * * * ?")
-    @Scheduled(cron = "0 16 0/4 * * ?")
+    @Scheduled(cron = "0 16 0/6 * * ?")
     public void getFollowUpChapter() throws Exception {
         log.info("定时任务启动...");
         List<IdNameModel<Long>> option = iBookService.option();
-        System.out.println("option = " + option);
         for (IdNameModel<Long> idNameModel : option) {
             String name = idNameModel.getName();
             log.info(String.format("获取 %s 后续章节...", name));
