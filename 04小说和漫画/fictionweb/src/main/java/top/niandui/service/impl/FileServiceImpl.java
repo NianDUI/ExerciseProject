@@ -13,9 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static top.niandui.common.uitls.file.DownloadUtil.downloadFile;
+import static top.niandui.utils.PathUtil.getPapers;
+import static top.niandui.utils.PathUtil.getPath;
 
 /**
  * @Title: FileServiceImpl.java
@@ -45,7 +50,7 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public List<Papers> list(HttpServletRequest request) throws Exception {
-        return list(getPath(request, "list"));
+        return list(getPath(request, "list")[1]);
     }
 
     @Override
@@ -53,19 +58,18 @@ public class FileServiceImpl implements IFileService {
         List<Papers> list;
         File file = new File(configInfo.getFilePath() + path);
         if (file.exists() && file.isDirectory()) {
-            Papers.filePathLength = configInfo.getFilePath().length();
             File[] files = file.listFiles();
             list = new ArrayList<>(files.length + 1);
             if (!"/".equals(path)) {
-                Papers papers = new Papers(file.getParentFile());
+                Papers papers = getPapers(file.getParentFile());
                 papers.setName("..");
                 papers.setIsDir(true);
                 papers.setIsFile(false);
                 papers.setIsExists(true);
                 list.add(papers);
             }
-            Arrays.stream(files).filter(File::isDirectory).forEach(f -> list.add(new Papers(f)));
-            Arrays.stream(files).filter(File::isFile).forEach(f -> list.add(new Papers(f)));
+            Arrays.stream(files).filter(File::isDirectory).forEach(f -> list.add(getPapers(f)));
+            Arrays.stream(files).filter(File::isFile).forEach(f -> list.add(getPapers(f)));
             log.info("读取目录：" + file.getAbsolutePath());
         } else {
             list = Collections.emptyList();
@@ -75,21 +79,7 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String path = getPath(request, "download");
+        String path = getPath(request, "download")[1];
         downloadFile(request, response, configInfo.getFilePath() + path);
-    }
-
-    // 获取路径
-    public static String getPath(HttpServletRequest request, String endStr) throws Exception {
-        String path = request.getRequestURI();
-        path = path.substring(path.indexOf(endStr) + endStr.length()).replace("..", ".");
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-        path = new String(Base64.getUrlDecoder().decode(path)).trim();
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        return path;
     }
 }

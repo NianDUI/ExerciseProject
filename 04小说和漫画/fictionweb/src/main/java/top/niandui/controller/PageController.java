@@ -13,10 +13,9 @@ import top.niandui.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.Base64;
 import java.util.Map;
 
-import static top.niandui.service.impl.FileServiceImpl.getPath;
+import static top.niandui.utils.PathUtil.getPath;
 
 /**
  * @Title: PageController.java
@@ -128,7 +127,8 @@ public class PageController {
     @SneakyThrows
     @GetMapping("/file/list/**")
     public String fileList(HttpServletRequest request, Map map) {
-        String path = getPath(request, "list");
+        String[] paths = getPath(request, "list");
+        String path = paths[1];
         File file = new File(configInfo.getFilePath() + path);
         if (file.isFile()) {
             String name = file.getName();
@@ -139,14 +139,12 @@ public class PageController {
             } else {
                 map.put("form", name);
             }
-            path = Base64.getUrlEncoder().encodeToString(path.getBytes());
-            map.put("path", path);
+            map.put("path", paths[0]);
             return "file/video";
         } else {
             map.put("list", iFileService.list(path));
             map.put("pathName", path);
-            path = Base64.getUrlEncoder().encodeToString(path.getBytes());
-            map.put("path", path);
+            map.put("path", paths[0]);
             return "file/list";
         }
     }
