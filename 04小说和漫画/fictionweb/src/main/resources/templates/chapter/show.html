@@ -7,6 +7,11 @@
 </head>
 <body>
 <blockquote class="layui-elem-quote">
+    <a class="layui-btn layui-btn-xs prev" th:if="${previd} != 'null'">上一章</a>
+    <label th:if="${previd} != 'null' and ${nextid} != 'null'">&nbsp;&nbsp;</label>
+    <a class="layui-btn layui-btn-xs next" th:if="${nextid} != 'null'">下一章</a>
+    <br/>
+    <br/>
     <fieldset class="layui-elem-field">
         <legend th:text="${chapter.name} + ' - ' + ${book.name}"></legend>
         <br/>
