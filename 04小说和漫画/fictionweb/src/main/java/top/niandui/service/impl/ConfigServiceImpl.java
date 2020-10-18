@@ -14,6 +14,8 @@ import top.niandui.service.IConfigService;
 
 import java.util.List;
 
+import static top.niandui.common.uitls.MethodUtil.addDefaultSort;
+
 /**
  * @author 李永达
  * @version 1.0
@@ -51,7 +53,7 @@ public class ConfigServiceImpl extends BaseServiceImpl implements IConfigService
 
     @Override
     public PageInfo<Config> queryList(ConfigSearchVO searchVO) throws Exception {
-//        addDefaultSort(searchVO, "createtime", "DESC");
+        addDefaultSort(searchVO, "configid", "DESC");
         PageHelper.startPage(searchVO.getPageNum(), searchVO.getPageSize(), getOrder(searchVO));
         return new PageInfo<Config>(iConfigDao.queryList(searchVO));
     }

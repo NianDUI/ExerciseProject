@@ -16,6 +16,8 @@ import top.niandui.service.ISiteService;
 
 import java.util.List;
 
+import static top.niandui.common.uitls.MethodUtil.addDefaultSort;
+
 /**
  * @author 李永达
  * @version 1.0
@@ -55,7 +57,7 @@ public class SiteServiceImpl extends BaseServiceImpl implements ISiteService {
 
     @Override
     public PageInfo<SiteListReturnVO> queryList(SiteSearchVO searchVO) throws Exception {
-//        addDefaultSort(searchVO, "createtime", "DESC");
+        addDefaultSort(searchVO, "siteid", "DESC");
         PageHelper.startPage(searchVO.getPageNum(), searchVO.getPageSize(), getOrder(searchVO));
         return new PageInfo<SiteListReturnVO>(iSiteDao.queryList(searchVO));
     }
