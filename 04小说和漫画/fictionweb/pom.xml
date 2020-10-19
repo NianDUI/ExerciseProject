@@ -23,6 +23,8 @@
         <!-- thymeleaf2 和 layout1 这是一个适配 -->
         <!-- layout：是来做布局功能扩展的 -->
         <thymeleaf-layout-dialect.version>2.4.1</thymeleaf-layout-dialect.version>
+        <!-- 指定使用的ES版本为启动的ES版本 -->
+        <elasticsearch.version>7.9.2</elasticsearch.version>
     </properties>
 
     <dependencies>

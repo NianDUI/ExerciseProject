@@ -2,3 +2,9 @@
 spring:
   redis:
     password: ''
+
+##ES配置
+#  elasticsearch:
+#    rest:
+#      uris:
+#        - 10.144.0.21:9200
