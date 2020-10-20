@@ -83,7 +83,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
 
     @Override
     public PageInfo<BookListReturnVO> queryList(BookSearchVO searchVO) throws Exception {
-        addDefaultSort(searchVO, "createtime", "DESC");
+        addDefaultSort(searchVO, "b.\"bookid\"", "DESC");
         PageHelper.startPage(searchVO.getPageNum(), searchVO.getPageSize(), getOrder(searchVO));
         return new PageInfo<BookListReturnVO>(iBookDao.queryList(searchVO));
     }
@@ -95,6 +95,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
 
     @Override
     public List<IdNameModel<Long>> option() throws Exception {
+        PageHelper.orderBy(getOrder("bookid", "DESC"));
         return iBookDao.option();
     }
 

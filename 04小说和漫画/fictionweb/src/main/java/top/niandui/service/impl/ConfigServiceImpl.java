@@ -65,6 +65,7 @@ public class ConfigServiceImpl extends BaseServiceImpl implements IConfigService
 
     @Override
     public List<IdNameModel<Long>> option() throws Exception {
+        PageHelper.orderBy(getOrder("configid", "DESC"));
         return iConfigDao.option();
     }
 

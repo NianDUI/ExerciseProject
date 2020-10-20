@@ -19,11 +19,23 @@ public class BaseServiceImpl {
      * @return
      */
     public String getOrder(PageOrder pageOrder) {
+        return getOrder(pageOrder.getOrderBy(), pageOrder.getDescOrAsc());
+    }
+
+    /**
+     * 格式化排序参数
+     *
+     * @param orderBy   排序字段
+     * @param descOrAsc 排序方式
+     * @return
+     */
+    public String getOrder(String orderBy, String descOrAsc) {
         StringBuilder order = new StringBuilder();
-        String orderBy = pageOrder.getOrderBy();
         if (!StringUtils.isEmpty(orderBy)) {
+            if (!orderBy.startsWith("\"") && !orderBy.endsWith("\"")) {
+                orderBy = "\"" + orderBy + "\"";
+            }
             order.append(orderBy);
-            String descOrAsc = pageOrder.getDescOrAsc();
             if (!StringUtils.isEmpty(descOrAsc)) {
                 order.append(" ").append(descOrAsc);
             }

@@ -82,6 +82,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
 
     @Override
     public List<IdNameModel<Long>> option() throws Exception {
+        PageHelper.orderBy(getOrder("seqid", "ASC"));
         return iChapterDao.option();
     }
 
@@ -146,7 +147,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         ParagraphSearchVO sv = new ParagraphSearchVO();
         sv.setBookid(rv.getChapter().getBookid());
         sv.setChapterid(rv.getChapter().getChapterid());
-        addDefaultSort(sv, "seqid", "ASC");
+        PageHelper.orderBy(getOrder("seqid", "ASC"));
         rv.setParagraphList(iParagraphDao.queryList(sv));
         return rv;
     }
