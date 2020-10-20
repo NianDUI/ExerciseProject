@@ -23,6 +23,8 @@
         <!-- thymeleaf2 和 layout1 这是一个适配 -->
         <!-- layout：是来做布局功能扩展的 -->
         <thymeleaf-layout-dialect.version>2.4.1</thymeleaf-layout-dialect.version>
+        <!-- 指定使用的ES版本为启动的ES版本 -->
+        <elasticsearch.version>7.9.2</elasticsearch.version>
     </properties>
 
     <dependencies>
@@ -79,7 +81,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.24</version>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -118,7 +120,7 @@
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.43.0</version>
+            <version>2.44.0</version>
         </dependency>
         <!-- easyexcel -->
         <dependency>
