@@ -69,6 +69,7 @@ public class SiteServiceImpl extends BaseServiceImpl implements ISiteService {
 
     @Override
     public List<IdNameModel<Long>> option() throws Exception {
+        PageHelper.orderBy(getOrder("siteid", "DESC"));
         return iSiteDao.option();
     }
 

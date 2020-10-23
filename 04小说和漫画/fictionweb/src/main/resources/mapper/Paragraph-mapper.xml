@@ -89,12 +89,6 @@
                 AND "chapterid" = #{chapterid}
             </if>
         </where>
-        <if test="orderBy != null and orderBy != ''">
-            ORDER BY ${orderBy}
-            <if test="descOrAsc != null and descOrAsc != ''">
-                ${descOrAsc}
-            </if>
-        </if>
     </select>
 
     <!-- 删除段落 -->
