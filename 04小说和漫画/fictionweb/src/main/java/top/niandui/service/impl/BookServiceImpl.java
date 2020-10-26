@@ -134,10 +134,8 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         for (int i = 0; i < config.getConlnnum(); i++) {
             contentWrap += "\n";
         }
-        try (
-                OutputStream os = getDownloadOS(response, book.getName() + ".txt");
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))
-        ) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+                    getDownloadOS(response, book.getName() + ".txt"), StandardCharsets.UTF_8))) {
             List<Map> list = iBookDao.queryContentList(book.getBookid());
             for (Map map : list) {
                 String content = convert(map.get("content"), Function.identity(), String.class);

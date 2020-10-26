@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.util.Objects;
 
 /**
@@ -28,5 +30,13 @@ public class Test01 {
         System.out.println(DigestUtils.md5DigestAsHex(str.getBytes()));
         System.out.println(DigestUtils.md5DigestAsHex("".getBytes()));
         System.out.println(DigestUtils.md5DigestAsHex("".getBytes()));
+    }
+
+    @Test
+    public void jsTest() throws Exception {
+        ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("Nashorn");
+        String a = "1 + 2 * 3 + 4 / (1 + 1)";
+        Object eval = nashorn.eval(a);
+        System.out.println(eval);
     }
 }
