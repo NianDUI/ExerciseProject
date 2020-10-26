@@ -113,12 +113,13 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     @Override
     public void downloadBook(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Book book = (Book) iBookDao.model(id);
-        OutputStream os = getDownloadOS(response, book.getName() + ".txt");
         String statementId = "queryContentList";
         Map params = Collections.singletonMap("bookid", book.getBookid());
         String contentSql = getExecuteSql(sqlSessionFactory.getConfiguration(), statementId, params);
         String table = COPY_OUT_SQL.replace("[contentSql]", contentSql);
-        copyOut(jdbcTemplate, os, table, "^", "UTF-8");
+        try (OutputStream os = getDownloadOS(response, book.getName() + ".txt")) {
+            copyOut(jdbcTemplate, os, table, "^", "UTF-8");
+        }
     }
 
     @Override
