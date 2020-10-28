@@ -21,6 +21,10 @@ mybatis:
   configuration:
     # 开启 将下划线映射到驼峰大小写
     map-underscore-to-camel-case: true
+    # 延迟加载：开关
+    #lazy-loading-enabled: true
+    # 积极加载：true，调用对象的任何属性(不论是否为延迟加载对象的属性)都会加载该对象的所有属性、false，消极加载，按需加载(只有调用延迟加载对象的属性时才会加载)
+    #aggressive-lazy-loading: true
 
 # pageHelper配置
 pagehelper:
