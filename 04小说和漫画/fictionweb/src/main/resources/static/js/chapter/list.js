@@ -137,7 +137,7 @@ if (taskswitch != 0) {
             , success: function (data) {
                 if (data.code == 200) {
                     layer.msg("正在获取");
-                    stopGet.show();
+                    schedule();
                 } else {
                     layer.alert(data.message);
                 }
@@ -152,7 +152,7 @@ if (taskswitch != 0) {
             , success: function (data) {
                 if (data.code == 200) {
                     layer.msg("正在获取");
-                    stopGet.show();
+                    schedule();
                 } else {
                     layer.alert(data.message);
                 }
@@ -176,7 +176,7 @@ if (taskswitch != 0) {
                     , success: function (data) {
                         if (data.code == 200) {
                             layer.msg("正在获取");
-                            stopGet.show();
+                            schedule();
                             layer.close(index);
                         } else {
                             layer.alert(data.message);
