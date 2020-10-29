@@ -71,7 +71,31 @@ list();
 
 if (taskswitch != 0) {
     const stopGet = $(".stopGet");
-    $(".search").click(function () {
+    let timer = null;
+    // 是否自动开启定时刷新任务
+    if (taskstatus != 0) {
+        schedule();
+    }
+
+    // 启用定时刷新任务
+    function schedule() {
+        if (timer == null) {
+            stopGet.show();
+            timer = window.setInterval("pageNum = 0x7fffffff;searchBtn.click();", 5000);
+        }
+    }
+
+    // 停止定时刷新任务
+    function cancel() {
+        if (timer != null) {
+            stopGet.hide();
+            window.clearInterval(timer);
+            timer = null;
+            taskstatus = 0;
+        }
+    }
+
+    searchBtn.click(function () {
         $.ajax({
             type: "get"
             , contentType: "application/json"
@@ -79,9 +103,10 @@ if (taskswitch != 0) {
             , success: function (data) {
                 if (data.code == 200) {
                     if (data.data != 0) {
-                        stopGet.show();
+                        taskstatus = data.data;
+                        schedule();
                     } else {
-                        stopGet.hide();
+                        cancel();
                     }
                 } else {
                     layer.alert(data.message);
@@ -97,7 +122,7 @@ if (taskswitch != 0) {
             , success: function (data) {
                 if (data.code == 200) {
                     layer.msg("停止获取");
-                    stopGet.hide();
+                    cancel();
                 } else {
                     layer.alert(data.message);
                 }

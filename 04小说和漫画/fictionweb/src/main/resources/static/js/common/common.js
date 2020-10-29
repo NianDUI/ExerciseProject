@@ -21,14 +21,17 @@ function tableParseData(res) {
     return {"code": res.code, "msg": res.message, "count": res.data.total, "data": res.data.list}
 }
 // 列表页面需要响应
+const searchBtn = $(".search");
+const searchInput = $(".searVal");
 function list() {
     const idName = baseParams.idName;
     table.on("rowDouble(table)", function (obj) {
         add(obj.data[idName]);
     });
-    $(".search").click(search);
+    // 搜索点击事件
+    searchBtn.click(search);
     // 按键弹起事件
-    $(".searVal").keyup(function (e) {
+    searchInput.keyup(function (e) {
         // 回车
         if (e.keyCode == 13) {
             search();
@@ -54,13 +57,17 @@ function list() {
     });
 }
 // 列表页面搜索方法
-let searVal = "";
+let searVal = "", pageNum = 1;
 function search() {
-    const name = $(".searVal").val().trim();
-    const params = {where: {name: name}};
+    const name = searchInput.val().trim();
+    const params = {where: {name: name}, page: {}};
     if (name != searVal) {
-        params.page = {curr: 1};
+        params.page.curr = 1;
         searVal = name;
+    }
+    if (pageNum != 1) {
+        params.page.curr = pageNum;
+        pageNum = 1;
     }
     tableList.reload(params);
 }
