@@ -32,6 +32,13 @@ public class PathUtil {
     public static int filePathLength;
     public static RedisUtil redisUtil;
 
+    @Autowired
+    public PathUtil(ConfigInfo configInfo, RedisUtil redisUtil) {
+        PathUtil.configInfo = configInfo;
+        PathUtil.redisUtil = redisUtil;
+        filePathLength = configInfo.getFilePath().length();
+    }
+
     // 获取路径
     public static String[] getPath(HttpServletRequest request, String endStr) throws Exception {
         String path = request.getRequestURI().trim();
@@ -75,6 +82,11 @@ public class PathUtil {
         return path;
     }
 
+//    @Autowired
+//    public void setRedisUtil(RedisUtil redisUtil) {
+//        PathUtil.redisUtil = redisUtil;
+//    }
+
     // 获取 Papers 对象
     public static Papers getPapers(File file) {
         Papers papers = new Papers();
@@ -91,16 +103,5 @@ public class PathUtil {
             papers.setIsFile(file.isFile());
         }
         return papers;
-    }
-
-    @Autowired
-    public void setRedisUtil(RedisUtil redisUtil) {
-        PathUtil.redisUtil = redisUtil;
-    }
-
-    @Autowired
-    public void setConfigInfo(ConfigInfo configInfo) {
-        PathUtil.configInfo = configInfo;
-        filePathLength = configInfo.getFilePath().length();
     }
 }

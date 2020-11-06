@@ -16,5 +16,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @EnableScheduling
 @MapperScan("top.niandui.dao")
+//@EnableConfigurationProperties(ConfigInfo.class)
 public class BaseConfig {
 }

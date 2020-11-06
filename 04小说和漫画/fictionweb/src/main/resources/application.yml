@@ -25,6 +25,8 @@ mybatis:
     #lazy-loading-enabled: true
     # 积极加载：true，调用对象的任何属性(不论是否为延迟加载对象的属性)都会加载该对象的所有属性、false，消极加载，按需加载(只有调用延迟加载对象的属性时才会加载)
     #aggressive-lazy-loading: true
+    # 一级(本地)缓存范围：session(同一个会话，开启事务),statement(应该是出了方法即失效)
+    #local-cache-scope: statement
 
 # pageHelper配置
 pagehelper:

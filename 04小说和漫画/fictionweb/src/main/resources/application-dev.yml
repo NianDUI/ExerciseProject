@@ -8,3 +8,25 @@ spring:
 #    rest:
 #      uris:
 #        - 10.144.0.21:9200
+
+# Spring Boot Actuator
+management:
+  endpoints:
+    # 通过HTTP暴露Actuator endpoints。 Use "*" to expose all endpoints, or a comma-separated list to expose selected ones=health,info
+    web:
+      exposure:
+        include: "*"
+        exclude:
+    # 通过JMX暴露Actuator endpoints。Use "*" to expose all endpoints, or a comma-separated list to expose selected ones
+#    jmx:
+#      exposure:
+#        include: "*"
+#        exclude:
+  endpoint:
+    health:
+      # 显示详细的健康信息
+      show-details: always
+  health:
+    # 关闭特定的健康检查指标
+#    mongo:
+#      enabled: false

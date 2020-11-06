@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties("config-info")
+@ConfigurationProperties(prefix = "config-info")
 public class ConfigInfo {
     public static final boolean IS_WIN = System.getProperty("os.name").contains("Windows");
 //    private String contextPath;
