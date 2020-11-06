@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import top.niandui.common.base.BaseServiceImpl;
 import top.niandui.common.model.IdNameModel;
+import top.niandui.common.uitls.redis.RedisUtil;
 import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IConfigDao;
@@ -31,7 +32,9 @@ import java.util.function.Function;
 
 import static top.niandui.common.uitls.MethodUtil.*;
 import static top.niandui.common.uitls.file.DownloadUtil.getDownloadOS;
+import static top.niandui.config.PublicConstant.BOOK_TASK_STATUS;
 import static top.niandui.utils.TaskStateUtil.checkTaskStatus;
+import static top.niandui.utils.TaskStateUtil.getBookTaskStatus;
 
 /**
  * @author 李永达
@@ -54,6 +57,8 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public void create(Book book) throws Exception {
@@ -71,14 +76,16 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
 
     @Override
     public void delete(String id) throws Exception {
-        for (String sId : id.split(",")) {
-            checkTaskStatus(((Book) iBookDao.model(Long.valueOf(sId))).getTaskstatus());
+        String[] ids = id.split(",");
+        for (String sId : ids) {
+            checkTaskStatus(getBookTaskStatus(Long.valueOf(sId)));
         }
         // 删除段落
         iParagraphDao.deleteByBookId(id);
         // 删除章节
         iChapterDao.deleteByBookId(id);
         iBookDao.delete(id);
+        redisUtil.hdel(BOOK_TASK_STATUS, ids);
     }
 
     @Override

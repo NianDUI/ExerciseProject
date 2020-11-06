@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import top.niandui.common.expection.ReStateException;
-import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IParagraphDao;
 import top.niandui.model.Book;
@@ -27,7 +26,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static top.niandui.utils.HandleUtil.getIsEndHref;
-import static top.niandui.utils.TaskStateUtil.getTaskStatus;
+import static top.niandui.utils.TaskStateUtil.*;
 
 /**
  * @Title: WebClientUtil.java
@@ -41,8 +40,6 @@ import static top.niandui.utils.TaskStateUtil.getTaskStatus;
 public class WebClientUtil {
     @Autowired
     private ObjectMapper json;
-    @Autowired
-    private IBookDao iBookDao;
     @Autowired
     private IChapterDao iChapterDao;
     @Autowired
@@ -80,7 +77,7 @@ public class WebClientUtil {
     public void getBook(Config config, Book book, long seqid, boolean isFirstJump) {
         try {
             // 更新任务状态
-            if (iBookDao.updateTaskstatusBy(book.getBookid(), book.getTaskstatus(), 0) == 0) {
+            if (updateTaskStatusByRawStatus(book.getBookid(), book.getTaskstatus(), 0) == 0) {
                 log.info(book.getName() + getTaskStatus(book.getTaskstatus()) + "已被其他服务处理");
             }
             Map handleInfo = json.readValue(book.getHandlerinfo(), Map.class);
@@ -91,7 +88,7 @@ public class WebClientUtil {
             // 获取起始页面
             HtmlPage htmlPage = getWebClient().getPage(book.getStarturl());
             int errorNum = 0;
-            while (iBookDao.queryBookTaskstatus(book.getBookid()) != 0) {
+            while (getBookTaskStatus(book.getBookid()) != 0) {
                 String url = htmlPage.getUrl().toString().trim();
                 if (!isFirstJump) {
                     Chapter chapter = new Chapter();
@@ -153,9 +150,10 @@ public class WebClientUtil {
             log.error("获取失败...");
             log.error(e.toString());
 //            throw new RuntimeException(e);
+        } finally {
+            // 更新任务状态
+            updateBookTaskStatus(book.getBookid(), 0);
         }
-        // 更新任务状态
-        iBookDao.updateTaskstatus(book.getBookid(), 0);
     }
 
     /**
@@ -167,7 +165,7 @@ public class WebClientUtil {
     public void getChapter(Config config, Chapter chapter) {
         try {
             // 更新任务状态
-            if (iBookDao.updateTaskstatusBy(chapter.getBookid(), 3, 0) == 0) {
+            if (updateTaskStatusByRawStatus(chapter.getBookid(), 3, 0) == 0) {
                 log.info(chapter.getName() + getTaskStatus(3) + "已被其他服务处理");
             }
             // 获取开始结束时间
@@ -210,7 +208,7 @@ public class WebClientUtil {
             throw new ReStateException("获取失败");
         } finally {
             // 更新任务状态
-            iBookDao.updateTaskstatus(chapter.getBookid(), 0);
+            updateBookTaskStatus(chapter.getBookid(), 0);
         }
     }
 

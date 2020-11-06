@@ -20,20 +20,25 @@ public class PropertiesUtil {
      * @author huangwx
      * @date 2019/12/13 14:25
      */
-    public static String getConfiguration(String fileName, String typeName) {
+    /**
+     * 获取yaml文件的Properties对象
+     *
+     * @param fileName 文件名
+     * @return Properties对象
+     */
+    public static Properties getYamlProperties(String fileName) {
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         yaml.setResources(new ClassPathResource(fileName));
-        Properties properties = yaml.getObject();
-        return properties.getProperty(typeName);
+        return yaml.getObject();
     }
 
     /**
-     * 返回　Properties
-     * @param fileName 文件名　(注意：加载的是src下的文件,如果在某个包下．请把包名加上)
-     * @param
-     * @return
+     * 获取properties文件的Properties对象
+     *
+     * @param fileName 文件名　(注意：加载的是根类路径下的文件,如果在某个包下．请把包名加上)
+     * @return Properties对象
      */
-    public static Properties getProperties(String fileName){
+    public static Properties getProperties(String fileName) {
         Properties prop = new Properties();
         try {
             Reader reader = Resources.getResourceAsReader(fileName);

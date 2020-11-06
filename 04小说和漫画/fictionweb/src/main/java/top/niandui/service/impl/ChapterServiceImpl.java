@@ -20,8 +20,7 @@ import top.niandui.utils.WebClientUtil;
 import java.util.List;
 
 import static top.niandui.common.uitls.MethodUtil.addDefaultSort;
-import static top.niandui.utils.TaskStateUtil.checkTaskStatus;
-import static top.niandui.utils.TaskStateUtil.checkTaskSwitch;
+import static top.niandui.utils.TaskStateUtil.*;
 
 /**
  * @author 李永达
@@ -173,11 +172,11 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
 
     @Override
     public Integer queryGetStatus(Long id) throws Exception {
-        return iBookDao.queryBookTaskstatus(id);
+        return getBookTaskStatus(id);
     }
 
     @Override
     public void stopGet(Long id) throws Exception {
-        iBookDao.updateTaskstatus(id, 0);
+        updateBookTaskStatus(id, 0);
     }
 }

@@ -3,6 +3,7 @@ package top.niandui.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import top.niandui.common.base.IBaseDao;
+import top.niandui.model.Book;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Repository
 public interface IBookDao<T> extends IBaseDao<T> {
     // 更新任务状态
-    void updateTaskstatus(Long bookid, Integer taskstatus);
+    int updateTaskstatus(Long bookid, Integer taskstatus);
 
     // 查询站点书籍数量
     int querySiteBookCount(String id);
@@ -26,9 +27,12 @@ public interface IBookDao<T> extends IBaseDao<T> {
     Integer queryBookTaskstatus(Long id);
 
     // 更新指定状态任务的任务状态
-    int updateTaskstatusBy(@Param("bookid") Long bookid
+    int updateTaskstatusByRawStatus(@Param("bookid") Long bookid
             , @Param("newStatus") Integer newStatus, @Param("rawStatus") Integer rawStatus);
 
     // 查询内容列表
     List<Map> queryContentList(@Param("bookid") Long bookid);
+
+    // 查询书籍任务转台列表
+    List<Book> queryBookTaskstatusList();
 }

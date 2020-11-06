@@ -121,7 +121,7 @@
     </select>
 
     <!-- 更新指定状态任务的任务状态 -->
-    <update id="updateTaskstatusBy">
+    <update id="updateTaskstatusByRawStatus">
         UPDATE "book"
         SET "taskstatus" = #{newStatus}
         WHERE "bookid" = #{bookid} AND "taskstatus" = #{rawStatus}
@@ -136,5 +136,10 @@
         ) t INNER JOIN "chapter" c ON c."chapterid" = t."chapterid"
         WHERE c."bookid" = #{bookid}
         ORDER BY c."seqid",t."seqid"
+    </select>
+
+    <!-- 查询书籍任务转台列表 -->
+    <select id="queryBookTaskstatusList" resultType="top.niandui.model.Book">
+        SELECT "bookid","taskstatus" FROM "book" ORDER BY "bookid"
     </select>
 </mapper>
