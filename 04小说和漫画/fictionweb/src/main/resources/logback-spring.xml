@@ -13,8 +13,7 @@
             </pattern>
         </layout>
     </appender>
-    <appender name="fileInfoLog"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>DENY</onMatch>
@@ -29,8 +28,7 @@
             <maxHistory>30</maxHistory><!-- 只保存30天的日志文件 -->
         </rollingPolicy>
     </appender>
-    <appender name="fileErrorLog"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>

@@ -3,7 +3,6 @@ package top.niandui.common.base;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Title: IBaseDao.java
