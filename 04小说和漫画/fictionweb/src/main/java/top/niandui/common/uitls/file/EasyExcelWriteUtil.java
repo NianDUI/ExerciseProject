@@ -22,7 +22,10 @@ import top.niandui.common.base.IBaseExcel;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -146,41 +149,45 @@ public class EasyExcelWriteUtil {
         if (sheets != null && classes != null && sheets.length != classes.length) {
             throw new RuntimeException("sheets和classes长度不相等请检查");
         }
-        // 指定写到哪
-        ExcelWriterBuilder writerBuilder = EasyExcel.write(os);
-        // 自定义的公共策略，设置自定义头部样式 和 自适应列宽
-        writerBuilder.registerWriteHandler(new CustomizeWriteHandler());
-        ExcelWriter excelWriter = writerBuilder.build();
-        List<List<String>> emptyHead = Collections.singletonList(Collections.singletonList("暂无数据"));
-        int i = 0;
-        int[] num = {0};
-        for (String key : sheets) {
-            num[0] = 0;
-            createBatch(data.get(key), ts -> {
-                String sheetName = num[0] > 0 ? key + num[0] : key;
-                // 写该sheet的数据
-                T t = ts.get(0);
-                WriteSheet writeSheet = EasyExcel.writerSheet(sheetName).registerWriteHandler(t).head(t.getClass()).build();
-                excelWriter.write(ts, writeSheet);
-                num[0]++;
-                return ts.size();
-            }, 1048575);
-            if (num[0] == 0) {
-                WriteSheet writeSheet;
-                if (classes == null || classes[i] == null) {
-                    writeSheet = EasyExcel.writerSheet(key).head(emptyHead).build();
-                } else {
-                    writeSheet = EasyExcel.writerSheet(key).head(classes[i]).build();
+        try (OutputStream _os = os) {
+            // 指定写到哪
+            ExcelWriterBuilder writerBuilder = EasyExcel.write(_os);
+            // 自定义的公共策略，设置自定义头部样式 和 自适应列宽
+            writerBuilder.registerWriteHandler(new CustomizeWriteHandler());
+            ExcelWriter excelWriter = writerBuilder.build();
+            List<List<String>> emptyHead = Collections.singletonList(Collections.singletonList("暂无数据"));
+            int i = 0;
+            int[] num = {0};
+            for (String key : sheets) {
+                num[0] = 0;
+                createBatch(data.get(key), ts -> {
+                    String sheetName = num[0] > 0 ? key + num[0] : key;
+                    // 写该sheet的数据
+                    T t = ts.get(0);
+                    WriteSheet writeSheet = EasyExcel.writerSheet(sheetName).registerWriteHandler(t).head(t.getClass()).build();
+                    excelWriter.write(ts, writeSheet);
+                    num[0]++;
+                    return ts.size();
+                }, 1048575);
+                if (num[0] == 0) {
+                    WriteSheet writeSheet;
+                    if (classes == null || classes[i] == null) {
+                        writeSheet = EasyExcel.writerSheet(key).head(emptyHead).build();
+                    } else {
+                        writeSheet = EasyExcel.writerSheet(key).head(classes[i]).build();
+                    }
+                    excelWriter.write(Collections.emptyList(), writeSheet);
                 }
-                excelWriter.write(new ArrayList(0), writeSheet);
+                i++;
             }
-            i++;
+            if (i == 0) {
+                excelWriter.write(Collections.emptyList(), EasyExcel.writerSheet("数据").head(emptyHead).build());
+            }
+            // 关闭流
+            excelWriter.finish();
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
-        if (i == 0) {
-            excelWriter.write(new ArrayList(0), EasyExcel.writerSheet("数据").head(emptyHead).build());
-        }
-        // 关闭流
-        excelWriter.finish();
     }
 
     // 定制写处理器, 自定义的公共策略，设置自定义头部样式 和 自适应列宽
@@ -191,10 +198,6 @@ public class EasyExcelWriteUtil {
         private static final WriteCellStyle HEAD_WRITE_CELL_STYLE = new WriteCellStyle();
         // 全角字符，正则匹配表达式
         private static final Pattern PATTERN = Pattern.compile("[^\\x00-\\xff]+");
-        // 头部单元格样式
-        private CellStyle headCellStyle;
-        // sheet中的各列最大宽度
-        private final Map<Integer, Integer> columnMaxWidthMap = new HashMap<>();
 
         static {
             // 背景设置为白色
@@ -207,6 +210,11 @@ public class EasyExcelWriteUtil {
             headFont.setBold(Boolean.FALSE);
             HEAD_WRITE_CELL_STYLE.setWriteFont(headFont);
         }
+
+        // sheet中的各列最大宽度
+        private final Map<Integer, Integer> columnMaxWidthMap = new HashMap<>();
+        // 头部单元格样式
+        private CellStyle headCellStyle;
 
         @Override
         public String uniqueValue() {

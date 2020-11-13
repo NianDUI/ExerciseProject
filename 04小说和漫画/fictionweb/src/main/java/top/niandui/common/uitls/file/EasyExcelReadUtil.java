@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -36,20 +37,18 @@ public class EasyExcelReadUtil {
         if (!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
             throw new RuntimeException("请检查是否是Excel文件！");
         }
-        try {
-            EasyExcel.read(file.getInputStream(), dataClass, new CustomizeReadListener<T>(callback))
+        try (InputStream is = file.getInputStream()) {
+            EasyExcel.read(is, dataClass, new CustomizeReadListener<T>(callback))
                     // 字符串、表头等数据自动trim
                     .autoTrim(Boolean.TRUE)
                     // 忽略空白行
                     .ignoreEmptyRow(Boolean.TRUE)
                     // 读取所有工作表
                     .doReadAll();
+        } catch (ExcelAnalysisException e) {
+            throw new RuntimeException(e.getMessage(), e);
         } catch (Exception e) {
-            if (e instanceof ExcelAnalysisException) {
-                throw new RuntimeException(e.getMessage());
-            }
-            e.printStackTrace();
-            throw new RuntimeException("请检查Excel数据是否正确！");
+            throw new RuntimeException("请检查Excel数据是否正确！", e);
         }
     }
 
