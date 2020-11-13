@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +36,8 @@ public class EasyExcelReadUtil {
         if (!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
             throw new RuntimeException("请检查是否是Excel文件！");
         }
-        try (InputStream is = file.getInputStream()) {
-            EasyExcel.read(is, dataClass, new CustomizeReadListener<T>(callback))
+        try {
+            EasyExcel.read(file.getInputStream(), dataClass, new CustomizeReadListener<T>(callback))
                     // 字符串、表头等数据自动trim
                     .autoTrim(Boolean.TRUE)
                     // 忽略空白行
