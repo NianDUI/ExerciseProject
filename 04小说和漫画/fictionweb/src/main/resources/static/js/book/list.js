@@ -1,9 +1,21 @@
+// 参数设置
+setBaseParams({
+    idName: "bookid"
+    , addUrl: base + "book/add/"
+    , showChapterUrl: base + "chapter/list/"
+    , siteAddUrl: base + "site/add/"
+    , configAddUrl: base + "config/add/"
+    , listUrl: base + "api/queryBookList"
+    , deleteUrl: base + "api/deleteBook/"
+    , downloadUrl: base + "api/downloadBook/"
+    , downloadUrl2: base + "api/downloadBook2/"
+});
 const tableList = table.render({
     elem: "#table"
     , id: "table"
     , method: "post"
-    , contentType: "application/json"
-    , url: base + "api/queryBookList"
+    , contentType: getBaseParams("contentType")
+    , url: getBaseParams("listUrl")
     , where: {
         name: ""
         , siteid: siteid
@@ -17,8 +29,8 @@ const tableList = table.render({
     , cols: [[
         {checkbox: true, fixed: "left"}
         , {field: "name", title: "名称", minWidth: 180}
-        , {field: "sitename", title: "站点", minWidth: 180}
-        , {field: "configname", title: "配置", minWidth: 180}
+        , {field: "sitename", title: "站点", minWidth: 180, event: "siteAdd"}
+        , {field: "configname", title: "配置", minWidth: 180, event: "configAdd"}
         , {field: "taskstatusname", title: "任务状态", minWidth: 90}
         , {field: "taskswitchname", title: "任务开关", minWidth: 90}
         , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
@@ -30,24 +42,25 @@ const tableList = table.render({
 table.on("tool(table)", function (obj) {
     var data = obj.data;
     if (obj.event === "showChapter") {
-        self.location.href = base + "chapter/list/" + data.bookid;
+        self.location.href = getBaseParams("showChapterUrl", data.bookid);
     } else if (obj.event === "download") {
         layer.msg("数据整理中请稍等！");
-        location.href = base + "api/downloadBook/" + data.bookid;
+        location.href = getBaseParams("downloadUrl", data.bookid);
     } else if (obj.event === "download2") {
-        location.href = base + "api/downloadBook2/" + data.bookid;
+        layer.msg("数据整理中请稍等！");
+        location.href = getBaseParams("downloadUrl2", data.bookid);
     } else if (obj.event === "edit") {
-        add(data.bookid);
+        show(getBaseParams("addUrl", data.bookid));
     } else if (obj.event === "del") {
         layer.confirm("确认删除该信息？", function (index) {
             del(data.bookid);
             layer.close(index);
         });
+    } else if (obj.event === "siteAdd") {
+        show(getBaseParams("siteAddUrl", data.siteid), "站点");
+    } else if (obj.event === "configAdd") {
+        show(getBaseParams("configAddUrl", data.configid), "配置");
     }
-});
-setBaseParams({
-    idName: "bookid"
-    , addUrl: base + "book/add/"
-    , delUrl: base + "api/deleteBook/"
+    console.log(data);
 });
 list();

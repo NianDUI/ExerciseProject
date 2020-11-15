@@ -1,9 +1,25 @@
+// 参数设置
+setBaseParams({
+    idName: "chapterid"
+    , addUrl: base + "chapter/add/"
+    , showUrl: base + "chapter/show/"
+    , bookAddUrl: base + "book/add/"
+    , configAddUrl: base + "config/add/"
+    , listUrl: base + "api/queryChapterList"
+    , deleteUrl: base + "api/deleteChapter/"
+    , reacquireSingleChapterUrl: base + "api/reacquireSingleChapter/"
+    , statusUrl: base + "api/queryGetStatus/"
+    , stopUrl: base + "api/stopGet/"
+    , reacquireAllChapterUrl: base + "api/reacquireAllChapter/"
+    , getFollowUpChapterUrl: base + "api/getFollowUpChapter/"
+    , getSpecifiedAndFollowUpChapterUrl: base + "api/getSpecifiedAndFollowUpChapter"
+});
 const tableList = table.render({
     elem: "#table"
     , id: "table"
     , method: "post"
-    , contentType: "application/json"
-    , url: base + "api/queryChapterList"
+    , contentType: getBaseParams("contentType")
+    , url: getBaseParams("listUrl")
     , where: {
         name: ""
         , bookid: bookid
@@ -18,8 +34,8 @@ const tableList = table.render({
         {checkbox: true, fixed: "left"}
         , {field: "name", title: "名称", minWidth: 200}
         , {field: "rawname", title: "原名称", minWidth: 200}
-        , {field: "bookname", title: "书籍", minWidth: 180}
-        , {field: "configname", title: "配置", minWidth: 180}
+        , {field: "bookname", title: "书籍", minWidth: 180, event: "bookAdd"}
+        , {field: "configname", title: "配置", minWidth: 180, event: "configAdd"}
         , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
         , {field: "url", title: "链接", minWidth: 300}
         , {title: "操作", fixed: "right", minWidth: 230, align: "center", toolbar: "#toolbar"}
@@ -27,23 +43,21 @@ const tableList = table.render({
 });
 table.on("tool(table)", function (obj) {
     var data = obj.data;
-    if (obj.event === "show") {
-        layer.open({
-            type: 2
-            , title: "查看"
-            , shadeClose: true
-            , maxmin: true
-            , area: computeArea() + "px"
-            // , offset: "t"
-            , content: base + "chapter/show/" + data.chapterid // [, "no"]
-        })
-        ;
+    if (obj.event === "edit") {
+        show(getBaseParams("addUrl", data.chapterid));
+    } else if (obj.event === "del") {
+        layer.confirm("确认删除该信息？", function (index) {
+            del(data.chapterid);
+            layer.close(index);
+        });
+    } else if (obj.event === "show") {
+        show(getBaseParams("showUrl", data.chapterid), "查看")
     } else if (obj.event === "reacquire") {
         const index = layer.load(2);
         $.ajax({
             type: "get"
-            , contentType: "application/json"
-            , url: base + "api/reacquireSingleChapter/" + data.chapterid
+            , contentType: getBaseParams("contentType")
+            , url: getBaseParams("reacquireSingleChapterUrl", data.chapterid)
             , success: function (data) {
                 layer.close(index);
                 if (data.code == 200) {
@@ -53,27 +67,19 @@ table.on("tool(table)", function (obj) {
                 }
             }
         });
-    } else if (obj.event === "edit") {
-        add(data.chapterid);
-    } else if (obj.event === "del") {
-        layer.confirm("确认删除该信息？", function (index) {
-            del(data.chapterid);
-            layer.close(index);
-        });
+    } else if (obj.event === "bookAdd") {
+        show(getBaseParams("bookAddUrl", data.bookid), "书籍");
+    } else if (obj.event === "configAdd") {
+        show(getBaseParams("configAddUrl", data.configid), "配置");
     }
-});
-setBaseParams({
-    idName: "chapterid"
-    , addUrl: base + "chapter/add/"
-    , delUrl: base + "api/deleteChapter/"
 });
 list();
 
-if (taskswitch != 0) {
+if (taskswitch !== 0) {
     const stopGet = $(".stopGet");
     let timer = null;
     // 是否自动开启定时刷新任务
-    if (taskstatus != 0) {
+    if (taskstatus !== 0) {
         schedule();
     }
 
@@ -98,11 +104,11 @@ if (taskswitch != 0) {
     searchBtn.click(function () {
         $.ajax({
             type: "get"
-            , contentType: "application/json"
-            , url: base + "api/queryGetStatus/" + bookid
+            , contentType: getBaseParams("contentType")
+            , url: getBaseParams("statusUrl", bookid)
             , success: function (data) {
-                if (data.code == 200) {
-                    if (data.data != 0) {
+                if (data.code === 200) {
+                    if (data.data !== 0) {
                         taskstatus = data.data;
                         schedule();
                     } else {
@@ -117,10 +123,10 @@ if (taskswitch != 0) {
     stopGet.click(function () {
         $.ajax({
             type: "get"
-            , contentType: "application/json"
-            , url: base + "api/stopGet/" + bookid
+            , contentType: getBaseParams("contentType")
+            , url: getBaseParams("stopUrl", bookid)
             , success: function (data) {
-                if (data.code == 200) {
+                if (data.code === 200) {
                     layer.msg("停止获取");
                     cancel();
                 } else {
@@ -132,10 +138,10 @@ if (taskswitch != 0) {
     $(".reacquire").click(function () {
         $.ajax({
             type: "get"
-            , contentType: "application/json"
-            , url: base + "api/reacquireAllChapter/" + bookid
+            , contentType: getBaseParams("contentType")
+            , url: getBaseParams("reacquireAllChapterUrl", bookid)
             , success: function (data) {
-                if (data.code == 200) {
+                if (data.code === 200) {
                     layer.msg("正在获取");
                     schedule();
                 } else {
@@ -147,10 +153,10 @@ if (taskswitch != 0) {
     $(".getFollowUp").click(function () {
         $.ajax({
             type: "get"
-            , contentType: "application/json"
-            , url: base + "api/getFollowUpChapter/" + bookid
+            , contentType: getBaseParams("contentType")
+            , url: getBaseParams("getFollowUpChapterUrl", bookid)
             , success: function (data) {
-                if (data.code == 200) {
+                if (data.code === 200) {
                     layer.msg("正在获取");
                     schedule();
                 } else {
@@ -170,11 +176,11 @@ if (taskswitch != 0) {
             if (value.trim().length > 0) {
                 $.ajax({
                     type: "post"
-                    , contentType: "application/json"
-                    , url: base + "api/getSpecifiedAndFollowUpChapter"
+                    , contentType: getBaseParams("contentType")
+                    , url: getBaseParams("getSpecifiedAndFollowUpChapterUrl")
                     , data: JSON.stringify({bookid: bookid, url: value})
                     , success: function (data) {
-                        if (data.code == 200) {
+                        if (data.code === 200) {
                             layer.msg("正在获取");
                             schedule();
                             layer.close(index);

@@ -1,9 +1,16 @@
+// 参数设置
+setBaseParams({
+    idName: "configid"
+    , addUrl: base + "config/add/"
+    , listUrl: base + "api/queryConfigList"
+    , deleteUrl: base + "api/deleteConfig/"
+});
 const tableList = table.render({
     elem: "#table"
     , id: "table"
     , method: "post"
-    , contentType: "application/json"
-    , url: base + "api/queryConfigList"
+    , contentType: getBaseParams("contentType")
+    , url: getBaseParams("listUrl")
     , where: {
         name: ""
     }
@@ -30,17 +37,12 @@ const tableList = table.render({
 table.on("tool(table)", function (obj) {
     var data = obj.data;
     if (obj.event === "edit") {
-        add(data.configid);
+        show(getBaseParams("addUrl", data.configid));
     } else if (obj.event === "del") {
         layer.confirm("确认删除该信息？", function (index) {
             del(data.configid);
             layer.close(index);
         });
     }
-});
-setBaseParams({
-    idName: "configid"
-    , addUrl: base + "config/add/"
-    , delUrl: base + "api/deleteConfig/"
 });
 list();

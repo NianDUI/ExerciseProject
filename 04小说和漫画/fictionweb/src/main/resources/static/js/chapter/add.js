@@ -1,13 +1,18 @@
+// 参数设置
+setBaseParams({
+    saveUrl: base + "api/saveChapter"
+    , modelUrl: base + "api/modelChapter/"
+});
 setAddIframeStyle();
-const thisIndex = baseParams.thisIndex;
+const thisIndex = getBaseParams("thisIndex");
 if (id != null) {
-    parent.layer.title("修改", thisIndex);
+    parent.layer.title(getBaseParams("title"), thisIndex);
     $.ajax({
         type: "get"
-        , contentType: "application/json"
-        , url: base + "api/modelChapter/" + id
+        , contentType: getBaseParams("contentType")
+        , url: getBaseParams("modelUrl", id)
         , success: function (data) {
-            if (data.code == 200) {
+            if (data.code === 200) {
                 $(".reset").click(function () {
                     form.val("form", data.data);
                     return false;
@@ -31,11 +36,11 @@ form.on("submit(submit)", function (data) {
     field.chapterid = id;
     $.ajax({
         type: "post"
-        , contentType: "application/json"
-        , url: base + "api/saveChapter"
+        , contentType: getBaseParams("contentType")
+        , url: getBaseParams("saveUrl")
         , data: JSON.stringify(field)
         , success: function (data) {
-            if (data.code == 200) {
+            if (data.code === 200) {
                 layer.msg("提交成功");
                 parent.search();
                 parent.layer.close(thisIndex);
