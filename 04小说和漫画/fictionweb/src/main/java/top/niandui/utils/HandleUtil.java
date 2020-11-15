@@ -47,7 +47,7 @@ public class HandleUtil {
                 return title -> titleHandler(title, startIndex,
                         title.substring(startIndex).replaceAll("^\\d*", ""), 0);
             }
-            return title -> title;
+            return title -> title.substring(startIndex);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.toString());

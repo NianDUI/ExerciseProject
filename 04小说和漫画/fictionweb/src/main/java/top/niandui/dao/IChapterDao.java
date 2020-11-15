@@ -6,6 +6,8 @@ import top.niandui.common.base.IBaseDao;
 import top.niandui.model.Book;
 import top.niandui.model.Chapter;
 
+import java.util.Map;
+
 /**
  * @author 李永达
  * @version 1.0
@@ -35,4 +37,10 @@ public interface IChapterDao<T> extends IBaseDao<T> {
 
     // 通过多个id查询数据
     Book queryBookByMultiId(String id);
+
+    // 更新章节名称
+    int updateName(Map params);
+
+    // 更新null章节名称为原名称
+    void updateNullNameToRawname(Long bookid);
 }

@@ -35,4 +35,7 @@ public interface IBookDao<T> extends IBaseDao<T> {
 
     // 查询书籍任务转台列表
     List<Book> queryBookTaskstatusList();
+
+    // 查询书籍处理信息
+    String queryHandlerinfo(Long id);
 }

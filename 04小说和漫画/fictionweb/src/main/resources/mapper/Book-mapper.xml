@@ -142,4 +142,9 @@
     <select id="queryBookTaskstatusList" resultType="top.niandui.model.Book">
         SELECT "bookid","taskstatus" FROM "book" ORDER BY "bookid"
     </select>
+
+    <!-- 查询书籍处理信息 -->
+    <select id="queryHandlerinfo" resultType="string">
+        SELECT "handlerinfo" FROM "book" WHERE "bookid" = #{id}
+    </select>
 </mapper>

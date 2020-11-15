@@ -186,4 +186,29 @@
             WHERE c."chapterid" IN (${id}) AND c."bookid" = b."bookid"
         )
     </select>
+
+    <!-- 更新章节名称 -->
+    <update id="updateName">
+        UPDATE "chapter" SET "name" =
+        <if test="titleType == 0">
+            SUBSTRING("rawname", #{startIndex} + 1)
+        </if>
+        <if test="titleType == 1">
+            '第' || TRIM(REPLACE(SUBSTRING("rawname", #{startIndex} + 1), #{delimiter}, '章 '))
+        </if>
+        <if test="titleType == 2">
+            '第' || TRIM((SUBSTRING(SUBSTRING("rawname", #{startIndex} + 1) FROM '[\d零一二三四五六七八九十百千万]+'))) ||
+            '章 ' || TRIM(REGEXP_REPLACE(SUBSTRING("rawname", #{startIndex} + 1), '[\d零一二三四五六七八九十百千万]+', ''))
+        </if>
+        WHERE "bookid" = #{bookid}
+    </update>
+    <!--
+        PSQLException: 错误: 返回集合函数不允许出现在UPDATE中
+        '第' || TRIM((REGEXP_MATCHES(SUBSTRING("rawname", #{startIndex} + 1), '[\d零一二三四五六七八九十百千万]+')::TEXT[])[1]) ||
+    -->
+
+    <!-- 更新null章节名称为原名称 -->
+    <update id="updateNullNameToRawname">
+        UPDATE "chapter" SET "name" = "rawname" WHERE "bookid" = #{bookid} AND "name" IS NULL
+    </update>
 </mapper>

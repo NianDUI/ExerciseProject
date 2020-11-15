@@ -109,20 +109,20 @@ form.on('select(titleType)', function (data) {
 form.on('select(endType)', function (data) {
     setEndShowHide();
 });
-const startIndexDiv = $(".startIndexDiv");
+// const startIndexDiv = $(".startIndexDiv");
 const delimiterDiv = $(".delimiterDiv");
 const endCharacterDiv = $(".endCharacterDiv");
 
 function setTitleShowHide() {
     let val = titleType.val();
     if (val === "1") {
-        startIndexDiv.show();
+        // startIndexDiv.show();
         delimiterDiv.show();
     } else if (val === "2") {
-        startIndexDiv.show();
+        // startIndexDiv.show();
         delimiterDiv.hide();
     } else {
-        startIndexDiv.hide();
+        // startIndexDiv.hide();
         delimiterDiv.hide();
     }
 }

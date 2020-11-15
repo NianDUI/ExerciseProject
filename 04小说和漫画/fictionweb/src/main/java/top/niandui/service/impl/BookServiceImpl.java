@@ -1,5 +1,6 @@
 package top.niandui.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -59,6 +60,8 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private ObjectMapper json;
 
     @Override
     public void create(Book book) throws Exception {
@@ -71,7 +74,16 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
     public void update(Book book) throws Exception {
         // 检查重名
         // checkName(new IdNameModel(book.getBookid(), book.getName()));
+        String infoRaw = iBookDao.queryHandlerinfo(book.getBookid());
         iBookDao.update(book);
+        Map info = json.readValue(book.getHandlerinfo(), Map.class);
+        if (!info.equals(json.readValue(infoRaw, Map.class))) {
+            info.put("bookid", book.getBookid());
+            // 更新章节名称
+            iChapterDao.updateName(info);
+            // 更新null章节名称为原名称
+            iChapterDao.updateNullNameToRawname(book.getBookid());
+        }
     }
 
     @Override
