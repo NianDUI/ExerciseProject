@@ -20,6 +20,7 @@ const tableList = table.render({
         name: ""
         , siteid: siteid
     }
+    , headers: headers()
     , request: tableRequest
     , response: tableReponse
     , parseData: tableParseData
@@ -61,6 +62,5 @@ table.on("tool(table)", function (obj) {
     } else if (obj.event === "configAdd") {
         show(getBaseParams("configAddUrl", data.configid), "配置");
     }
-    console.log(data);
 });
 list();

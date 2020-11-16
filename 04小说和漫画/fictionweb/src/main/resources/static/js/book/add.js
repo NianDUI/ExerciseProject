@@ -9,24 +9,20 @@ setAddIframeStyle();
 const thisIndex = getBaseParams("thisIndex");
 if (id != null) {
     parent.layer.title(getBaseParams("title"), thisIndex);
-    $.ajax({
+    ajax({
         type: "get"
         , contentType: getBaseParams("contentType")
         , url: getBaseParams("modelUrl", id)
         , success: function (data) {
-            if (data.code === 200) {
-                data = data.data;
-                let handlerinfo = JSON.parse(data.handlerinfo);
-                $(".reset").click(function () {
-                    form.val("form", data);
-                    form.val("form", handlerinfo);
-                    setTitleShowHide();
-                    setEndShowHide();
-                    return false;
-                }).click();
-            } else {
-                layer.alert(data.message);
-            }
+            data = data.data;
+            let handlerinfo = JSON.parse(data.handlerinfo);
+            $(".reset").click(function () {
+                form.val("form", data);
+                form.val("form", handlerinfo);
+                setTitleShowHide();
+                setEndShowHide();
+                return false;
+            }).click();
         }
     });
 }
@@ -67,21 +63,15 @@ form.on("submit(submit)", function (data) {
         , endType: parseInt(field.endType)
         , endCharacter: field.endCharacter
     });
-    $.ajax({
+    ajax({
         type: "post"
         , contentType: getBaseParams("contentType")
         , url: getBaseParams("saveUrl")
         , data: JSON.stringify(field)
         , success: function (data) {
-            if (data.code === 200) {
-                layer.msg("提交成功");
-                parent.search();
-                parent.layer.close(thisIndex);
-            } else {
-                layer.alert(data.message, {
-                    title: "错误信息"
-                });
-            }
+            layer.msg("提交成功");
+            parent.search();
+            parent.layer.close(thisIndex);
         }
     });
     return false;
@@ -90,16 +80,12 @@ form.on('select(siteid)', function (data) {
     if (data.value.trim().length === 0) {
         return;
     }
-    $.ajax({
+    ajax({
         type: "get"
         , contentType: getBaseParams("contentType")
         , url: getBaseParams("modelSiteUrl", data.value)
         , success: function (data) {
-            if (data.code === 200) {
-                form.val("form", {configid: data.data.configid});
-            } else {
-                layer.alert(data.message);
-            }
+            form.val("form", {configid: data.data.configid});
         }
     });
 });

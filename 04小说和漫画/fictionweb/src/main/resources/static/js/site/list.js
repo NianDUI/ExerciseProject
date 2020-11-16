@@ -16,6 +16,7 @@ const tableList = table.render({
     , where: {
         name: ""
     }
+    , headers: headers()
     , request: tableRequest
     , response: tableReponse
     , parseData: tableParseData

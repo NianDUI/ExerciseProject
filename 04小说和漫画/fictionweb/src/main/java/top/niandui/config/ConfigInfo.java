@@ -32,6 +32,8 @@ public class ConfigInfo {
     private String filePath;
     private String winFilePath;
     private String linuxFilePath;
+    // token
+    private String token;
 
 //    @Autowired
 //    public ConfigInfo(ServletContext servletContext) {

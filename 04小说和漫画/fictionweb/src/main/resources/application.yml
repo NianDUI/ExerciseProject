@@ -41,6 +41,7 @@ config-info:
   jquery-version: 3.5.1
   win-file-path: "D:"
   linux-file-path: /data
+  token: 'root'
 
 # spring配置
 spring:

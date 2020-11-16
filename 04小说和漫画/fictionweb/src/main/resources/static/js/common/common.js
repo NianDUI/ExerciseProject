@@ -36,6 +36,52 @@ function getBaseParams(key, end) {
     }
 }
 
+// ajax请求
+function ajax(options) {
+    console.log(options.headers);
+    if (options.headers == null) {
+        options.headers = headers();
+    } else {
+        options.headers.Token = getToken();
+    }
+    console.log(options.headers);
+    let success = options.success;
+    if (typeof success === "function") {
+        options.success = function (data) {
+            let successBefore = options.successBefore;
+            if (typeof successBefore === "function") {
+                successBefore(data);
+            }
+            if (data.code === 200) {
+                success(data);
+            } else {
+                layer.alert(data.message, {
+                    title: "错误信息"
+                });
+            }
+        }
+    }
+    $.ajax(options);
+}
+
+// 获取请求头
+function headers() {
+    return {"Token": getToken()};
+}
+
+// 获取token
+function getToken() {
+    let token = sessionStorage.getItem("token");
+    console.log(token);
+    if (token == null || token.length === 0) {
+        do {
+            token = prompt("请输入：");
+        } while (token.trim().length === 0)
+        sessionStorage.setItem("token", token);
+    }
+    return token;
+}
+
 /* 列表页面相关 */
 // 列表页面公用参数
 const tableRequest = {pageName: "pageNum", limitName: "pageSize"};
@@ -119,17 +165,13 @@ function show(url, title) {
 
 // 列表页面删除方法
 function del(id) {
-    $.ajax({
+    ajax({
         type: "get"
         , contentType: getBaseParams("contentType")
         , url: getBaseParams("deleteUrl", id)
         , success: function (data) {
-            if (data.code === 200) {
-                layer.msg("删除成功");
-                search();
-            } else {
-                layer.alert(data.message);
-            }
+            layer.msg("删除成功");
+            search();
         }
     });
 }

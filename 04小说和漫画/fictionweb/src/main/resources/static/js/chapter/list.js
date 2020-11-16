@@ -24,6 +24,7 @@ const tableList = table.render({
         name: ""
         , bookid: bookid
     }
+    , headers: headers()
     , request: tableRequest
     , response: tableReponse
     , parseData: tableParseData
@@ -54,17 +55,15 @@ table.on("tool(table)", function (obj) {
         show(getBaseParams("showUrl", data.chapterid), "查看")
     } else if (obj.event === "reacquire") {
         const index = layer.load(2);
-        $.ajax({
+        ajax({
             type: "get"
             , contentType: getBaseParams("contentType")
             , url: getBaseParams("reacquireSingleChapterUrl", data.chapterid)
-            , success: function (data) {
+            , successBefore: function (data) {
                 layer.close(index);
-                if (data.code == 200) {
-                    layer.msg("获取成功");
-                } else {
-                    layer.alert(data.message);
-                }
+            }
+            , success: function (data) {
+                layer.msg("获取成功");
             }
         });
     } else if (obj.event === "bookAdd") {
@@ -102,66 +101,50 @@ if (taskswitch !== 0) {
     }
 
     searchBtn.click(function () {
-        $.ajax({
+        ajax({
             type: "get"
             , contentType: getBaseParams("contentType")
             , url: getBaseParams("statusUrl", bookid)
             , success: function (data) {
-                if (data.code === 200) {
-                    if (data.data !== 0) {
-                        taskstatus = data.data;
-                        schedule();
-                    } else {
-                        cancel();
-                    }
+                if (data.data !== 0) {
+                    taskstatus = data.data;
+                    schedule();
                 } else {
-                    layer.alert(data.message);
+                    cancel();
                 }
             }
         });
     });
     stopGet.click(function () {
-        $.ajax({
+        ajax({
             type: "get"
             , contentType: getBaseParams("contentType")
             , url: getBaseParams("stopUrl", bookid)
             , success: function (data) {
-                if (data.code === 200) {
-                    layer.msg("停止获取");
-                    cancel();
-                } else {
-                    layer.alert(data.message);
-                }
+                layer.msg("停止获取");
+                cancel();
             }
         });
     });
     $(".reacquire").click(function () {
-        $.ajax({
+        ajax({
             type: "get"
             , contentType: getBaseParams("contentType")
             , url: getBaseParams("reacquireAllChapterUrl", bookid)
             , success: function (data) {
-                if (data.code === 200) {
-                    layer.msg("正在获取");
-                    schedule();
-                } else {
-                    layer.alert(data.message);
-                }
+                layer.msg("正在获取");
+                schedule();
             }
         });
     });
     $(".getFollowUp").click(function () {
-        $.ajax({
+        ajax({
             type: "get"
             , contentType: getBaseParams("contentType")
             , url: getBaseParams("getFollowUpChapterUrl", bookid)
             , success: function (data) {
-                if (data.code === 200) {
-                    layer.msg("正在获取");
-                    schedule();
-                } else {
-                    layer.alert(data.message);
-                }
+                layer.msg("正在获取");
+                schedule();
             }
         });
     });
@@ -174,19 +157,15 @@ if (taskswitch !== 0) {
             , area: [computeArea() + "px", "25px"]
         }, function (value, index, elem) {
             if (value.trim().length > 0) {
-                $.ajax({
+                ajax({
                     type: "post"
                     , contentType: getBaseParams("contentType")
                     , url: getBaseParams("getSpecifiedAndFollowUpChapterUrl")
                     , data: JSON.stringify({bookid: bookid, url: value})
                     , success: function (data) {
-                        if (data.code === 200) {
-                            layer.msg("正在获取");
-                            schedule();
-                            layer.close(index);
-                        } else {
-                            layer.alert(data.message);
-                        }
+                        layer.msg("正在获取");
+                        schedule();
+                        layer.close(index);
                     }
                 });
             } else {

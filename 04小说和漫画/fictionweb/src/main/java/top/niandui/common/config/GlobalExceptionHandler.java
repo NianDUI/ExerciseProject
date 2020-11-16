@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import top.niandui.common.expection.ReStateException;
+import top.niandui.common.expection.TokenCheckException;
 import top.niandui.common.model.ResponseData;
 import top.niandui.common.outher.StatusCode;
 
@@ -13,29 +15,29 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * @Title: ExceptionHandler.java
- * @description: 异常处理器
+ * @Title: GlobalExceptionHandler.java
+ * @description: 全局异常处理器
  * @time: 2020/4/2 11:52
  * @author: liyongda
  * @version: 1.0
  */
 @Slf4j
 @ControllerAdvice
-public class ExceptionHandler {
+public class GlobalExceptionHandler {
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @org.springframework.web.bind.annotation.ExceptionHandler({Exception.class})
+    @ExceptionHandler({Exception.class})
     public void exceptionHandler(Exception e, HttpServletResponse response) {
         log.error("系统异常：", e);
-        OutputStream os = null;
-        try {
+        try (OutputStream os = response.getOutputStream()) {
             response.reset();
             response.setContentType("application/json;charset=utf-8");
-            os = response.getOutputStream();
             ResponseData rd;
             if (e instanceof MethodArgumentNotValidException) {
                 rd = ResponseData.fail(StatusCode.PARAM_FORMAT_ERROR, ((MethodArgumentNotValidException) e).getBindingResult()
                         .getFieldError().getDefaultMessage());
+            } else if (e instanceof TokenCheckException) {
+                rd = ResponseData.fail(StatusCode.TOKEN_ERROR, e.getMessage());
             } else if (e instanceof ReStateException) {
                 rd = ResponseData.fail(StatusCode.RESTATE, e.getMessage());
             } else {
@@ -43,16 +45,7 @@ public class ExceptionHandler {
             }
             mapper.writeValue(os, rd);
         } catch (IOException ex) {
-            log.error("错误相应异常：", ex);
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    log.error(ex.toString());
-                }
-            }
+            log.error("错误响应异常：", ex);
         }
     }
 }
