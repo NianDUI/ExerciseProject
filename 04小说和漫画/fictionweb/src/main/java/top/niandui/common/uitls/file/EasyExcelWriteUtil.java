@@ -120,9 +120,8 @@ public class EasyExcelWriteUtil {
             write(getDownloadOS(response, fileName), sheets, classes, data);
         } catch (IOException e) {
             // 重置response
-            response.reset();
-            e.printStackTrace();
-            throw new RuntimeException("文件生成失败！");
+//            response.reset();
+            throw new RuntimeException("文件生成失败！", e);
         }
     }
 
