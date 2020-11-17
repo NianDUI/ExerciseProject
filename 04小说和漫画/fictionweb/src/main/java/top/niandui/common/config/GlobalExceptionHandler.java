@@ -1,7 +1,9 @@
 package top.niandui.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +15,7 @@ import top.niandui.common.outher.StatusCode;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * @Title: GlobalExceptionHandler.java
@@ -24,10 +27,17 @@ import java.io.OutputStream;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper json;
 
+    /**
+     * 全局异常处理
+     *
+     * @param response 响应流对象
+     * @param e        错误对象
+     */
     @ExceptionHandler({Exception.class})
-    public void exceptionHandler(Exception e, HttpServletResponse response) {
+    public void exceptionHandler(HttpServletResponse response, Exception e) {
         log.error("系统异常：", e);
         try (OutputStream os = response.getOutputStream()) {
             response.reset();
@@ -43,9 +53,35 @@ public class GlobalExceptionHandler {
             } else {
                 rd = ResponseData.fail(StatusCode.EXECUTE_FAIL, e.getMessage());
             }
-            mapper.writeValue(os, rd);
+            json.writeValue(os, rd);
         } catch (IOException ex) {
-            log.error("错误响应异常：", ex);
+            log.error("全局错误处理异常：", ex);
+        }
+    }
+
+    /**
+     * 全局Feign内部服务调用错误处理
+     *
+     * @param response 响应流
+     * @param e        Feign调用错误
+     */
+    @ExceptionHandler({FeignException.class})
+    public void feignExceptionHandler(HttpServletResponse response, FeignException e) {
+        response.setStatus(StatusCode.EXECUTE_FAIL);
+        response.setContentType("application/json;charset=utf-8");
+        ResponseData rd;
+        try {
+            Map errInfo = json.readValue(e.contentUTF8(), Map.class);
+            rd = ResponseData.fail((int) errInfo.get("code"), (String) errInfo.get("message"));
+            log.error("系统异常: " + errInfo.get("message"), e);
+        } catch (Exception ex) {
+            rd = ResponseData.fail(StatusCode.EXECUTE_FAIL, e.getMessage());
+            log.error("系统异常: ", e);
+        }
+        try (OutputStream os = response.getOutputStream()) {
+            json.writeValue(os, rd);
+        } catch (IOException ex) {
+            log.error("Feign错误处理异常", ex);
         }
     }
 }
