@@ -33,7 +33,7 @@ public class WebMvcConfig {
             public void addInterceptors(InterceptorRegistry registry) {
                 // 添加拦截器
                 registry.addInterceptor(tokenInterceptor).addPathPatterns("/api/**")
-                        .excludePathPatterns("/api/*download*/**", "/api/**/*download*/**");
+                        .excludePathPatterns("/api/*download*/**", "/api/**/*download*/**", "/api/file/read");
             }
         };
     }
