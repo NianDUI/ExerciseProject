@@ -98,7 +98,7 @@ public class EasyExcelReadUtil {
                 // 校验错误信息
                 Integer rowIndex = context.readRowHolder().getRowIndex() + 1;
                 String sheetName = context.readSheetHolder().getSheetName();
-                StringBuilder message = new StringBuilder("\"" + sheetName + "\"工作表-第" + rowIndex + "行：");
+                StringBuilder message = new StringBuilder("'" + sheetName + "'工作表-第" + rowIndex + "行：");
                 for (ConstraintViolation<T> violation : violationSet) {
                     message.append(violation.getMessage()).append("、");
                 }
