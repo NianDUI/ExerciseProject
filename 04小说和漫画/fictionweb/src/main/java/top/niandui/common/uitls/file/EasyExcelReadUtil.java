@@ -98,11 +98,11 @@ public class EasyExcelReadUtil {
                 // 校验错误信息
                 Integer rowIndex = context.readRowHolder().getRowIndex() + 1;
                 String sheetName = context.readSheetHolder().getSheetName();
-                String message = "\"" + sheetName + "\"工作表-第" + rowIndex + "行：";
+                StringBuilder message = new StringBuilder("\"" + sheetName + "\"工作表-第" + rowIndex + "行：");
                 for (ConstraintViolation<T> violation : violationSet) {
-                    message += violation.getMessage() + "、";
+                    message.append(violation.getMessage()).append("、");
                 }
-                throw new RuntimeException(message);
+                throw new RuntimeException(message.substring(0, message.length() - 1));
             }
             list.add(data);
             // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
