@@ -14,6 +14,7 @@ import java.util.Base64;
 
 /**
  * RSA基于因子分解的非对称称加密。支持公钥加密、私钥解密；支持私钥加密、公钥解密；
+ * 参考文档：https://blog.csdn.net/leifchen90/article/details/84749579
  *
  * @author liyongda
  * @version 1.0
