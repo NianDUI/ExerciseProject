@@ -22,64 +22,64 @@ import java.util.Base64;
 public class RSAUtil {
     // 加密算法
     private static final String RSA = "RSA";
-    // 经过java.util.Base64.getEncoder()处理后的公钥规范
+    // 经过java.util.Base64.getEncoder()处理后的公钥编码密钥
     private static final String RSA_PUBLIC_KEY_SPEC_BASE64 = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJg2Zsf4SrrGAJMSrfsjNJqyk9KxXNqcZUGttaIp/rsBJYyXidXR9r5NbYZ5ahqmNjSlWWxYmMfkPpe5nUFQyxsCAwEAAQ==";
-    // 经过java.util.Base64.getEncoder()处理后的私钥规范
+    // 经过java.util.Base64.getEncoder()处理后的私钥编码密钥
     private static final String RSA_PRIVATE_KEY_SPEC_BASE64 = "MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAmDZmx/hKusYAkxKt+yM0mrKT0rFc2pxlQa21oin+uwEljJeJ1dH2vk1thnlqGqY2NKVZbFiYx+Q+l7mdQVDLGwIDAQABAkBjrv0Q6SLHvvSRXSJj3mKNDXaR/WX6JYKKyOCzGx2gCdCbEm1H7E7rc9nsCf2MAinF70OtBYor8XksHQN3v16BAiEA8HJAEZ6nQo3CM9L6q0KAph3A3C0TuP1blGDvM0V2xEkCIQCiDwPFvbfniMFmROmGpWC+qQrkPez8IEJMzJWL4cgMQwIgeRN+8aBrZxcNCJ2fvidhssRevkAwo0FpISFisfWzpYkCIQCeHfY5TgUMI/NG3D/ZPqxo+jgFP6Jk0Pi/Q/E5XR65TwIhAMqqFLEVYi761Kj8Jz8Mfobl6l74B3YcDIHbxHtq65xj";
 
     private RSAUtil() {
     }
 
     /*************************公钥相关**************************/
-    // 公钥加密，使用默认公钥规范
+    // 公钥加密，使用默认公钥编码密钥
     public static String publicKeyEncrypt(String source) {
         return publicKeyEncrypt(source, RSA_PUBLIC_KEY_SPEC_BASE64);
     }
 
-    // 公钥加密，使用指定公钥规范
-    public static String publicKeyEncrypt(String source, String rsaPublicKeyBase64) {
+    // 公钥加密，使用指定公钥编码密钥
+    public static String publicKeyEncrypt(String source, String rsaPublicKeySpecBase64) {
         Base64.Decoder decoder = Base64.getDecoder();
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(rsaPublicKeyBase64));
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(rsaPublicKeySpecBase64));
         byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 1, keySpec, source.getBytes());
         return Base64.getEncoder().encodeToString(result);
     }
 
-    // 公钥解密，使用默认公钥规范
+    // 公钥解密，使用默认公钥编码密钥
     public static String publicKeyDecrypt(String source) {
         return publicKeyDecrypt(source, RSA_PUBLIC_KEY_SPEC_BASE64);
     }
 
-    // 公钥解密，使用指定公钥规范
-    public static String publicKeyDecrypt(String source, String rsaPublicKeyBase64) {
+    // 公钥解密，使用指定公钥编码密钥
+    public static String publicKeyDecrypt(String source, String rsaPublicKeySpecBase64) {
         Base64.Decoder decoder = Base64.getDecoder();
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(rsaPublicKeyBase64));
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(rsaPublicKeySpecBase64));
         byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 1, keySpec, decoder.decode(source));
         return new String(result);
     }
 
     /*************************私钥相关**************************/
-    // 私钥加密，使用默认私钥规范
+    // 私钥加密，使用默认私钥编码密钥
     public static String privateKeyEncrypt(String source) {
         return privateKeyEncrypt(source, RSA_PRIVATE_KEY_SPEC_BASE64);
     }
 
-    // 私钥加密，使用指定私钥规范
-    public static String privateKeyEncrypt(String source, String rsaPrivateKeyBase64) {
+    // 私钥加密，使用指定私钥编码密钥
+    public static String privateKeyEncrypt(String source, String rsaPrivateKeySpecBase64) {
         Base64.Decoder decoder = Base64.getDecoder();
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(rsaPrivateKeyBase64));
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(rsaPrivateKeySpecBase64));
         byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 2, keySpec, source.getBytes());
         return Base64.getEncoder().encodeToString(result);
     }
 
-    // 私钥解密，使用默认私钥规范
+    // 私钥解密，使用默认私钥编码密钥
     public static String privateKeyDecrypt(String source) {
         return privateKeyDecrypt(source, RSA_PRIVATE_KEY_SPEC_BASE64);
     }
 
-    // 私钥解密，使用指定私钥规范
-    public static String privateKeyDecrypt(String source, String rsaPrivateKeyBase64) {
+    // 私钥解密，使用指定私钥编码密钥
+    public static String privateKeyDecrypt(String source, String rsaPrivateKeySpecBase64) {
         Base64.Decoder decoder = Base64.getDecoder();
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(rsaPrivateKeyBase64));
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(rsaPrivateKeySpecBase64));
         byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 2, keySpec, decoder.decode(source));
         return new String(result);
     }
@@ -121,9 +121,9 @@ public class RSAUtil {
             keyPairGenerator.initialize(512);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
             RSAPublicKey rsaPublicKey = (RSAPublicKey) keyPair.getPublic();
-            System.out.println("经过java.util.Base64.getEncoder()处理后的公钥规范 = " + Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
+            System.out.println("经过java.util.Base64.getEncoder()处理后的公钥编码密钥 = " + Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
             RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyPair.getPrivate();
-            System.out.println("经过java.util.Base64.getEncoder()处理后的私钥规范 = " + Base64.getEncoder().encodeToString(rsaPrivateKey.getEncoded()));
+            System.out.println("经过java.util.Base64.getEncoder()处理后的私钥编码密钥 = " + Base64.getEncoder().encodeToString(rsaPrivateKey.getEncoded()));
             return keyPair;
         } catch (Exception e) {
             throw new RuntimeException("密钥对生成错误！", e);
