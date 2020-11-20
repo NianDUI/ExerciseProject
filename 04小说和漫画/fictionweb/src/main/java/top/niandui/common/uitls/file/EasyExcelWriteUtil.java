@@ -48,7 +48,7 @@ public class EasyExcelWriteUtil {
      * @param data     写出数据的list对象
      * @param <T>      泛型
      */
-    public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, List<T> data) {
+    public static <T extends IBaseExcel<T>> void write(HttpServletResponse response, String fileName, List<T> data) {
         write(response, fileName, null, data);
     }
 
@@ -61,7 +61,7 @@ public class EasyExcelWriteUtil {
      * @param data      写出数据的list对象
      * @param <T>       泛型
      */
-    public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, Class<T> dataClass, List<T> data) {
+    public static <T extends IBaseExcel<T>> void write(HttpServletResponse response, String fileName, Class<T> dataClass, List<T> data) {
         String[] sheets = {"数据"};
         write(response, fileName, sheets, new Class[]{dataClass}, Collections.singletonMap(sheets[0], data));
     }
@@ -73,7 +73,7 @@ public class EasyExcelWriteUtil {
      * @param data 写出数据的list对象
      * @param <T>  泛型
      */
-    public static <T extends IBaseExcel> void write(OutputStream os, List<T> data) {
+    public static <T extends IBaseExcel<T>> void write(OutputStream os, List<T> data) {
         write(os, null, data);
     }
 
@@ -85,7 +85,7 @@ public class EasyExcelWriteUtil {
      * @param data      写出数据的list对象
      * @param <T>       泛型
      */
-    public static <T extends IBaseExcel> void write(OutputStream os, Class<T> dataClass, List<T> data) {
+    public static <T extends IBaseExcel<T>> void write(OutputStream os, Class<T> dataClass, List<T> data) {
         String[] sheets = {"数据"};
         write(os, sheets, new Class[]{dataClass}, Collections.singletonMap(sheets[0], data));
     }
@@ -99,7 +99,7 @@ public class EasyExcelWriteUtil {
      * @param data     写到Excel的Sheet名称和数据列表映射Map
      * @param <T>      IBaseExcel及其子类
      */
-    public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, String[] sheets, Map<String, List<T>> data) {
+    public static <T extends IBaseExcel<T>> void write(HttpServletResponse response, String fileName, String[] sheets, Map<String, List<T>> data) {
         write(response, fileName, sheets, null, data);
     }
 
@@ -113,7 +113,7 @@ public class EasyExcelWriteUtil {
      * @param data     写到Excel的Sheet名称和数据列表映射Map
      * @param <T>      IBaseExcel及其子类
      */
-    public static <T extends IBaseExcel> void write(HttpServletResponse response, String fileName, String[] sheets, Class<T>[] classes, Map<String, List<T>> data) {
+    public static <T extends IBaseExcel<T>> void write(HttpServletResponse response, String fileName, String[] sheets, Class<T>[] classes, Map<String, List<T>> data) {
         try {
             int index = fileName.lastIndexOf(".");
             fileName = (index > 0 ? fileName.substring(0, index) : fileName) + ".xlsx";
@@ -132,7 +132,7 @@ public class EasyExcelWriteUtil {
      * @param data   写到Excel的Sheet名称和数据列表映射Map
      * @param <T>    IBaseExcel及其子类
      */
-    public static <T extends IBaseExcel> void write(OutputStream os, String[] sheets, Map<String, List<T>> data) {
+    public static <T extends IBaseExcel<T>> void write(OutputStream os, String[] sheets, Map<String, List<T>> data) {
         write(os, sheets, null, data);
     }
 
@@ -144,7 +144,7 @@ public class EasyExcelWriteUtil {
      * @param data    写到Excel的Sheet名称和数据列表映射Map
      * @param <T>     IBaseExcel及其子类
      */
-    public static <T extends IBaseExcel> void write(OutputStream os, String[] sheets, Class<T>[] classes, Map<String, List<T>> data) {
+    public static <T extends IBaseExcel<T>> void write(OutputStream os, String[] sheets, Class<T>[] classes, Map<String, List<T>> data) {
         if (sheets != null && classes != null && sheets.length != classes.length) {
             throw new RuntimeException("sheets和classes长度不相等请检查");
         }
@@ -190,7 +190,7 @@ public class EasyExcelWriteUtil {
     }
 
     // 定制写处理器, 自定义的公共策略，设置自定义头部样式 和 自适应列宽
-    public static class CustomizeWriteHandler implements IBaseExcel {
+    public static class CustomizeWriteHandler implements IBaseExcel<CustomizeWriteHandler> {
         // 最大列宽度：单位：一个字符的1/256；最大256个字符宽度。
         private static final int MAX_COLUMN_WIDTH = 256 * 25; // 255 * 256;
         // 头部写单元格样式
