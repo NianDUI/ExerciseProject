@@ -8,11 +8,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * @Title: AESUtil.java
- * @description: AES加密
- * @time: 2020/6/22 16:55
- * @author: liyongda
- * @version: 1.0
+ * AES加密
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/6/22 16:55
  */
 public class AESUtil {
     // 加密方式

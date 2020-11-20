@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 /**
- * @Title: Algorithm01.java
- * @description: 算法01：二分搜索、杨辉三角
- * @time: 2020/10/27 10:12
- * @author: liyongda
- * @version: 1.0
+ * 算法01：二分搜索、杨辉三角
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/10/27 10:12
  */
 public class Algorithm01 {
 

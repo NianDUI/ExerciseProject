@@ -14,11 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
- * @Title: SSHJTest.java
- * @description: SSHJTest
- * @time: 2020/9/28 11:22
- * @author: liyongda
- * @version: 1.0
+ * SSHJTest
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/9/28 11:22
  */
 @Slf4j
 public class SSHJTest {
@@ -27,6 +27,7 @@ public class SSHJTest {
         sshj();
     }
 
+    // 设置日志显示等级
     public static void setLogLevel() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger root = context.getLogger("root");

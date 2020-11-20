@@ -33,11 +33,11 @@ import static top.niandui.common.uitls.MethodUtil.createBatch;
 import static top.niandui.common.uitls.file.DownloadUtil.getDownloadOS;
 
 /**
- * @Title: EasyExcelWriteUtil.java
- * @description: EasyExcelWriteUtil
- * @time: 2020/1/15 9:46
- * @author: liyongda
- * @version: 1.0
+ * 阿里EasyExcel写工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/1/15 9:46
  */
 public class EasyExcelWriteUtil {
     /**
