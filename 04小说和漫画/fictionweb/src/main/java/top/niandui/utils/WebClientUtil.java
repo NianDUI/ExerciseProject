@@ -147,8 +147,7 @@ public class WebClientUtil {
             log.info("获取结束...");
         } catch (Exception e) {
             log.info("获取失败...");
-            log.error("获取失败...");
-            log.error(e.toString());
+            log.error("获取失败...", e);
 //            throw new RuntimeException(e);
         } finally {
             // 更新任务状态
@@ -204,8 +203,7 @@ public class WebClientUtil {
             log.info("获取结束...");
         } catch (Exception e) {
             log.info("获取失败...");
-            log.error(e.toString());
-            throw new ReStateException("获取失败");
+            throw new ReStateException("获取失败", e);
         } finally {
             // 更新任务状态
             updateBookTaskStatus(chapter.getBookid(), 0);
