@@ -6,12 +6,8 @@ import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -107,7 +103,7 @@ public class RedisByteUtil {
 			if (key.length == 1) {
 				redisTemplateByte.delete(key[0]);
 			} else {
-				redisTemplateByte.delete(CollectionUtils.arrayToList(key));
+				redisTemplateByte.delete(Arrays.asList(key));
 			}
 		}
 	}
