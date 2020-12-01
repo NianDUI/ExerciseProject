@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Title: SwaggerConfig.java
- * @description: swagger配置
- * @time: 2020/3/22 16:02
- * @author: liyongda
- * @version: 1.0
+ * swagger配置
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/3/22 16:02
  */
 @Configuration
 @EnableSwagger2
@@ -72,7 +72,8 @@ public class SwaggerConfig {
 
     /**
      * Api信息
-     * @return
+     *
+     * @return Api信息
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()

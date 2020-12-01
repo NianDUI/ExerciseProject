@@ -1,11 +1,11 @@
 package top.niandui.common.expection;
 
 /**
- * @Title: ReStateException.java
- * @description: 状态错误
- * @time: 2020/4/7 16:25
- * @author: liyongda
- * @version: 1.0
+ * 状态错误异常
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/4/7 16:25
  */
 public class ReStateException extends RuntimeException {
 

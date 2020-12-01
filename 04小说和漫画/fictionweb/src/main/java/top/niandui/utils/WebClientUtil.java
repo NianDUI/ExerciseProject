@@ -29,11 +29,11 @@ import static top.niandui.utils.HandleUtil.getIsEndHref;
 import static top.niandui.utils.TaskStateUtil.*;
 
 /**
- * @Title: WebClientUtil.java
- * @description: WebClientUtil
- * @time: 2020/1/17 11:00
- * @author: liyongda
- * @version: 1.0
+ * Web客户端工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/1/17 11:00
  */
 @Slf4j
 @Component

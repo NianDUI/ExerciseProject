@@ -14,11 +14,11 @@ import static top.niandui.config.PublicConstant.PATH_MAPPING_M_P;
 import static top.niandui.config.PublicConstant.PATH_MAPPING_P_M;
 
 /**
- * @Title: PathUtil.java
- * @description: 路径工具
- * @time: 2020/9/17 16:29
- * @author: liyongda
- * @version: 1.0
+ * 路径工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/9/17 16:29
  */
 public class PathUtil {
     // 路径保存时间

@@ -11,11 +11,11 @@ import static top.niandui.config.PublicBean.redisUtil;
 import static top.niandui.config.PublicConstant.BOOK_TASK_STATUS;
 
 /**
- * @Title: TaskStateUtil.java
- * @description: 任务状态工具
- * @time: 2020/8/1 16:16
- * @author: liyongda
- * @version: 1.0
+ * 任务状态工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/8/1 16:16
  */
 public class TaskStateUtil {
     // 任务状态映射

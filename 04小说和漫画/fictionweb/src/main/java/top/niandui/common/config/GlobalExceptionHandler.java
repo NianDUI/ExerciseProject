@@ -18,11 +18,11 @@ import java.io.OutputStream;
 import java.util.Map;
 
 /**
- * @Title: GlobalExceptionHandler.java
- * @description: 全局异常处理器
- * @time: 2020/4/2 11:52
- * @author: liyongda
- * @version: 1.0
+ * 全局异常处理器
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/4/2 11:52
  */
 @Slf4j
 @ControllerAdvice

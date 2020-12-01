@@ -8,11 +8,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * @Title: HandleUtils.java
- * @description: 处理工具
- * @time: 2020/4/6 18:30
- * @author: liyongda
- * @version: 1.0
+ * 处理工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/4/6 18:30
  */
 @Slf4j
 public class HandleUtil {
