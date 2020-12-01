@@ -8,11 +8,11 @@ import top.niandui.common.base.BaseModel;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @Title: IdNameModel.java
- * @description: 检查重名公共model
- * @time: 2020/3/22 17:28
- * @author: liyongda
- * @version: 1.0
+ * 检查重名公共model
+ *
+ * @author liyongda
+ * @version 1.0
+ * @time 2020/3/22 17:28
  */
 @Data
 @ApiModel(description = "检查重名公共model")

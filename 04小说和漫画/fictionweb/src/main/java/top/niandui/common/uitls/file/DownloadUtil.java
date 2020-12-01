@@ -11,11 +11,11 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 
 /**
- * @Title: DownloadUtils.java
- * @description: 下载工具
- * @time: 2020/5/18 14:26
- * @author: liyongda
- * @version: 1.0
+ * 下载工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/5/18 14:26
  */
 @Slf4j
 public class DownloadUtil {
@@ -55,21 +55,18 @@ public class DownloadUtil {
             response.setHeader("Content-Length", String.valueOf(file.length()));
             Files.copy(file.toPath(), os);
         } catch (UnsupportedEncodingException e) {
-            log.error(e.toString());
-            throw new RuntimeException("下载资源名称转码异常");
+            throw new RuntimeException("下载资源名称转码异常", e);
         } catch (FileNotFoundException e) {
-            log.error(e.toString());
-            throw new RuntimeException("下载资源不存在");
+            throw new RuntimeException("下载资源不存在", e);
         } catch (IOException e) {
-            log.error(e.toString());
-            throw new RuntimeException("下载资源流异常");
+            throw new RuntimeException("下载资源流异常", e);
         }
     }
 
     /**
      * 下载文件(支持断点续传)
      *
-     * @param request HttpServletRequest对象
+     * @param request  HttpServletRequest对象
      * @param response HttpServletResponse对象
      * @param filePath 文件路径
      */
@@ -95,21 +92,16 @@ public class DownloadUtil {
                 if (strRange.length == 2) {
                     end = Long.parseLong(strRange[1].trim());
                 }
-                String contentRange = new StringBuffer("bytes ").append(start).append("-").append(end)
-                        .append("/").append(length).toString();
-                response.setHeader("Content-Range", contentRange);
+                response.setHeader("Content-Range", "bytes " + start + "-" + end + "/" + length);
             }
             response.setHeader("Content-Length", String.valueOf(end - start + 1));
             long num = StreamUtils.copyRange(is, os, start, end);
             response.setHeader("Content-Length", String.valueOf(num));
+        } catch (ClientAbortException e) {
+            // 浏览器点击取消
+            log.info("下载取消：" + filePath);
         } catch (Exception e) {
-            if (e instanceof ClientAbortException) {
-                // 浏览器点击取消
-                log.info("下载取消：" + filePath);
-            } else {
-                log.error(e.toString());
-                throw new RuntimeException("下载失败：" + filePath);
-            }
+            throw new RuntimeException("下载失败：" + filePath, e);
         }
     }
 }

@@ -13,11 +13,11 @@ import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @Title: FTPUtil.java
- * @description: FTP工具
- * @time: 2020/6/4 14:15
- * @author: liyongda
- * @version: 1.0
+ * FTP工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/6/4 14:15
  */
 public class FTPUtil {
 

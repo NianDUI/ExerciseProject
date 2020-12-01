@@ -4,13 +4,13 @@ import org.springframework.util.StringUtils;
 import top.niandui.common.model.PageOrder;
 
 /**
- * @Title: BaseServiceImpl.java
- * @description: ServiceImpl基类
- * @time: 2020/3/22 18:09
- * @author: liyongda
- * @version: 1.0
+ * ServiceImpl基类
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/3/22 18:09
  */
-public class BaseServiceImpl {
+public abstract class BaseServiceImpl {
 
     /**
      * 格式化排序参数

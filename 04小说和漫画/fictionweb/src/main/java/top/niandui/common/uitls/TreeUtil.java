@@ -5,6 +5,7 @@ import top.niandui.common.base.IBaseTree;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 把一个List<? extend IBaseTree>集合转为树形式
@@ -83,7 +84,7 @@ public class TreeUtil {
         Iterator<T> it = list.iterator();
         while (it.hasNext()) {
             T n = it.next();
-            if (n.getTreeParentId().equals(t.getTreeId())) {
+            if (Objects.equals(n.getTreeParentId(), t.getTreeId())) {
                 tlist.add(n);
                 // 匹配上则去除,优化性能
                 it.remove();
@@ -105,7 +106,7 @@ public class TreeUtil {
         Iterator<T> it = list.iterator();
         while (it.hasNext()) {
             T n = it.next();
-            if (n.getTreeParentId().equals(t.getTreeId())) {
+            if (Objects.equals(n.getTreeParentId(), t.getTreeId())) {
                 return true;
             }
         }

@@ -5,20 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * 删除文件
+ *
  * @author liangj
  * @version 1.0
- * @Title DelFileUtil.java
- * @description 删除文件
- * @time 2019-3-27 上午10:34:46
+ * @date 2019/3/27 10:34
  */
 public class DelFileUtil {
     /**
-     * @param folderPath
-     * @return void
-     * @Title delFolder
-     * @Description 删除文件夹
-     * @author liangj
-     * @date 2019-3-27 上午10:35:32
+     * 删除文件夹
+     *
+     * @param folderPath 文件夹路径
      */
     public static void delFolder(String folderPath) {
         try {
@@ -31,12 +28,10 @@ public class DelFileUtil {
     }
 
     /**
-     * @param path
-     * @return boolean
-     * @Title delAllFile
-     * @Description 删除指定文件夹下的所有文件
-     * @author liangj
-     * @date 2019-3-27 上午10:35:57
+     * 删除指定文件夹下的所有文件
+     *
+     * @param path 文件夹路径
+     * @return 是否删除成功
      */
     public static boolean delAllFile(String path) {
         boolean flag = false;
@@ -48,7 +43,7 @@ public class DelFileUtil {
             return flag;
         }
         String[] tempList = file.list();
-        File temp = null;
+        File temp;
         for (int i = 0; i < tempList.length; i++) {
             if (path.endsWith(File.separator)) {
                 temp = new File(path + tempList[i]);
@@ -67,15 +62,13 @@ public class DelFileUtil {
         return flag;
     }
 
-    /*
-     * @title deleteFileDateNum
-     * @description 删除指定天数前的文件
-     * @param [path, dateNum]
-     * @return void
-     * @author huangwx
-     * @date 2020/5/26 17:15
+    /**
+     * 删除文件夹下指定天数前的文件
+     *
+     * @param path    文件夹路径
+     * @param dateNum 天数
      */
-    public static void deleteFileDateNum(String path, int dateNum) throws Exception {
+    public static void deleteFileDateNum(String path, int dateNum) {
         File file = new File(path);
         if (!file.exists()) {
             file.mkdir();
@@ -101,7 +94,7 @@ public class DelFileUtil {
     /**
      * 递归算法，删除非空目录
      *
-     * @param file
+     * @param file 文件对象
      */
     public static void deleteDir(File file) {
         if (file.isFile()) {//表示该文件不是文件夹

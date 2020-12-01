@@ -8,18 +8,13 @@ import java.io.Reader;
 import java.util.Properties;
 
 /**
+ * 解析配置文件
+ *
  * @author huangwx
  * @version 1.0
- * @title PropertiesUtils.java
- * @description 解析配置文件
- * @time 2019/12/13 14:40
+ * @date 2019/12/13 14:40
  */
 public class PropertiesUtil {
-    /**
-     * @description 解析yml
-     * @author huangwx
-     * @date 2019/12/13 14:25
-     */
     /**
      * 获取yaml文件的Properties对象
      *

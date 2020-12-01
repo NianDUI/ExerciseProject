@@ -4,11 +4,11 @@ import ch.qos.logback.core.PropertyDefinerBase;
 import org.springframework.boot.system.ApplicationHome;
 
 /**
- * @Title: LogInfo.java
- * @description: 获取log信息
- * @time: 2020/3/22 17:04
- * @author: liyongda
- * @version: 1.0
+ * 获取log所需信息
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/3/22 17:04
  */
 public class GetInfo extends PropertyDefinerBase {
     public static final String serviceName;

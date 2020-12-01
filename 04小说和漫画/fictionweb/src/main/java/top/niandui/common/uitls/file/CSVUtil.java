@@ -9,27 +9,26 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * @Title: CSVUtils.java
- * @description: csv工具
- * @time: 2020/3/6 14:47
- * @author: liyongda
- * @version: 1.0
+ * csv工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @time 2020/3/6 14:47
  */
 public class CSVUtil {
-    // 每隔30条存储数据库，然后清理list ，方便内存回收
+    // 每隔BATCH_COUNT条存储数据库，然后清理list ，方便内存回收
     private static final int BATCH_COUNT = 2000;
 
     /**
      * 根据标题读取CSV
      *
-     * @param is        文件输入流
-     * @param headerMap 头部字段映射：中文映射字段名
-     * @param callback  回调方法，用于读取数据的保存
+     * @param is          文件输入流
+     * @param headerMap   头部字段映射：中文映射字段名
+     * @param callback    回调方法，用于读取数据的保存
+     * @param charsetName 文件编码格式
      */
-    public static void read(InputStream is, Map<String, String> headerMap, Consumer<List<Map<String, String>>> callback) {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(is, "GBK"));
+    public static void read(InputStream is, Map<String, String> headerMap, Consumer<List<Map<String, String>>> callback, String charsetName) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, charsetName))) {
             // 获取头部信息
             String line = br.readLine();
             String[] header = line.split(",");
@@ -64,15 +63,7 @@ public class CSVUtil {
                 callback.accept(list);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            throw new RuntimeException("读取文件失败", e);
         }
     }
 
@@ -84,9 +75,7 @@ public class CSVUtil {
      * @return 读取的所有信息，一行为一条
      */
     public static List<String> readAllLine(String filepath, String charsetName) {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), charsetName));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), charsetName))) {
             // 获取数据信息
             String line;
             List<String> list = new ArrayList<>();
@@ -99,16 +88,7 @@ public class CSVUtil {
             }
             return list;
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("读取文件失败");
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            throw new RuntimeException("读取文件失败", e);
         }
     }
 }

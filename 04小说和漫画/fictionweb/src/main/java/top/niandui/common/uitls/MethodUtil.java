@@ -25,11 +25,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * @Title: MethodUtils.java
- * @description: 工具
- * @time: 2020/3/25 9:47
- * @author: liyongda
- * @version: 1.0
+ * 方法工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/3/25 9:47
  */
 @Slf4j
 public class MethodUtil {

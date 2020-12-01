@@ -16,11 +16,11 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
+ * ZIP压缩工具类
+ *
  * @author liyongda
  * @version 1.0
- * @title ZipUtil.java
- * @description 压缩工具类
- * @time 2020/6/22 10:24
+ * @date 2020/6/22 10:24
  */
 @Slf4j
 public class ZipUtil {

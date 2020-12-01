@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 
 /**
- * @Title: FileUtil.java
- * @description: 文件工具
- * @time: 2020/6/19 15:22
- * @author: liyongda
- * @version: 1.0
+ * 文件工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/6/19 15:22
  */
 @Slf4j
 public class FileUtil {
@@ -20,7 +20,7 @@ public class FileUtil {
     public static final long TB = GB * 1024;
     public static final long PB = TB * 1024;
     public static final long EB = PB * 1024;
-    public static final long ZB = EB * 1024;
+    public static final long ZB = Long.MAX_VALUE; // EB * 1024; //数字溢出
 
     /**
      * 获取文件编码格式

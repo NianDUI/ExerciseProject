@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * @Title: IBaseExcel.java
- * @description: Excel读写实体类基本接口
- * @time: 2020/1/21 16:20
- * @author: liyongda
- * @version: 1.0
+ * Excel读写实体类基本接口
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/1/21 16:20
  */
 public interface IBaseExcel<T extends IBaseExcel<T>> extends SheetWriteHandler, RowWriteHandler, CellWriteHandler, NotRepeatExecutor {
 

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @Title: GetIp.java
- * @description: 获取本机ip
- * @time: 2020/3/22 17:59
- * @author: liyongda
- * @version: 1.0
+ * 获取本机ip
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/3/22 17:59
  */
 public class GetIp {
 
@@ -91,7 +91,7 @@ public class GetIp {
      */
     public static Optional<Inet4Address> getLocalIp4Address() throws SocketException {
         final List<Inet4Address> ipByNi = getLocalIp4AddressFromNetworkInterface();
-        if (ipByNi.isEmpty() || ipByNi.size() > 1) {
+        if (ipByNi.size() != 1) {
             final Optional<Inet4Address> ipBySocketOpt = getIpBySocket();
             if (ipBySocketOpt.isPresent()) {
                 return ipBySocketOpt;

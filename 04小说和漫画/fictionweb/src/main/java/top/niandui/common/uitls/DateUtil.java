@@ -4,11 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @Title: DateUtil.java
- * @description: 日期工具
- * @time: 2020/9/9 16:48
- * @author: liyongda
- * @version: 1.0
+ * 日期工具
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/9/9 16:48
  */
 public class DateUtil {
     // 日期格式化器：yyyy-MM-dd HH:mm:ss

@@ -8,11 +8,11 @@ import top.niandui.common.base.BaseModel;
 import java.util.List;
 
 /**
- * @Title: PageList.java
- * @description: 返回分页数据公共类
- * @time: 2020/3/22 18:32
- * @author: liyongda
- * @version: 1.0
+ * 返回分页数据公共类
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2020/3/22 18:32
  */
 @Data
 @ApiModel(description = "返回分页数据公共类")
