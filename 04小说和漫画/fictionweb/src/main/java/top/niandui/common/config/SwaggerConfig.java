@@ -37,9 +37,9 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("top.niandui.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                // 添加全局Authorization
-//                .securitySchemes(securitySchemes())
-//                .securityContexts(securityContexts())
+                // 添加全局Token
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts())
                 // 时间转字符串
                 .directModelSubstitute(Timestamp.class, String.class)
                 .directModelSubstitute(Date.class, String.class);
@@ -47,7 +47,7 @@ public class SwaggerConfig {
 
     private List<ApiKey> securitySchemes() {
         List<ApiKey> apiKeyList = new ArrayList();
-        apiKeyList.add(new ApiKey("令牌", "Authorization", "header"));
+        apiKeyList.add(new ApiKey("令牌", "Token", "header"));
         return apiKeyList;
     }
 
@@ -66,7 +66,7 @@ public class SwaggerConfig {
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         List<SecurityReference> securityReferences = new ArrayList<>();
-        securityReferences.add(new SecurityReference("Authorization", authorizationScopes));
+        securityReferences.add(new SecurityReference("Token", authorizationScopes));
         return securityReferences;
     }
 

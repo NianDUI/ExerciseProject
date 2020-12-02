@@ -3,6 +3,7 @@ package top.niandui.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import top.niandui.common.base.IBaseDao;
+import top.niandui.common.model.IdNameModel;
 import top.niandui.model.Book;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.Map;
  */
 @Repository
 public interface IBookDao<T> extends IBaseDao<T> {
+    // 有条件的查询下拉
+    List<IdNameModel<Long>> option(Map params);
+
     // 更新任务状态
     int updateTaskstatus(Long bookid, Integer taskstatus);
 

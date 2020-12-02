@@ -64,6 +64,11 @@
             "bookid" AS "id",
             "name" AS "name"
         FROM "book"
+        <where>
+            <if test="taskswitch != null">
+                AND "taskswitch" = #{taskswitch}
+            </if>
+        </where>
     </select>
 
     <!-- 查询所有书籍列表 -->
