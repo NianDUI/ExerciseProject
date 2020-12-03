@@ -33,9 +33,9 @@ public class GetInfo extends PropertyDefinerBase {
     @Override
     public String getPropertyValue() {
         i++;
-        if (i == 1) {
+        if (i % 3 == 1) {
             return LOG_DIR;
-        } else if (i == 2) {
+        } else if (i % 3 == 2) {
             return SERVICE_IP;
         } else {
             return SERVICE_NAME;
