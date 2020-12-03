@@ -9,10 +9,20 @@ server:
 
 #    context-path: /v1.0
 
-# 忽略swagger赋值错误
-logging:
-  level:
-    io.swagger.models.parameters.AbstractSerializableParameter: error
+# Knife4j配置
+knife4j:
+  # 开启Knife4j提供的增强
+  enable: true
+  # 前端Ui的个性化配置属性
+  setting:
+    # 是否显示Footer(页脚)
+    enable-footer: false
+    # 重命名SwaggerModel名称
+    swagger_model_name: 实体类列表
+    # 开启自定义主页内容
+    enable_home_custom: true
+    # 主页内容Markdown文件路径
+    home_custom_location: classpath:markdown/README.md
 
 # mybatis配置
 mybatis:
@@ -45,6 +55,8 @@ config-info:
 
 # spring配置
 spring:
+  application:
+    name: fictionweb
   servlet:
     multipart:
       # 单个文件上传最大值
