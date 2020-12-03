@@ -1,5 +1,6 @@
 package top.niandui.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -28,25 +29,26 @@ import java.util.List;
 @RestController
 @Api(tags = "文件")
 @RequestMapping("/api/file")
+@ApiSupport(author = "李永达")
 public class FileController {
     @Autowired
     private IFileService iFileService;
 
     @GetMapping("/read")
-    @ApiOperation(value = "读取文件", notes = "<br>开发人：李永达<br>时间：2020/08/21<br>")
+    @ApiOperation(value = "读取文件", notes = "时间：2020/08/21")
     @ApiImplicitParam(value = "路径", name = "path", dataType = "String", required = true)
     public void read(@RequestParam String path, HttpServletResponse response) throws Exception {
         iFileService.read(path, response);
     }
 
     @GetMapping("/list/**")
-    @ApiOperation(value = "文件列表", notes = "<br>开发人：李永达<br>时间：2020/09/09<br>")
+    @ApiOperation(value = "文件列表", notes = "时间：2020/09/09")
     public ResponseData<List<Papers>> list(HttpServletRequest request) throws Exception {
         return ResponseData.ok(iFileService.list(request));
     }
 
     @GetMapping("/download/**")
-    @ApiOperation(value = "下载文件", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>支持断点续传", produces = "application/octet-stream")
+    @ApiOperation(value = "下载文件", notes = "时间：2020/04/06<br>支持断点续传", produces = "application/octet-stream")
     public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
         iFileService.download(request, response);
     }

@@ -1,5 +1,6 @@
 package top.niandui.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,12 +31,13 @@ import java.util.List;
 @RestController
 @Api(tags = "书籍")
 @RequestMapping("/api")
+@ApiSupport(author = "李永达")
 public class BookController extends BaseController {
     @Autowired
     private IBookService iBookService;
 
     @PostMapping("/saveBook")
-    @ApiOperation(value = "保存书籍", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>无id为新增,有id为修改")
+    @ApiOperation(value = "保存书籍", notes = "时间：2020/04/06<br>无id为新增,有id为修改")
     public ResponseData saveBook(@RequestBody @Validated Book book) throws Exception {
         if (book.getBookid() == null) {
             iBookService.create(book);
@@ -46,33 +48,33 @@ public class BookController extends BaseController {
     }
 
     @PostMapping("/checkBookName")
-    @ApiOperation(value = "书籍重名校验", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "书籍重名校验", notes = "时间：2020/04/06")
     public ResponseData checkBookName(@RequestBody @Validated IdNameModel<Long> checkName) throws Exception {
         iBookService.checkName(checkName);
         return ResponseData.ok();
     }
 
     @GetMapping("/modelBook/{id}")
-    @ApiOperation(value = "查询单个书籍", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "查询单个书籍", notes = "时间：2020/04/06")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
     public ResponseData<Book> modelBook(@PathVariable Long id) throws Exception {
         return ResponseData.ok(iBookService.model(id));
     }
 
     @PostMapping("/queryBookList")
-    @ApiOperation(value = "查询书籍列表", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "查询书籍列表", notes = "时间：2020/04/06")
     public ResponseData<PageList<BookListReturnVO>> queryBookList(@RequestBody @Validated BookSearchVO bookSearchVO) throws Exception {
         return ResponseData.ok(iBookService.queryList(bookSearchVO));
     }
 
     @GetMapping("/optionBook")
-    @ApiOperation(value = "书籍下拉", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "书籍下拉", notes = "时间：2020/04/06")
     public ResponseData<List<IdNameModel<Long>>> optionBook() throws Exception {
         return ResponseData.ok(iBookService.option());
     }
 
     @GetMapping("/deleteBook/{id}")
-    @ApiOperation(value = "删除书籍", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "删除书籍", notes = "时间：2020/04/06")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id,多个用逗号隔开", dataType = "String", required = true))
     public ResponseData deleteBook(@PathVariable String id) throws Exception {
         iBookService.delete(id);
@@ -80,14 +82,14 @@ public class BookController extends BaseController {
     }
 
     @GetMapping("/downloadBook/{id}")
-    @ApiOperation(value = "下载书籍(一次查询sql)", produces = "application/octet-stream", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "下载书籍(一次查询sql)", produces = "application/octet-stream", notes = "时间：2020/04/06")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
     public void downloadBook(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         iBookService.downloadBook(id, request, response);
     }
 
     @GetMapping("/downloadBook2/{id}")
-    @ApiOperation(value = "下载书籍2(多次查询sql)", produces = "application/octet-stream", notes = "<br>开发人：李永达<br>时间：2020/04/06<br>")
+    @ApiOperation(value = "下载书籍2(多次查询sql)", produces = "application/octet-stream", notes = "时间：2020/04/06")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "书籍id", dataType = "Long", required = true))
     public void downloadBook2(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         iBookService.downloadBook2(id, request, response);

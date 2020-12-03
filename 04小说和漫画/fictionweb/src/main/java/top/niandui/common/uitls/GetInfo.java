@@ -11,33 +11,34 @@ import org.springframework.boot.system.ApplicationHome;
  * @date 2020/3/22 17:04
  */
 public class GetInfo extends PropertyDefinerBase {
-    public static final String serviceName;
-    public static final String serviceIp;
-    public static final String logDir;
+    private static final String FILE_NAME = "application.yml";
+    public static final String SERVICE_NAME;
+    public static final String SERVICE_IP;
+    public static final String LOG_DIR;
     private static int i = 0;
 
     static {
-        serviceName = "fictionweb";
+        SERVICE_NAME = PropertiesUtil.getYamlProperties(FILE_NAME).getProperty("spring.application.name");
         String hostAddress;
         try {
             hostAddress = GetIp.getLocalIp4Address().get().getHostAddress();
         } catch (Exception e) {
             hostAddress = "127.0.0.1";
         }
-        serviceIp = hostAddress;
+        SERVICE_IP = hostAddress;
         // 动态设置日志目录
-        logDir = new ApplicationHome(GetInfo.class).toString() + "/";
+        LOG_DIR = new ApplicationHome(GetInfo.class).toString() + "/";
     }
 
     @Override
     public String getPropertyValue() {
         i++;
         if (i == 1) {
-            return logDir;
+            return LOG_DIR;
         } else if (i == 2) {
-            return serviceIp;
+            return SERVICE_IP;
         } else {
-            return serviceName;
+            return SERVICE_NAME;
         }
     }
 }

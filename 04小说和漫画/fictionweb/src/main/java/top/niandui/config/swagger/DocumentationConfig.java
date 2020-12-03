@@ -1,7 +1,6 @@
 package top.niandui.config.swagger;
 
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
@@ -16,7 +15,7 @@ import java.util.List;
  * @version: 1.0
  */
 @Primary
-@Component
+//@Component
 public class DocumentationConfig implements SwaggerResourcesProvider {
     @Override
     public List<SwaggerResource> get() {

@@ -1,8 +1,10 @@
 package top.niandui.common.config;
 
-import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -10,7 +12,8 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import top.niandui.common.uitls.GetInfo;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -25,18 +28,24 @@ import java.util.List;
  * @date 2020/3/22 16:02
  */
 @Configuration
-@EnableSwagger2
-@EnableKnife4j
+//@EnableKnife4j
+@EnableSwagger2WebMvc
+//@EnableSwagger2WebFlux
+@Import(BeanValidatorPluginsConfiguration.class) // 提供Knife4j的请求参数对JSR303支持
 public class SwaggerConfig {
 
     @Bean
-    public Docket createRestApi() {
+    public Docket createRestApi(OpenApiExtensionResolver openApiExtensionResolver) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+                .groupName(GetInfo.SERVICE_NAME)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("top.niandui.controller"))
                 .paths(PathSelectors.any())
                 .build()
+                // 赋予插件体系
+                .extensions(openApiExtensionResolver.buildExtensions(GetInfo.SERVICE_NAME))
+                .extensions(openApiExtensionResolver.buildSettingExtensions())
                 // 添加全局Token
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts())
@@ -46,7 +55,7 @@ public class SwaggerConfig {
     }
 
     private List<ApiKey> securitySchemes() {
-        List<ApiKey> apiKeyList = new ArrayList();
+        List<ApiKey> apiKeyList = new ArrayList<>();
         apiKeyList.add(new ApiKey("令牌", "Token", "header"));
         return apiKeyList;
     }
