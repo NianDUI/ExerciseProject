@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${book.name} + '章节'"></title>
+    <link th:href="@{${@configInfo.layuiCss}}" rel="stylesheet" media="all">
+</head>
+<body>
+<blockquote class="layui-elem-quote layui-quote-nm">
+    <div class="layui-card">
+        <span class="layui-breadcrumb" lay-separator=">>>">
+          <a th:href="@{/main}">首页</a>
+          <a th:href="@{/book/list}">书籍</a>
+          <a><cite th:text="${book.name} + '章节'"></cite></a>
+        </span>
+    </div>
+    <div class="layui-form">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input searVal" placeholder="请输入名称"/>
+            </div>
+            <a class="layui-btn search">搜索</a>
+        </div>
+        <div class="layui-inline" style="float: right;">
+            <a class="layui-btn layui-btn-checked stopGet" th:if="${book.taskswitch != 0}"
+               th:styleappend="${book.taskstatus == 0} ? 'display:none;'">停止获取</a>
+            <a class="layui-btn layui-btn-normal reacquire" th:if="${book.taskswitch != 0}">重新获取</a>
+            <a class="layui-btn layui-btn-warm getFollowUp" th:if="${book.taskswitch != 0}">获取后续</a>
+            <a class="layui-btn getSpecifiedAndFollowUp" th:if="${book.taskswitch != 0}">获取指定和后续</a>
+            <a class="layui-btn layui-btn-danger layui-btn-normal delAll">删除</a>
+        </div>
+    </div>
+    <table id="table" lay-filter="table"></table>
+</blockquote>
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="show">查看</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="reacquire">刷新</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>const base = "[[@{/}]]";
+const bookid = [[${book.bookid}]];
+const taskswitch = [[${book.taskswitch}]];
+let taskstatus = [[${book.taskstatus}]];</script>
+<script th:src="@{${@configInfo.layuiJs}}"></script>
+<script th:src="@{/js/common/common.js}"></script>
+<script th:src="@{/js/chapter/list.js}"></script>
+</body>
+</html>

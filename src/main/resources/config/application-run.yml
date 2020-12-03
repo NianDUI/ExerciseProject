@@ -1,0 +1,12 @@
+# run环境配置
+spring:
+  redis:
+    password: 'root'
+
+# Knife4j配置
+knife4j:
+  # 对Knife4j提供的资源提供BasicHttp校验,保护文档
+  basic:
+    enable: true
+    username: root
+    password: root

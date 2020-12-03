@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${name}"></title>
+</head>
+<body align="center">
+<a style="color: black;text-decoration: none;" th:href="@{'/api/file/download/' + ${path}}" th:text="'下载：' + ${name}"></a>
+<hr/>
+<video controls preload="metadata" fluid="false" name="media" style="width: 100%">
+    <source th:src="@{'/api/file/download/' + ${path}}" th:type="'video/' + ${form}"/>
+</video>
+</body>
+</html>

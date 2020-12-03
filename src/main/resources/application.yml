@@ -1,0 +1,158 @@
+server:
+  port: 8001
+  servlet:
+    # encoding配置
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+
+#    context-path: /v1.0
+
+# Knife4j配置
+knife4j:
+  # 开启Knife4j提供的增强
+  enable: true
+  # 前端Ui的个性化配置属性
+  setting:
+    # 是否显示Footer(页脚)
+    enable-footer: false
+    # 重命名SwaggerModel名称
+    swagger_model_name: 实体类列表
+    # 开启自定义主页内容
+    enable_home_custom: true
+    # 主页内容Markdown文件路径
+    home_custom_location: classpath:markdown/README.md
+
+# mybatis配置
+mybatis:
+  mapper-locations: classpath*:mapper/*-mapper.xml
+  type-aliases-package: top.niandui.model
+  configuration:
+    # 开启 将下划线映射到驼峰大小写
+    map-underscore-to-camel-case: true
+    # 延迟加载：开关
+    #lazy-loading-enabled: true
+    # 积极加载：true，调用对象的任何属性(不论是否为延迟加载对象的属性)都会加载该对象的所有属性、false，消极加载，按需加载(只有调用延迟加载对象的属性时才会加载)
+    #aggressive-lazy-loading: true
+    # 一级(本地)缓存范围：session(同一个会话，开启事务),statement(应该是出了方法即失效)
+    #local-cache-scope: statement
+
+# pageHelper配置
+pagehelper:
+  params: count=countSql
+  helper-dialect: postgresql #指定分页插件使用哪种方言
+  reasonable: 'true' #分页合理化参数 pageNum<=0时会查询第一页 pageNum>pages(超过总数时) 会查询最后一页
+  support-methods-arguments: 'true'
+
+# 配置信息
+config-info:
+  layui-version: 2.5.6
+  jquery-version: 3.5.1
+  win-file-path: "D:"
+  linux-file-path: /data
+  token: 'root'
+
+# spring配置
+spring:
+  application:
+    name: fictionweb
+  servlet:
+    multipart:
+      # 单个文件上传最大值
+      maxFileSize: 100MB
+      # 单次所有文件上传最大值
+      maxRequestSize: 10000MB
+
+  # 运行环境
+  profiles:
+    active: dev
+
+  # Redis配置
+  redis:
+    database: 0
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 20   #最大连接数据库连接数（使用负值表示没有限制）
+        max-idle: 3     #最大空闲连接,设 0 为没有限制
+        min-idle: 1     #最小空闲连接,设 0 为没有限制
+        max-wait: 10000  #连接池最大阻塞等待时间（使用负值表示没有限制）
+      shutdown-timeout: 10s
+    password: ''
+    port: 6379
+
+  # jackson配置
+  jackson:
+    # 全局设置@JsonFormat的格式pattern
+    date-format: yyyy-MM-dd HH:mm:ss
+    # 设置全局时区
+    time-zone: GMT+8
+    # 常用，全局设置pojo或被@JsonInclude注解的属性的序列化方式
+    # 不为空的属性才会序列化(转json),具体属性可看JsonInclude.Include
+    #default-property-inclusion: NON_NULL
+
+  # 数据库配置
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/fiction
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+    druid:
+      # 初始化大小，最小，最大
+      initialSize: 2
+      minIdle: 2
+      maxActive: 10
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 2000
+      # 配置一个连接在池中最小和最大生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 600000
+      maxEvictableIdleTimeMillis: 900000
+      validationQuery: select 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙，此处是filter修改的地方,去除log4j
+      filters: stat,wall,slf4j
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      ###############################监控配置###############################
+      # StatViewServlet配置，说明请参考Druid Wiki，配置_StatViewServlet配置
+      stat-view-servlet:
+        enabled: true #是否启用StatViewServlet（监控页面）默认值为false（考虑到安全问题默认并未启动，如需启用建议设置密 码或白名单以保障安全）
+        url-pattern: /druid/*
+        # 允许清空统计数据
+        reset-enable: true
+        # 用户名和密码
+        login-username: root
+        login-password: root
+        # ip白名单,如果allow没有配置或者为空，则允许所有访问
+        allow:
+        # ip黑名单,deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝。
+        deny: # 192.168.1.255/24
+      # WebStatFilter配置，说明请参考Druid Wiki，配置_配置WebStatFilter
+      web-stat-filter:
+        enabled: true #是否启用StatFilter默认值false
+        url-pattern: /*
+        # 排除一些不必要的url，比如*.js,/jslib/*等等
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+        # session统计功能, false：开启, true：关闭
+        session-stat-enable: false
+        # 缺省sessionStatMaxCount是1000个。你可以按需要进行配置
+        session-stat-max-count: 1000
+        # 可以配置principalSessionName，使得druid能够知道当前的session的用户是谁
+        #principal-session-name: xxx.user
+        # 如果你的user信息保存在cookie中，你可以配置principalCookieName，使得druid知道当前的user是谁
+        #principal-cookie-name: xxx.user
+        # 配置profileEnable能够监控单个url调用的sql列表
+        profile-enable: true
+      # Spring监控配置，说明请参考Druid Github Wiki，配置_Druid和Spring关联监控配置
+      # Spring监控AOP切入点，如x.y.z.service.*,配置多个英文逗号分隔
+      aop-patterns: top.niandui.service.impl.*.(..),top.niandui.dao.*.(..)

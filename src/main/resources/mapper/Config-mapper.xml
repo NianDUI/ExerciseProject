@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.niandui.dao.IConfigDao">
+    <!--表字段-->
+    <sql id="tableField">
+        "configid","name","titlematch","titlelnnum","conmatch","conlnnum","startoffset","endoffset","amatch","nexta"
+    </sql>
+
+    <!-- 配置书籍 -->
+    <insert id="create" parameterType="top.niandui.model.Config" useGeneratedKeys="true" keyProperty="configid">
+        INSERT INTO "config"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "name","titlematch","titlelnnum","conmatch","conlnnum","startoffset","endoffset","amatch","nexta",
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            #{name,jdbcType=VARCHAR},
+            #{titlematch,jdbcType=VARCHAR},
+            #{titlelnnum,jdbcType=INTEGER},
+            #{conmatch,jdbcType=VARCHAR},
+            #{conlnnum,jdbcType=INTEGER},
+            #{startoffset,jdbcType=INTEGER},
+            #{endoffset,jdbcType=INTEGER},
+            #{amatch,jdbcType=VARCHAR},
+            #{nexta,jdbcType=INTEGER},
+        </trim>
+    </insert>
+
+    <!-- 修改书籍 -->
+    <update id="update" parameterType="top.niandui.model.Config">
+        UPDATE "config"
+        <set>
+            "name" = #{name},
+            "titlematch" = #{titlematch},
+            "titlelnnum" = #{titlelnnum},
+            "conmatch" = #{conmatch},
+            "conlnnum" = #{conlnnum},
+            "startoffset" = #{startoffset},
+            "endoffset" = #{endoffset},
+            "amatch" = #{amatch},
+            "nexta" = #{nexta},
+        </set>
+        WHERE "configid" = #{configid};
+    </update>
+
+    <!-- 重名校验 -->
+    <select id="checkName" parameterType="top.niandui.common.model.IdNameModel" resultType="int">
+        SELECT COUNT(1)
+        FROM "config"
+        <where>
+            "name" = #{name}
+            <if test="id != null">
+                and "configid" != #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询单条书籍 -->
+    <select id="model" parameterType="Long" resultType="top.niandui.model.Config">
+        SELECT
+            <include refid="tableField"/>
+        FROM "config"
+        WHERE "configid" = #{id}
+    </select>
+
+    <!-- 所有书籍下拉列表 -->
+    <select id="option" resultType="top.niandui.common.model.IdNameModel">
+        SELECT
+            "configid" AS "id",
+            "name" AS "name"
+        FROM "config"
+    </select>
+
+    <!-- 查询所有书籍列表 -->
+    <select id="queryList" parameterType="top.niandui.model.vo.ConfigSearchVO" resultType="top.niandui.model.Config">
+        SELECT
+            <include refid="tableField"/>
+        FROM "config"
+        <where>
+            <if test="name != null and name != ''">
+                AND "name" ILIKE '%${name}%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 删除书籍 -->
+    <delete id="delete" parameterType="String">
+        DELETE FROM "config"
+        WHERE "configid" IN (${id})
+    </delete>
+
+    <!-- 查询配置使用数量 -->
+    <select id="queryConfigUseCount" resultType="long">
+        SELECT
+            ( SELECT COUNT ( 1 ) FROM "site" WHERE "configid" IN (${id}) )
+            + ( SELECT COUNT ( 1 ) FROM "book" WHERE "configid" IN (${id}) )
+            + ( SELECT COUNT ( 1 ) FROM "chapter" WHERE "configid" IN (${id}) )
+    </select>
+</mapper>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.niandui.dao.IBookDao">
+    <!--表字段-->
+    <sql id="tableField">
+        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus","taskswitch"
+    </sql>
+
+    <!-- 新增书籍 -->
+    <insert id="create" parameterType="top.niandui.model.Book" useGeneratedKeys="true" keyProperty="bookid">
+        INSERT INTO "book"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "name","url","configid","starturl","handlerinfo","siteid","taskswitch"
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            #{name,jdbcType=VARCHAR},
+            #{url,jdbcType=VARCHAR},
+            #{configid,jdbcType=BIGINT},
+            #{starturl,jdbcType=VARCHAR},
+            #{handlerinfo,jdbcType=VARCHAR},
+            #{siteid,jdbcType=BIGINT},
+            #{taskswitch,jdbcType=INTEGER},
+        </trim>
+    </insert>
+
+    <!-- 修改书籍 -->
+    <update id="update" parameterType="top.niandui.model.Book">
+        UPDATE "book"
+        <set>
+            "name" = #{name},
+            "url" = #{url},
+            "configid" = #{configid},
+            "starturl" = #{starturl},
+            "handlerinfo" = #{handlerinfo},
+            "siteid" = #{siteid},
+            "taskswitch" = #{taskswitch},
+        </set>
+        WHERE "bookid" = #{bookid};
+    </update>
+
+    <!-- 重名校验 -->
+    <select id="checkName" parameterType="top.niandui.common.model.IdNameModel" resultType="int">
+        SELECT COUNT(1)
+        FROM "book"
+        <where>
+            "name" = #{name}
+            <if test="id != null">
+                and "bookid" != #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询单条书籍 -->
+    <select id="model" parameterType="Long" resultType="top.niandui.model.Book">
+        SELECT
+            <include refid="tableField"/>
+        FROM "book"
+        WHERE "bookid" = #{id}
+    </select>
+
+    <!-- 所有书籍下拉列表 -->
+    <select id="option" resultType="top.niandui.common.model.IdNameModel">
+        SELECT
+            "bookid" AS "id",
+            "name" AS "name"
+        FROM "book"
+        <where>
+            <if test="taskswitch != null">
+                AND "taskswitch" = #{taskswitch}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询所有书籍列表 -->
+    <select id="queryList" parameterType="top.niandui.model.vo.BookSearchVO" resultType="top.niandui.model.vo.BookListReturnVO">
+        SELECT
+            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus",b."taskswitch"
+            ,c."name" "configname",s."name" "sitename"
+            ,CASE b."taskstatus"
+                WHEN 1 THEN '重新获取全部'
+                WHEN 2 THEN '获取后续章节'
+                WHEN 3 THEN '重新获取单章'
+                ELSE '无'
+             END "taskstatusname"
+            ,CASE b."taskswitch"
+                WHEN 0 THEN '关闭'
+                WHEN 1 THEN '开启'
+             END "taskswitchname"
+        FROM "book" b
+            LEFT JOIN "config" c ON c."configid" = b."configid"
+            LEFT JOIN "site" s ON s."siteid" = b."siteid"
+        <where>
+            <if test="name != null and name != ''">
+                AND b."name" ILIKE '%${name}%'
+            </if>
+            <if test="siteid != null">
+                AND b."siteid" = #{siteid}
+            </if>
+        </where>
+    </select>
+
+    <!-- 删除书籍 -->
+    <delete id="delete" parameterType="String">
+        DELETE FROM "book"
+        WHERE "bookid" IN (${id})
+    </delete>
+
+    <!-- 更新任务状态 -->
+    <update id="updateTaskstatus">
+        UPDATE "book"
+        SET "taskstatus" = #{taskstatus}
+        WHERE "bookid" = #{bookid}
+    </update>
+
+    <!-- 查询站点书籍数量 -->
+    <select id="querySiteBookCount" resultType="int">
+        SELECT COUNT(1)
+        FROM "book"
+        WHERE "siteid" IN (${id})
+    </select>
+
+    <!-- 查询书籍任务状态 -->
+    <select id="queryBookTaskstatus" resultType="int">
+        SELECT "taskstatus" FROM "book"
+        WHERE "bookid" = #{id}
+    </select>
+
+    <!-- 更新指定状态任务的任务状态 -->
+    <update id="updateTaskstatusByRawStatus">
+        UPDATE "book"
+        SET "taskstatus" = #{newStatus}
+        WHERE "bookid" = #{bookid} AND "taskstatus" = #{rawStatus}
+    </update>
+
+    <!-- 查询内容列表 -->
+    <select id="queryContentList" resultType="map">
+        SELECT t.* FROM (
+            SELECT "name" "content","chapterid",-1 "seqid",0 "type" FROM "chapter"
+            UNION ALL
+            SELECT '    ' || "content","chapterid","seqid",1 "type" FROM "paragraph"
+        ) t INNER JOIN "chapter" c ON c."chapterid" = t."chapterid"
+        WHERE c."bookid" = #{bookid}
+        ORDER BY c."seqid",t."seqid"
+    </select>
+
+    <!-- 查询书籍任务转台列表 -->
+    <select id="queryBookTaskstatusList" resultType="top.niandui.model.Book">
+        SELECT "bookid","taskstatus" FROM "book" ORDER BY "bookid"
+    </select>
+
+    <!-- 查询书籍处理信息 -->
+    <select id="queryHandlerinfo" resultType="string">
+        SELECT "handlerinfo" FROM "book" WHERE "bookid" = #{id}
+    </select>
+</mapper>

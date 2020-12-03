@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.niandui.dao.IChapterDao">
+    <!--表字段-->
+    <sql id="tableField">
+        "chapterid","name","bookid","configid","rawname","createtime","seqid","url"
+    </sql>
+
+    <!-- 新增章节 -->
+    <insert id="create" parameterType="top.niandui.model.Chapter" useGeneratedKeys="true" keyProperty="chapterid">
+        INSERT INTO "chapter"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "name","bookid","configid","rawname","seqid","url",
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            #{name,jdbcType=VARCHAR},
+            #{bookid,jdbcType=BIGINT},
+            #{configid,jdbcType=BIGINT},
+            #{rawname,jdbcType=VARCHAR},
+            #{seqid,jdbcType=BIGINT},
+            #{url,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+
+    <!-- 新增章节列表 -->
+    <insert id="createBatch" parameterType="list">
+        INSERT INTO "chapter"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "name","bookid","configid","rawname","seqid","url",
+        </trim>
+        <foreach collection="list" item="item" separator="," open="VALUES">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.name,jdbcType=VARCHAR},
+                #{item.bookid,jdbcType=BIGINT},
+                #{item.configid,jdbcType=BIGINT},
+                #{item.rawname,jdbcType=VARCHAR},
+                #{item.seqid,jdbcType=BIGINT},
+                #{item.url,jdbcType=VARCHAR},
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <!-- 修改章节 -->
+    <update id="update" parameterType="top.niandui.model.Chapter">
+        UPDATE "chapter"
+        <set>
+            "name" = #{name},
+            "rawname" = #{rawname},
+            "seqid" = #{seqid},
+            "url" = #{url},
+        </set>
+        WHERE "chapterid" = #{chapterid};
+    </update>
+
+    <!-- 重名校验 -->
+    <select id="checkName" parameterType="top.niandui.common.model.IdNameModel" resultType="int">
+        SELECT COUNT(1)
+        FROM "chapter"
+        <where>
+            "name" = #{name}
+            <if test="id != null">
+                and "chapterid" != #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询单条章节 -->
+    <select id="model" parameterType="Long" resultType="top.niandui.model.Chapter">
+        SELECT
+            <include refid="tableField"/>
+        FROM "chapter"
+        WHERE "chapterid" = #{id}
+    </select>
+
+    <!-- 所有章节下拉列表 -->
+    <select id="option" resultType="top.niandui.common.model.IdNameModel">
+        SELECT
+            "chapterid" AS "id",
+            "name" AS "name"
+        FROM "chapter"
+    </select>
+
+    <!-- 查询所有章节列表 -->
+    <select id="queryList" parameterType="top.niandui.model.vo.ChapterSearchVO" resultType="top.niandui.model.vo.ChapterListReturnVO">
+        SELECT
+            c."chapterid",c."name",c."bookid",c."configid",c."rawname",c."createtime",c."seqid",c."url"
+            ,b."name" "bookname",co."name" "configname"
+        FROM "chapter" c
+            LEFT JOIN "book" b ON b."bookid" = c."bookid"
+            LEFT JOIN "config" co ON co."configid" = c."configid"
+        <where>
+            <if test="bookid != null">
+                AND c."bookid" = #{bookid}
+            </if>
+            <if test="name != null and name != ''">
+                AND c."name" ILIKE '%${name}%'
+            </if>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+            <if test="descOrAsc != null and descOrAsc != ''">
+                ${descOrAsc}
+            </if>
+        </if>
+    </select>
+
+    <!-- 删除章节 -->
+    <delete id="delete" parameterType="String">
+        DELETE FROM "chapter"
+        WHERE "chapterid" IN (${id})
+    </delete>
+
+    <!-- 通过书籍id删除 -->
+    <delete id="deleteByBookId">
+        DELETE FROM "chapter"
+        WHERE "bookid" IN (${id})
+    </delete>
+
+    <!-- 通过书籍和章节id删除 -->
+    <delete id="deleteByBookAndChapterId">
+        DELETE FROM "chapter"
+        WHERE "bookid" = #{bookid} AND "chapterid" IN (${chapterid})
+    </delete>
+
+    <!-- 查询书籍最后一章节 -->
+    <select id="queryBookAsLastChapter" resultType="top.niandui.model.Chapter">
+        SELECT
+            c."chapterid",c."name",c."bookid",c."configid",c."rawname",c."createtime",c."seqid",c."url"
+        FROM "chapter" c
+            INNER JOIN "book" b ON b."bookid" = c."bookid"
+        WHERE b."bookid" = #{id}
+        ORDER BY c."seqid" DESC
+        LIMIT 1
+    </select>
+
+    <!-- 获取下一章 -->
+    <select id="nextModel" resultType="top.niandui.model.Chapter">
+        SELECT
+            <include refid="tableField"/>
+        FROM "chapter" c
+        WHERE EXISTS (
+                SELECT 1 FROM  "chapter" cc
+                WHERE "chapterid" = #{id}
+                    AND c."bookid" = cc."bookid"
+                    AND c."seqid" > cc."seqid"
+            )
+        ORDER BY "seqid" ASC
+        LIMIT 1
+    </select>
+
+    <!-- 获取下一章id -->
+    <select id="nextChapterid" resultType="long">
+        SELECT "chapterid"
+        FROM "chapter" c
+        WHERE EXISTS (
+                SELECT 1 FROM  "chapter" cc
+                WHERE "chapterid" = #{id}
+                    AND c."bookid" = cc."bookid"
+                    AND c."seqid" &gt; cc."seqid"
+            )
+        ORDER BY "seqid" ASC
+        LIMIT 1
+    </select>
+
+    <!-- 获取上一章id -->
+    <select id="prevChapterid" resultType="long">
+        SELECT "chapterid"
+        FROM "chapter" c
+        WHERE EXISTS (
+                SELECT 1 FROM  "chapter" cc
+                WHERE "chapterid" = #{id}
+                    AND c."bookid" = cc."bookid"
+                    AND c."seqid" &lt; cc."seqid"
+            )
+        ORDER BY "seqid" DESC
+        LIMIT 1
+    </select>
+
+    <!-- 通过多个id查询数据 -->
+    <select id="queryBookByMultiId" resultType="top.niandui.model.Book">
+        SELECT <include refid="top.niandui.dao.IBookDao.tableField"/>
+        FROM "book" b
+        WHERE EXISTS (
+            SELECT 1 FROM "chapter" c
+            WHERE c."chapterid" IN (${id}) AND c."bookid" = b."bookid"
+        )
+    </select>
+
+    <!-- 更新章节名称 -->
+    <update id="updateName">
+        UPDATE "chapter" SET "name" =
+        <if test="titleType == 0">
+            SUBSTRING("rawname", #{startIndex} + 1)
+        </if>
+        <if test="titleType == 1">
+            '第' || TRIM(REPLACE(SUBSTRING("rawname", #{startIndex} + 1), #{delimiter}, '章 '))
+        </if>
+        <if test="titleType == 2">
+            '第' || TRIM((SUBSTRING(SUBSTRING("rawname", #{startIndex} + 1) FROM '[\d零一二三四五六七八九十百千万]+'))) ||
+            '章 ' || TRIM(REGEXP_REPLACE(SUBSTRING("rawname", #{startIndex} + 1), '[\d零一二三四五六七八九十百千万]+', ''))
+        </if>
+        WHERE "bookid" = #{bookid}
+    </update>
+    <!--
+        PSQLException: 错误: 返回集合函数不允许出现在UPDATE中
+        '第' || TRIM((REGEXP_MATCHES(SUBSTRING("rawname", #{startIndex} + 1), '[\d零一二三四五六七八九十百千万]+')::TEXT[])[1]) ||
+    -->
+
+    <!-- 更新null章节名称为原名称 -->
+    <update id="updateNullNameToRawname">
+        UPDATE "chapter" SET "name" = "rawname" WHERE "bookid" = #{bookid} AND "name" IS NULL
+    </update>
+</mapper>

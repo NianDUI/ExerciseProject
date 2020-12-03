@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.niandui.dao.ITaskDao">
+    <!--表字段-->
+    <sql id="tableField">
+        "taskid","name","cron","taskswitch","taskclass","classpath","description"
+    </sql>
+
+    <!-- 新增站点 -->
+    <insert id="create" parameterType="top.niandui.model.Task" useGeneratedKeys="true" keyProperty="taskid">
+        INSERT INTO "task"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "name","cron","taskswitch","taskclass","classpath","description",
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            #{name,jdbcType=VARCHAR},
+            #{cron,jdbcType=VARCHAR},
+            #{taskswitch,jdbcType=INTEGER},
+            #{taskclass,jdbcType=VARCHAR},
+            #{classpath,jdbcType=VARCHAR},
+            #{description,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+
+    <!-- 修改站点 -->
+    <update id="update" parameterType="top.niandui.model.Task">
+        UPDATE "task"
+        <set>
+            "name" = #{name},
+            "cron" = #{cron},
+            "taskswitch" = #{taskswitch},
+            "taskclass" = #{taskclass},
+            "classpath" = #{classpath},
+            "description" = #{description},
+        </set>
+        WHERE "taskid" = #{taskid}
+    </update>
+
+    <!-- 重名校验 -->
+    <select id="checkName" parameterType="top.niandui.common.model.IdNameModel" resultType="int">
+        SELECT COUNT(1)
+        FROM "task"
+        <where>
+            "name" = #{name}
+            <if test="id != null">
+                and "taskid" != #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询单条站点 -->
+    <select id="model" parameterType="Long" resultType="top.niandui.model.Task">
+        SELECT <include refid="tableField"/>
+        FROM "task"
+        WHERE "taskid" = #{id}
+    </select>
+
+    <!-- 所有站点下拉列表 -->
+    <select id="option" resultType="top.niandui.common.model.IdNameModel">
+        SELECT
+            "taskid" AS "id",
+            "name" AS "name"
+        FROM "task"
+    </select>
+
+    <!-- 查询所有站点列表 -->
+    <select id="queryList" parameterType="top.niandui.model.vo.TaskSearchVO" resultType="top.niandui.model.vo.TaskListReturnVO">
+        SELECT <include refid="tableField"/>
+        FROM "task"
+    </select>
+
+    <!-- 删除站点 -->
+    <delete id="delete" parameterType="String">
+        DELETE FROM "task" WHERE "taskid" IN (${id})
+    </delete>
+</mapper>

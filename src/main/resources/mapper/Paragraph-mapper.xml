@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.niandui.dao.IParagraphDao">
+    <!--表字段-->
+    <sql id="tableField">
+        "createtime","seqid","content","bookid","chapterid"
+    </sql>
+
+    <!-- 新增段落 -->
+    <insert id="create" parameterType="top.niandui.model.Paragraph" useGeneratedKeys="true" keyProperty="paragraphid">
+        INSERT INTO "paragraph"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "seqid","content","bookid","chapterid"
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            #{seqid,jdbcType=BIGINT},
+            #{content,jdbcType=VARCHAR},
+            #{bookid,jdbcType=BIGINT},
+            #{chapterid,jdbcType=BIGINT},
+        </trim>
+    </insert>
+
+    <!-- 新增段落列表 -->
+    <insert id="createBatch" parameterType="list">
+        INSERT INTO "paragraph"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            "seqid","content","bookid","chapterid"
+        </trim>
+        <foreach collection="list" item="item" separator="," open="VALUES">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.seqid,jdbcType=BIGINT},
+                #{item.content,jdbcType=VARCHAR},
+                #{item.bookid,jdbcType=BIGINT},
+                #{item.chapterid,jdbcType=BIGINT},
+            </trim>
+        </foreach>
+    </insert>
+
+    <!-- 修改段落 -->
+    <update id="update" parameterType="top.niandui.model.Paragraph">
+        UPDATE "paragraph"
+        <set>
+            "content" = #{content},
+        </set>
+        WHERE
+            "bookid" = #{bookid}
+            AND "chapterid" = #{chapterid}
+            AND "seqid" = #{seqid}
+    </update>
+
+    <!-- 重名校验 -->
+    <!--<select id="checkName" parameterType="top.niandui.common.model.IdNameModel" resultType="int">
+        SELECT COUNT(1)
+        FROM "paragraph"
+        <where>
+            "content" = #{name}
+            <if test="id != null">
+                and "paragraphid" != #{id}
+            </if>
+        </where>
+    </select>-->
+
+    <!-- 查询单条段落 -->
+    <!--<select id="model" parameterType="Long" resultType="top.niandui.model.Paragraph">
+        SELECT
+            <include refid="tableField"/>
+        FROM "paragraph"
+        WHERE "paragraphid" = #{id}
+    </select>-->
+
+    <!-- 所有段落下拉列表 -->
+    <!--<select id="option" resultType="top.niandui.common.model.IdNameModel">
+        SELECT
+            "paragraphid" AS "id",
+            "name" AS "name"
+        FROM "paragraph"
+    </select>-->
+
+    <!-- 查询所有段落列表 -->
+    <select id="queryList" parameterType="top.niandui.model.vo.ParagraphSearchVO" resultType="top.niandui.model.Paragraph">
+        SELECT
+            <include refid="tableField"/>
+        FROM "paragraph"
+        <where>
+            <if test="bookid != null">
+                AND "bookid" = #{bookid}
+            </if>
+            <if test="chapterid != null">
+                AND "chapterid" = #{chapterid}
+            </if>
+        </where>
+    </select>
+
+    <!-- 删除段落 -->
+    <!--<delete id="delete" parameterType="String">
+        DELETE FROM "paragraph"
+        WHERE "paragraphid" IN (${id})
+    </delete>-->
+
+    <!-- 通过章节id删除 -->
+    <delete id="deleteByChapterId">
+        DELETE FROM "paragraph"
+        WHERE "chapterid" IN (${id})
+    </delete>
+
+    <!-- 通过书籍id删除 -->
+    <delete id="deleteByBookId">
+        DELETE FROM "paragraph"
+        WHERE "bookid" IN (${id})
+    </delete>
+
+    <!-- 通过书籍和章节id删除 -->
+    <delete id="deleteByBookAndChapterId">
+        DELETE FROM "paragraph"
+        WHERE "bookid" = #{bookid} AND "chapterid" IN (${chapterid})
+    </delete>
+</mapper>
