@@ -29,9 +29,6 @@ public class Task extends BaseModel {
     @NotNull(message = "任务开关不能为空")
     @ApiModelProperty(value = "任务开关：0 关闭，1 开启", required = true)
     private Integer taskswitch;
-    @NotBlank(message = "任务类不能为空")
-    @ApiModelProperty(value = "任务类", required = true)
-    private String taskclass;
     @NotBlank(message = "任务类路径不能为空")
     @ApiModelProperty(value = "任务类路径", required = true)
     private String classpath;

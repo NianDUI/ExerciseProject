@@ -3,20 +3,19 @@
 <mapper namespace="top.niandui.dao.ITaskDao">
     <!--表字段-->
     <sql id="tableField">
-        "taskid","name","cron","taskswitch","taskclass","classpath","description"
+        "taskid","name","cron","taskswitch","classpath","description"
     </sql>
 
     <!-- 新增站点 -->
     <insert id="create" parameterType="top.niandui.model.Task" useGeneratedKeys="true" keyProperty="taskid">
         INSERT INTO "task"
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            "name","cron","taskswitch","taskclass","classpath","description",
+            "name","cron","taskswitch","classpath","description",
         </trim>
         <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
             #{name,jdbcType=VARCHAR},
             #{cron,jdbcType=VARCHAR},
             #{taskswitch,jdbcType=INTEGER},
-            #{taskclass,jdbcType=VARCHAR},
             #{classpath,jdbcType=VARCHAR},
             #{description,jdbcType=VARCHAR},
         </trim>
@@ -29,7 +28,6 @@
             "name" = #{name},
             "cron" = #{cron},
             "taskswitch" = #{taskswitch},
-            "taskclass" = #{taskclass},
             "classpath" = #{classpath},
             "description" = #{description},
         </set>
@@ -67,6 +65,11 @@
     <select id="queryList" parameterType="top.niandui.model.vo.TaskSearchVO" resultType="top.niandui.model.vo.TaskListReturnVO">
         SELECT <include refid="tableField"/>
         FROM "task"
+        <where>
+            <if test="taskswitch != null">
+                AND "taskswitch" = #{taskswitch}
+            </if>
+        </where>
     </select>
 
     <!-- 删除站点 -->

@@ -1,17 +1,13 @@
-package top.niandui.scheduled;
+package top.niandui.task;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TriggerContext;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-import top.niandui.common.base.IBaseScheduled;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.dao.IBookDao;
 import top.niandui.service.IChapterService;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +20,11 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class GetFollowUpChapterScheduled implements IBaseScheduled {
+public class GetFollowUpChapterTask implements Runnable {
     // 下拉书籍参数
-    private static final Map params = Collections.singletonMap("taskswitch", 1);
-    // 触发表达式对象
-    private final CronTrigger cronTrigger = new CronTrigger("0 16 0/6 * * ?");
+    private static final Map PARAMS = Collections.singletonMap("taskswitch", 1);
+    // 是否启用
+    private final boolean enable = true;
     @Autowired
     private IBookDao iBookDao;
     @Autowired
@@ -36,26 +32,18 @@ public class GetFollowUpChapterScheduled implements IBaseScheduled {
 
     @Override
     public void run() {
-        try {
-            getFollowUpChapter();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        if (enable) {
+            try {
+                getFollowUpChapter();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
-    }
-
-    @Override
-    public Date nextExecutionTime(TriggerContext triggerContext) {
-        return cronTrigger.nextExecutionTime(triggerContext);
-    }
-
-    @Override
-    public boolean isEnable() {
-        return true;
     }
 
     public void getFollowUpChapter() throws Exception {
         log.info("定时任务启动...");
-        List<IdNameModel<Long>> option = iBookDao.option(params);
+        List<IdNameModel<Long>> option = iBookDao.option(PARAMS);
         for (IdNameModel<Long> idNameModel : option) {
             String name = idNameModel.getName();
             log.info(String.format("获取 %s 后续章节...", name));
