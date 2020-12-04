@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -42,6 +43,8 @@ public class TaskManagerScheduled implements IBaseScheduled {
     private static final CronTrigger CRON_TRIGGER = new CronTrigger("0 0/10 * * * ?");
     @Autowired
     private ITaskDao iTaskDao;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Override
     public void run() {
@@ -71,7 +74,8 @@ public class TaskManagerScheduled implements IBaseScheduled {
             Long taskid = task.getTaskid();
             CronTask cronTask = RMV_TASK_MAP.remove(taskid);
             if (cronTask == null) {
-                cronTask = new CronTask((Runnable) Class.forName(task.getClasspath()).newInstance(), task.getCron());
+                Object bean = applicationContext.getBean(Class.forName(task.getClasspath()));
+                cronTask = new CronTask((Runnable) bean, task.getCron());
                 cronTask.setScheduledFuture(TASK_SCHEDULER.schedule(cronTask.getRunnable(), cronTask.getTriggerHolder().value));
             } else {
                 cronTask.setExpression(task.getCron());
