@@ -32,6 +32,9 @@ public class Task extends BaseModel {
     @NotBlank(message = "任务类路径不能为空")
     @ApiModelProperty(value = "任务类路径", required = true)
     private String classpath;
+    @NotNull(message = "类加载方式不能为空")
+    @ApiModelProperty(value = "类加载方式：0 反射、1 IOC容器", required = true)
+    private Integer loadmanner;
     @ApiModelProperty(value = "任务描述")
     private String description;
 }

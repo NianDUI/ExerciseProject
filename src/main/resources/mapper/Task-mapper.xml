@@ -3,20 +3,21 @@
 <mapper namespace="top.niandui.dao.ITaskDao">
     <!--表字段-->
     <sql id="tableField">
-        "taskid","name","cron","taskswitch","classpath","description"
+        "taskid","name","cron","taskswitch","classpath","loadmanner","description"
     </sql>
 
     <!-- 新增站点 -->
     <insert id="create" parameterType="top.niandui.model.Task" useGeneratedKeys="true" keyProperty="taskid">
         INSERT INTO "task"
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            "name","cron","taskswitch","classpath","description",
+            "name","cron","taskswitch","classpath","loadmanner","description",
         </trim>
         <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
             #{name,jdbcType=VARCHAR},
             #{cron,jdbcType=VARCHAR},
             #{taskswitch,jdbcType=INTEGER},
             #{classpath,jdbcType=VARCHAR},
+            #{loadmanner,jdbcType=INTEGER},
             #{description,jdbcType=VARCHAR},
         </trim>
     </insert>
@@ -29,6 +30,7 @@
             "cron" = #{cron},
             "taskswitch" = #{taskswitch},
             "classpath" = #{classpath},
+            "loadmanner" = #{loadmanner},
             "description" = #{description},
         </set>
         WHERE "taskid" = #{taskid}

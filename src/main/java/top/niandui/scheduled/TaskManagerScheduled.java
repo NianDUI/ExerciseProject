@@ -74,7 +74,10 @@ public class TaskManagerScheduled implements IBaseScheduled {
             Long taskid = task.getTaskid();
             CronTask cronTask = RMV_TASK_MAP.remove(taskid);
             if (cronTask == null) {
-                Object bean = applicationContext.getBean(Class.forName(task.getClasspath()));
+                Object bean = getClassObject(task);
+                if (!(bean instanceof Runnable)) {
+                    continue;
+                }
                 cronTask = new CronTask((Runnable) bean, task.getCron());
                 cronTask.setScheduledFuture(TASK_SCHEDULER.schedule(cronTask.getRunnable(), cronTask.getTriggerHolder().value));
             } else {
@@ -84,6 +87,22 @@ public class TaskManagerScheduled implements IBaseScheduled {
         }
         RMV_TASK_MAP.forEach((taskid, cronTask) -> cronTask.getScheduledFuture().cancel(true));
         RMV_TASK_MAP.clear();
+    }
+
+    // 获取类对象
+    private Object getClassObject(TaskListReturnVO task) {
+        try {
+            if (task.getLoadmanner() == 0) {
+                // 通过反射创建
+                return Class.forName(task.getClasspath()).newInstance();
+            } else if (task.getLoadmanner() == 1) {
+                // 从IOC容器中获取
+                return applicationContext.getBean(Class.forName(task.getClasspath()));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     // Cron任务类
