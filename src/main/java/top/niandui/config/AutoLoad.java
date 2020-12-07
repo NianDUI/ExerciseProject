@@ -42,7 +42,7 @@ public class AutoLoad implements ApplicationRunner {
             Map<String, Object> statusMap = new HashMap<>();
             statusList.forEach(item -> statusMap.put(item.getBookid() + "", item.getTaskstatus()));
             redisUtil.del(BOOK_TASK_STATUS);
-            redisUtil.hmset(BOOK_TASK_STATUS, statusMap);
+            redisUtil.hmSet(BOOK_TASK_STATUS, statusMap);
         } catch (Exception e) {
             log.error("==========>>>>>>>>>> 加载书籍任务状态至缓存出错!", e);
         }

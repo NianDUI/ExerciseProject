@@ -35,10 +35,10 @@ public class TaskStateUtil {
      * @return 返回书籍任务状态
      */
     public static Integer getBookTaskStatus(Long bookid) {
-        Integer taskstatus = convert(redisUtil.hget(BOOK_TASK_STATUS, bookid + ""), Integer::valueOf, Integer.class);
+        Integer taskstatus = convert(redisUtil.hGet(BOOK_TASK_STATUS, bookid + ""), Integer::valueOf, Integer.class);
         if (taskstatus == null) {
             taskstatus = iBookDao.queryBookTaskstatus(bookid);
-            redisUtil.hset(BOOK_TASK_STATUS, bookid + "", taskstatus);
+            redisUtil.hSet(BOOK_TASK_STATUS, bookid + "", taskstatus);
         }
         return taskstatus;
     }
@@ -51,7 +51,7 @@ public class TaskStateUtil {
      * @return 更新行数
      */
     public static int updateBookTaskStatus(Long bookid, Integer taskstatus) {
-        redisUtil.hset(BOOK_TASK_STATUS, bookid + "", taskstatus);
+        redisUtil.hSet(BOOK_TASK_STATUS, bookid + "", taskstatus);
         return iBookDao.updateTaskstatus(bookid, taskstatus);
     }
 
@@ -66,7 +66,7 @@ public class TaskStateUtil {
     public static int updateTaskStatusByRawStatus(Long bookid, Integer newStatus, Integer rawStatus) {
         int num = iBookDao.updateTaskstatusByRawStatus(bookid, newStatus, rawStatus);
         if (num > 0) {
-            redisUtil.hset(BOOK_TASK_STATUS, bookid + "", newStatus);
+            redisUtil.hSet(BOOK_TASK_STATUS, bookid + "", newStatus);
         }
         return num;
     }

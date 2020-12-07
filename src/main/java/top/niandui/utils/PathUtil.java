@@ -39,7 +39,7 @@ public class PathUtil {
             paths[1] = "/";
             return paths;
         }
-        path = (String) redisUtil.hget(PATH_MAPPING_M_P, path);
+        path = (String) redisUtil.hGet(PATH_MAPPING_M_P, path);
         if (path == null) {
             paths[1] = "/";
             return paths;
@@ -58,11 +58,11 @@ public class PathUtil {
             path = path.substring(filePathLength);
         }
         if (path.length() != 0) {
-            String md5 = (String) redisUtil.hget(PATH_MAPPING_P_M, path);
+            String md5 = (String) redisUtil.hGet(PATH_MAPPING_P_M, path);
             if (md5 == null) {
                 md5 = DigestUtils.md5DigestAsHex(path.getBytes());
-                redisUtil.hset(PATH_MAPPING_M_P, md5, path, PATH_SAVE_TIME);
-                redisUtil.hset(PATH_MAPPING_P_M, path, md5, PATH_SAVE_TIME);
+                redisUtil.hSet(PATH_MAPPING_M_P, md5, path, PATH_SAVE_TIME);
+                redisUtil.hSet(PATH_MAPPING_P_M, path, md5, PATH_SAVE_TIME);
             }
             path = md5;
         }

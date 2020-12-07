@@ -97,7 +97,7 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         // 删除章节
         iChapterDao.deleteByBookId(id);
         iBookDao.delete(id);
-        redisUtil.hdel(BOOK_TASK_STATUS, ids);
+        redisUtil.hDel(BOOK_TASK_STATUS, ids);
     }
 
     @Override
