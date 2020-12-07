@@ -1,0 +1,35 @@
+server:
+  port: 8001
+  servlet:
+    # encoding配置
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+#    context-path: /v1.0
+
+# spring配置
+spring:
+  application:
+    name: fictionweb
+  servlet:
+    multipart:
+      # 单个文件上传最大值
+      maxFileSize: 100MB
+      # 单次所有文件上传最大值
+      maxRequestSize: 10000MB
+
+  # 运行环境
+  profiles:
+    active: dev
+
+  # jackson配置
+  jackson:
+    # 全局设置@JsonFormat的格式pattern
+    date-format: yyyy-MM-dd HH:mm:ss
+    # 设置全局时区
+    time-zone: GMT+8
+    # 常用，全局设置pojo或被@JsonInclude注解的属性的序列化方式
+    # 不为空的属性才会序列化(转json),具体属性可看JsonInclude.Include
+    #default-property-inclusion: NON_NULL
+

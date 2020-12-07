@@ -1,0 +1,14 @@
+# Knife4j配置
+knife4j:
+  # 开启Knife4j提供的增强
+  enable: true
+  # 前端Ui的个性化配置属性
+  setting:
+    # 是否显示Footer(页脚)
+    enable-footer: false
+    # 重命名SwaggerModel名称
+    swagger_model_name: 实体类列表
+    # 开启自定义主页内容
+    enable_home_custom: true
+    # 主页内容Markdown文件路径
+    home_custom_location: classpath:markdown/README.md
