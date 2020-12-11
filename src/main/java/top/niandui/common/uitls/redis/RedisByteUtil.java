@@ -18,17 +18,16 @@ public class RedisByteUtil extends BaseRedisUtil<byte[]> {
 
     public RedisByteUtil(RedisConnectionFactory factory) {
         super(new RedisTemplate<>());
-        RedisTemplate<String, byte[]> template = getRedisTemplate();
-        template.setConnectionFactory(factory);
+        redisTemplate.setConnectionFactory(factory);
 
         // key采用String的序列化方式
-        template.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setKeySerializer(RedisSerializer.string());
         // hash的key也采用String的序列化方式
-        template.setHashKeySerializer(RedisSerializer.string());
+        redisTemplate.setHashKeySerializer(RedisSerializer.string());
         // value序列化方式采用 自定义byte数组的序列化方式
-        template.setValueSerializer(RedisSerializer.byteArray());
+        redisTemplate.setValueSerializer(RedisSerializer.byteArray());
         // hash的value序列化方式采用 自定义byte数组的序列化方式
-        template.setHashValueSerializer(RedisSerializer.byteArray());
-        template.afterPropertiesSet();
+        redisTemplate.setHashValueSerializer(RedisSerializer.byteArray());
+        redisTemplate.afterPropertiesSet();
     }
 }

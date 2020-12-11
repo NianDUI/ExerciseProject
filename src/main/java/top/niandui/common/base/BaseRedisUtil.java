@@ -16,17 +16,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public abstract class BaseRedisUtil<T> {
-    private final RedisTemplate<String, T> redisTemplate;
+    protected final RedisTemplate<String, T> redisTemplate;
 
     public BaseRedisUtil(RedisTemplate<String, T> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
-
-//    protected void setRedisTemplate(RedisTemplate<String, T> redisTemplate) {
-//        if (redisTemplate != null) {
-//            this.redisTemplate = redisTemplate;
-//        }
-//    }
 
     public RedisTemplate<String, T> getRedisTemplate() {
         return redisTemplate;
