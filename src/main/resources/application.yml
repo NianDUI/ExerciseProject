@@ -1,4 +1,4 @@
 spring:
   # 运行环境
   profiles:
-    include: server,knife4j,mybatis,redis,datasource
+    include: server,knife4j,mybatis,redis,datasource,info
