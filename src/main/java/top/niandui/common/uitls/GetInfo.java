@@ -11,7 +11,7 @@ import org.springframework.boot.system.ApplicationHome;
  * @date 2020/3/22 17:04
  */
 public class GetInfo extends PropertyDefinerBase {
-    private static final String FILE_NAME = "application.yml";
+    private static final String FILE_NAME = "config/application-server.yml";
     public static final String SERVICE_NAME;
     public static final String SERVICE_IP;
     public static final String LOG_DIR;
