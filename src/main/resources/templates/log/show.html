@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>日志</title>
+    <link th:href="@{${@configInfo.layuiCss}}" rel="stylesheet" media="all">
+</head>
+<body>
+<blockquote class="layui-elem-quote">
+    <fieldset class="layui-elem-field">
+        <legend>日志</legend>
+    </fieldset>
+</blockquote>
+<script th:src="@{${@configInfo.layuiJs}}"></script>
+<script>
+    let $ = layui.$;
+    const div = '<div class="layui-field-box">[txt]</div>';
+    const field = $(".layui-elem-field");
+    let url = "ws://" + window.location.host;
+    if (window.location.port === '') {
+        url += ":" + window.location.port;
+    }
+    let ws = new WebSocket(url + "[[@{/api/log/ws}]]");
+    ws.onmessage = function (evt) {
+        let boxs = $(".layui-field-box");
+        if (boxs.size() > 1000) {
+            boxs.eq(0).remove();
+        }
+        field.append(div.replace("[txt]", evt.data));
+        // 滚动到页面底部
+        scrollTo(0, $(document).height());
+        // $("html").scrollTop($(document).height());
+    }
+</script>
+</body>
+</html>

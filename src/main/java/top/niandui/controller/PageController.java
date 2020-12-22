@@ -149,9 +149,14 @@ public class PageController {
         }
     }
 
-    @SneakyThrows
     @GetMapping("/file/video1")
     public String fileVideo() {
         return "file/video1";
+    }
+
+    /*日志*/
+    @GetMapping("/log/show")
+    public String logShow() {
+        return "log/show";
     }
 }
