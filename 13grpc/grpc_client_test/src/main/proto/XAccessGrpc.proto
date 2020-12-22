@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+// 指定在proto文件中定义的所有消息、枚举和服务在生成java类的时候都会生成对应的java类文件，而不是以内部类的形式出现
+option java_multiple_files = true;
+// 指定生成的java类所在的包， 如果在.proto文件中没有提供明确的 java_package 选项，那么默认情况下，将使用 proto 包
+option java_package = "test.grpc.grpc";
+// 指定生成的java类文件名称，如果不指定则会默认使用 .proto 文件的文件名称
+//option java_outer_classname = "XAccessGrpc";
+
+package rpc_package;
+
+service XService {
+  rpc XCall (XRequest) returns (XReply) {}
+  rpc XCallIPC (XRequest) returns (XReply) {}
+}
+
+message XRoute{
+  repeated int32 instchain = 1;
+  int32 timeout = 2;
+}
+
+message XFileCmdsByContent{
+  string filename = 1;
+  string filecontent = 2;
+  string checksum = 3;
+}
+
+message XFileCmdsByPath{
+  string filepath = 1;
+}
+
+message XFileCmdsByID{
+  string fileid = 1;
+}
+
+message XFileCmd{
+  oneof _filecmd{
+    XFileCmdsByContent filecontent = 1;
+    XFileCmdsByPath filepath = 2;
+    XFileCmdsByID fileid = 3;
+  }
+}
+
+message XCmd {
+  string command = 1;
+  int32 timeout = 2;
+}
+
+message XRequest{
+  // 1-100 for control
+  XRoute route = 1;
+  string username = 2;
+  string password = 3;
+  int32 serviceid = 4;
+  int32 type = 5;
+  string token = 6;
+  string client = 8;
+  int32 warnflag = 9;
+  reserved 10 to 100;
+
+  // 101 - 200, for command 
+  repeated XCmd commands = 101;
+  repeated XCmd extdcommands = 102;
+  repeated XFileCmd filecommands = 103;
+
+}
+
+message XResult {
+    string errorno = 1;
+    string errmsg = 2;
+}
+
+message XCmdResult{
+  string command = 1;
+  string result = 2;
+  string encode = 3;
+  string filter_result = 4;
+}
+
+message XReply{
+  // 1-1000 for control
+  int32 type = 1;
+  string token = 2;
+  XResult result = 3;
+  reserved 4 to 100;
+
+  // command result
+  repeated XCmdResult commandresults = 101;
+}
