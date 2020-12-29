@@ -44,4 +44,7 @@ public interface IBookService {
 
     // 下载书籍2(多次查询sql)
     void downloadBook2(Long id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    // 代理下拉
+    List<IdNameModel<Integer>> optionProxy() throws Exception;
 }

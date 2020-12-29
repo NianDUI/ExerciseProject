@@ -152,4 +152,16 @@
     <select id="queryHandlerinfo" resultType="string">
         SELECT "handlerinfo" FROM "book" WHERE "bookid" = #{id}
     </select>
+
+    <!-- 代理下拉 -->
+    <select id="optionProxy" resultType="top.niandui.common.model.IdNameModel">
+        SELECT "proxyid" AS "id","name" AS "name" FROM "proxy"
+    </select>
+
+    <!-- 查询单条代理信息 -->
+    <select id="modelProxy" resultType="top.niandui.model.Proxy">
+        SELECT "proxyid","name","host","port","type"
+        FROM "proxy"
+        WHERE "proxyid" = #{id}
+    </select>
 </mapper>

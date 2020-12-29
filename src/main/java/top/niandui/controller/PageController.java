@@ -79,6 +79,7 @@ public class PageController {
         map.put("id", id);
         map.put("optionSite", iSiteService.option());
         map.put("optionConfig", iConfigService.option());
+        map.put("optionProxy", iBookService.optionProxy());
         return "book/add";
     }
 

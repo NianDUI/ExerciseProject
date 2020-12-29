@@ -10,8 +10,7 @@ import static top.niandui.common.uitls.DateUtil.dateFormat;
 import static top.niandui.common.uitls.file.FileUtil.unitConvert;
 import static top.niandui.config.PublicBean.configInfo;
 import static top.niandui.config.PublicBean.redisUtil;
-import static top.niandui.config.PublicConstant.PATH_MAPPING_M_P;
-import static top.niandui.config.PublicConstant.PATH_MAPPING_P_M;
+import static top.niandui.config.PublicConstant.*;
 
 /**
  * 路径工具
@@ -21,8 +20,6 @@ import static top.niandui.config.PublicConstant.PATH_MAPPING_P_M;
  * @date 2020/9/17 16:29
  */
 public class PathUtil {
-    // 路径保存时间
-    public static final long PATH_SAVE_TIME = 60 * 60 * 24;
     // 文件路径长度
     public static int filePathLength = configInfo.getFilePath().length();
 
@@ -61,8 +58,8 @@ public class PathUtil {
             String md5 = (String) redisUtil.hGet(PATH_MAPPING_P_M, path);
             if (md5 == null) {
                 md5 = DigestUtils.md5DigestAsHex(path.getBytes());
-                redisUtil.hSet(PATH_MAPPING_M_P, md5, path, PATH_SAVE_TIME);
-                redisUtil.hSet(PATH_MAPPING_P_M, path, md5, PATH_SAVE_TIME);
+                redisUtil.hSet(PATH_MAPPING_M_P, md5, path, DAY_SECOND);
+                redisUtil.hSet(PATH_MAPPING_P_M, path, md5, DAY_SECOND);
             }
             path = md5;
         }

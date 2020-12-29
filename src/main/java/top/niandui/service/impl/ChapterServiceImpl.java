@@ -130,7 +130,7 @@ public class ChapterServiceImpl extends BaseServiceImpl implements IChapterServi
         checkTaskStatus(book.getTaskstatus());
         checkTaskSwitch(book.getTaskswitch());
         Config config = (Config) iConfigDao.model(chapter.getConfigid());
-        webClientUtil.getChapter(config, chapter);
+        webClientUtil.getChapter(config, chapter, book.getHandlerinfo());
     }
 
     @Override

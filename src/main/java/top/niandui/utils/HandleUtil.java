@@ -24,8 +24,7 @@ public class HandleUtil {
             log.info("sleep：" + (sleepTime / 1000.0) + "s");
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            log.error(e.toString());
+            log.error(e.getMessage(), e);
         }
         return sleepTime;
     };
@@ -49,8 +48,7 @@ public class HandleUtil {
             }
             return title -> title.substring(startIndex);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.toString());
+            log.error(e.getMessage(), e);
             return title -> title;
         }
     }
@@ -71,8 +69,7 @@ public class HandleUtil {
             }
             return HandleUtil::isEndHrefDefaultMethod;
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.toString());
+            log.error(e.getMessage(), e);
             return HandleUtil::isEndHrefDefaultMethod;
         }
     }
@@ -88,7 +85,7 @@ public class HandleUtil {
      */
     public static String titleHandler(String title, int startIndex, String delimiter, int delLength) {
         int index = title.indexOf(delimiter);
-        if (index >= startIndex) {
+        if (index > startIndex) {
             title = "第" + title.substring(startIndex, index).trim() + "章 " + title.substring(index + delLength).trim();
         }
         return title;

@@ -76,11 +76,14 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
         // checkName(new IdNameModel(book.getBookid(), book.getName()));
         String infoRaw = iBookDao.queryHandlerinfo(book.getBookid());
         iBookDao.update(book);
-        Map info = json.readValue(book.getHandlerinfo(), Map.class);
-        if (!info.equals(json.readValue(infoRaw, Map.class))) {
-            info.put("bookid", book.getBookid());
+        Map infoMap = json.readValue(book.getHandlerinfo(), Map.class);
+        infoMap.remove("proxyid");
+        Map infoRawMap = json.readValue(infoRaw, Map.class);
+        infoRawMap.remove("proxyid");
+        if (!infoMap.equals(infoRawMap)) {
+            infoMap.put("bookid", book.getBookid());
             // 更新章节名称
-            iChapterDao.updateName(info);
+            iChapterDao.updateName(infoMap);
             // 更新null章节名称为原名称
             iChapterDao.updateNullNameToRawname(book.getBookid());
         }
@@ -168,5 +171,10 @@ public class BookServiceImpl extends BaseServiceImpl implements IBookService {
             }
             bw.flush();
         }
+    }
+
+    @Override
+    public List<IdNameModel<Integer>> optionProxy() throws Exception {
+        return iBookDao.optionProxy();
     }
 }

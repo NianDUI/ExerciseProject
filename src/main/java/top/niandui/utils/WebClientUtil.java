@@ -1,10 +1,7 @@
 package top.niandui.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebClientOptions;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import top.niandui.common.expection.ReStateException;
+import top.niandui.common.uitls.redis.RedisUtil;
+import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IParagraphDao;
-import top.niandui.model.Book;
-import top.niandui.model.Chapter;
-import top.niandui.model.Config;
-import top.niandui.model.Paragraph;
+import top.niandui.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +21,9 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static top.niandui.common.uitls.MethodUtil.convert;
+import static top.niandui.config.PublicConstant.BOOK_PROXY;
+import static top.niandui.config.PublicConstant.DAY_SECOND;
 import static top.niandui.utils.HandleUtil.getIsEndHref;
 import static top.niandui.utils.TaskStateUtil.*;
 
@@ -41,11 +40,15 @@ public class WebClientUtil {
     @Autowired
     private ObjectMapper json;
     @Autowired
+    private RedisUtil redisUtil;
+    @Autowired
+    private IBookDao iBookDao;
+    @Autowired
     private IChapterDao iChapterDao;
     @Autowired
     private IParagraphDao iParagraphDao;
 
-    //新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
+    // 新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
     public static WebClient getWebClient() {
         WebClient webClient = new WebClient(BrowserVersion.CHROME);
         WebClientOptions webClientOptions = webClient.getOptions();
@@ -65,6 +68,33 @@ public class WebClientUtil {
         return webClient;
     }
 
+    // 获取一个新的浏览器客户端对象，并判断是否设置
+    private WebClient getWebClient(Map handleInfo) {
+        WebClient client = getWebClient();
+        Integer proxyid = convert(handleInfo.get("proxyid"), Integer::valueOf, Integer.class);
+        if (proxyid != null && proxyid != 0) {
+            // 获取书籍代理缓存
+            String key = BOOK_PROXY + handleInfo.get("bookid");
+            Proxy proxy = (Proxy) redisUtil.get(key);
+            boolean isQuery = false;
+            if (proxy == null) {
+                proxy = iBookDao.modelProxy(proxyid);
+                isQuery = true;
+            }
+            if (proxy != null) {
+                ProxyConfig proxyConfig = client.getOptions().getProxyConfig();
+                proxyConfig.setSocksProxy(proxy.getType() == 1);
+                proxyConfig.setProxyHost(proxy.getHost());
+                proxyConfig.setProxyPort(proxy.getPort());
+                if (isQuery) {
+                    // 是查询出来的存入缓存
+                    redisUtil.set(key, proxy, DAY_SECOND);
+                }
+            }
+        }
+        return client;
+    }
+
     /**
      * 获取书籍各章节内容
      *
@@ -81,12 +111,13 @@ public class WebClientUtil {
                 log.info(book.getName() + getTaskStatus(book.getTaskstatus()) + "已被其他服务处理");
             }
             Map handleInfo = json.readValue(book.getHandlerinfo(), Map.class);
+            handleInfo.put("bookid", book.getBookid());
             Function<String, String> titleHandler = HandleUtil.getTitleHandler(handleInfo);
             BiFunction<String, String, Boolean> isEndHref = getIsEndHref(handleInfo);
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
             // 获取起始页面
-            HtmlPage htmlPage = getWebClient().getPage(book.getStarturl());
+            HtmlPage htmlPage = getWebClient(handleInfo).getPage(book.getStarturl());
             int errorNum = 0;
             while (getBookTaskStatus(book.getBookid()) != 0) {
                 String url = htmlPage.getUrl().toString().trim();
@@ -110,7 +141,7 @@ public class WebClientUtil {
                         // 调用休眠处理方法
                         HandleUtil.sleepHandler.get();
                         startTime = System.currentTimeMillis();
-                        htmlPage = getWebClient().getPage(htmlPage.getUrl());
+                        htmlPage = getWebClient(handleInfo).getPage(htmlPage.getUrl());
                         continue;
                     }
                     errorNum = 0;
@@ -152,6 +183,8 @@ public class WebClientUtil {
         } finally {
             // 更新任务状态
             updateBookTaskStatus(book.getBookid(), 0);
+            // 删除书籍代理缓存
+            redisUtil.del(BOOK_PROXY + book.getBookid());
         }
     }
 
@@ -160,17 +193,20 @@ public class WebClientUtil {
      *
      * @param config  配置信息
      * @param chapter 章节信息
+     * @param handlerinfo 处理信息
      */
-    public void getChapter(Config config, Chapter chapter) {
+    public void getChapter(Config config, Chapter chapter, String handlerinfo) {
         try {
             // 更新任务状态
             if (updateTaskStatusByRawStatus(chapter.getBookid(), 3, 0) == 0) {
                 log.info(chapter.getName() + getTaskStatus(3) + "已被其他服务处理");
             }
+            Map handleInfo = json.readValue(handlerinfo, Map.class);
+            handleInfo.put("bookid", chapter.getBookid());
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
             // 获取起始页面
-            HtmlPage htmlPage = getWebClient().getPage(chapter.getUrl());
+            HtmlPage htmlPage = getWebClient(handleInfo).getPage(chapter.getUrl());
             int num = 0;
             while (num++ < 10) {
                 // 获取标题DOM列表
@@ -186,7 +222,7 @@ public class WebClientUtil {
                     // 调用休眠处理方法
                     HandleUtil.sleepHandler.get();
                     startTime = System.currentTimeMillis();
-                    htmlPage = getWebClient().getPage(htmlPage.getUrl());
+                    htmlPage = getWebClient(handleInfo).getPage(htmlPage.getUrl());
                     continue;
                 }
                 // 计算使用时间
@@ -207,6 +243,8 @@ public class WebClientUtil {
         } finally {
             // 更新任务状态
             updateBookTaskStatus(chapter.getBookid(), 0);
+            // 删除书籍代理缓存
+            redisUtil.del(BOOK_PROXY + chapter.getBookid());
         }
     }
 

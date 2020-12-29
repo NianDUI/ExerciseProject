@@ -96,6 +96,15 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">代理</label>
+                <div class="layui-input-block">
+                    <select name="proxyid" class="proxyid" lay-verify="required">
+                        <option value="0">无</option>
+                        <option th:each="item : ${optionProxy}" th:value="${item.id}" th:text="${item.name}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button type="submit" class="layui-btn" lay-submit lay-filter="submit">提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary reset">重置</button>

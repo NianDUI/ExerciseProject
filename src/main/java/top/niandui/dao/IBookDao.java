@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import top.niandui.common.base.IBaseDao;
 import top.niandui.common.model.IdNameModel;
 import top.niandui.model.Book;
+import top.niandui.model.Proxy;
 
 import java.util.List;
 import java.util.Map;
@@ -42,4 +43,10 @@ public interface IBookDao<T> extends IBaseDao<T> {
 
     // 查询书籍处理信息
     String queryHandlerinfo(Long id);
+
+    // 代理下拉
+    List<IdNameModel<Integer>> optionProxy();
+
+    // 查询单条代理信息
+    Proxy modelProxy(Integer id);
 }

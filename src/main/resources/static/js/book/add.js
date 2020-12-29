@@ -62,6 +62,7 @@ form.on("submit(submit)", function (data) {
         , delimiter: field.delimiter
         , endType: parseInt(field.endType)
         , endCharacter: field.endCharacter
+        , proxyid: parseInt(field.proxyid)
     });
     ajax({
         type: "post"
