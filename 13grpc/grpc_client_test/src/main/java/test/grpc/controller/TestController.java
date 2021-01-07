@@ -9,6 +9,7 @@ import test.grpc.grpc.*;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**8001
  * TestController
@@ -24,13 +25,12 @@ public class TestController {
 
     public static void main(String[] args) throws Exception {
         TestController testController = new TestController();
-//        testController.send1();
-        testController.send2();
+        testController.send1();
+//        testController.send2();
     }
 
     @GetMapping("/send1")
     public void send1() throws Exception {
-        XServiceGrpc.XServiceBlockingStub blockingStub = XServiceGrpc.newBlockingStub(managedChannel);
         XRequest.Builder requestBuilder = XRequest.newBuilder();
         requestBuilder.setType(1001);
         requestBuilder.setUsername("liu123");
@@ -47,6 +47,11 @@ public class TestController {
         cmdBuilder.setCommand("echo ping 192.168.1.81 -c 5");
         requestBuilder.addCommands(cmdBuilder.build());
 
+        XServiceGrpc.XServiceBlockingStub blockingStub = XServiceGrpc.newBlockingStub(managedChannel)
+                // 返回一个新的存根，该存根的截止日期从现在开始为给定的{@code duration}之后
+                .withDeadlineAfter(20, TimeUnit.SECONDS)
+                ;
+//        CallOptions callOptions = blockingStub.getCallOptions().withDeadlineAfter(1, TimeUnit.SECONDS);
         XReply reply = blockingStub.xCall(requestBuilder.build());
         System.out.println("reply = " + reply);
         System.out.println("reply.getType() = " + reply.getType());
@@ -64,7 +69,6 @@ public class TestController {
 
     @GetMapping("/send2")
     public void send2() throws Exception {
-        XServiceGrpc.XServiceBlockingStub blockingStub = XServiceGrpc.newBlockingStub(managedChannel);
         XRequest.Builder requestBuilder = XRequest.newBuilder();
         requestBuilder.setType(1002);
         requestBuilder.setUsername("liu123");
@@ -75,6 +79,7 @@ public class TestController {
         cmdBuilder.setCommand("Dirwd");
         requestBuilder.addCommands(cmdBuilder.build());
 
+        XServiceGrpc.XServiceBlockingStub blockingStub = XServiceGrpc.newBlockingStub(managedChannel);
         XReply reply = blockingStub.xCall(requestBuilder.build());
         System.out.println("reply = " + reply);
         System.out.println("reply.getType() = " + reply.getType());
