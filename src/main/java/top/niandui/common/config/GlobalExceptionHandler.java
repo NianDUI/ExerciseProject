@@ -69,15 +69,17 @@ public class GlobalExceptionHandler {
     public void feignExceptionHandler(HttpServletResponse response, FeignException e) {
         response.setStatus(StatusCode.EXECUTE_FAIL);
         response.setContentType("application/json;charset=utf-8");
+        Object message = "";
         ResponseData rd;
         try {
             Map errInfo = json.readValue(e.contentUTF8(), Map.class);
             rd = ResponseData.fail((int) errInfo.get("code"), (String) errInfo.get("message"));
-            log.error("系统异常: " + errInfo.get("message"), e);
+            message = errInfo.get("message");
         } catch (Exception ex) {
             rd = ResponseData.fail(StatusCode.EXECUTE_FAIL, e.getMessage());
-            log.error("系统异常: ", e);
+            log.error("Feign异常转换异常: " + ex.getMessage(), ex);
         }
+        log.error("系统异常: " + message, e);
         try (OutputStream os = response.getOutputStream()) {
             json.writeValue(os, rd);
         } catch (IOException ex) {
