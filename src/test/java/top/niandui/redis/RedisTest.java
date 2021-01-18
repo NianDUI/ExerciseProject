@@ -6,6 +6,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -46,6 +47,13 @@ public class RedisTest {
         root.setLevel(Level.INFO);
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName("192.168.1.14");
+        config.setPort(6379);
+        // 64
+        config.setPassword("QTEyMzEyQHhxIQ==");
+        config.setDatabase(2);
+//        LettuceConnectionFactory factory = new LettuceConnectionFactory(config);
         LettuceConnectionFactory factory = new LettuceConnectionFactory("127.0.0.1", 6379);
         factory.afterPropertiesSet();
         template.setConnectionFactory(factory);
@@ -103,6 +111,12 @@ public class RedisTest {
     public void test1() throws Exception {
         Set<Object> set = redisUtil.sGet("asdfasdf");
         System.out.println("set = " + set);
+        // 成员不能为空
+//        redisUtil.sAdd("set1");
+        // 空指针异常
+//        redisUtil.sAdd("set2", null);
+        redisUtil.sAdd("set3", new String[]{null});
+        redisUtil.sAdd("set4", new String[]{"", "123"});
     }
 
     @Test
