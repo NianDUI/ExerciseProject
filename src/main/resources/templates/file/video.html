@@ -5,10 +5,38 @@
     <title th:text="${name}"></title>
 </head>
 <body align="center">
-<a style="color: black;text-decoration: none;" th:href="@{'/api/file/download/' + ${path}}" th:text="'下载：' + ${name}"></a>
+<a style="color: black;text-decoration: none;" th:href="@{'/api/file/download/' + ${path}}"
+   th:text="'下载：' + ${name}"></a>
 <hr/>
-<video controls preload="metadata" fluid="false" name="media" style="width: 100%">
+<video controls fluid="false" id="video" name="media" preload="metadata" style="max-width: 100%">
     <source th:src="@{'/api/file/download/' + ${path}}" th:type="'video/' + ${form}"/>
 </video>
 </body>
+<script>
+    // 获取 video 标签
+    const video = document.getElementById("video");
+
+    // 设置 video 的高度
+    function setVideoHeight() {
+        // 获取可视高度 - 59
+        const clientHeight = document.documentElement.clientHeight - 59;
+        // 获取可视宽度
+        const clientWidth = document.documentElement.clientWidth;
+        // 根据可视宽度，按照 16:9 计算出视频的窗口高度
+        let videoHeight = clientWidth / 16 * 9;
+        // 计算出的窗口高度 > 可视高度
+        if (videoHeight > clientHeight) {
+            // 窗口高度修改为可视高度
+            videoHeight = clientHeight;
+        }
+        // 给 video 标签设置高度样式标签
+        video.style.height = videoHeight + "px";
+    }
+
+    setVideoHeight();
+    // 窗口大小改变事件
+    window.onresize = function () {
+        setVideoHeight();
+    };
+</script>
 </html>
