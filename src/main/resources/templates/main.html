@@ -14,6 +14,10 @@
         <a class="layui-btn layui-bg-cyan" th:href="@{/file/list}">文件列表</a>
         <a class="layui-btn" th:href="@{/log/show}" style="background-color: #5FB878">当前日志</a>
     </div>
+    <hr/>
+    <div class="layui-btn-container" align="center">
+        <a class="layui-btn" href="http://ivi.bupt.edu.cn" target="_blank">IVI测试频道列表</a>
+    </div>
 </blockquote>
 <script>
     const base = "[[@{/}]]";
@@ -21,7 +25,7 @@
     // const sitePath = "[[@{/site/list}]]";
     // const configPath = "[[@{/config/list}]]";
 </script>
-<script th:src="@{${@configInfo.layuiJs}}"></script>
+<!--<script th:src="@{${@configInfo.layuiJs}}"></script>-->
 <!--<script th:src="@{/js/main.js}"></script>-->
 </body>
 </html>
