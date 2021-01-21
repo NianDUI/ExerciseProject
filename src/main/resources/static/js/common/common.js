@@ -38,13 +38,11 @@ function getBaseParams(key, end) {
 
 // ajax请求
 function ajax(options) {
-    console.log(options.headers);
     if (options.headers == null) {
         options.headers = headers();
     } else {
         options.headers.Token = getToken();
     }
-    console.log(options.headers);
     let success = options.success;
     if (typeof success === "function") {
         options.success = function (data) {
@@ -72,7 +70,6 @@ function headers() {
 // 获取token
 function getToken() {
     let token = sessionStorage.getItem("token");
-    console.log(token);
     if (token == null || token.length === 0) {
         do {
             token = prompt("请输入：");
