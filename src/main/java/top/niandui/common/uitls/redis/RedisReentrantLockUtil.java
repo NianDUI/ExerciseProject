@@ -46,7 +46,6 @@ public class RedisReentrantLockUtil extends BaseRedisLockUtil {
                     super.unlock(checkKey);
                 }
             }
-            System.out.println(Thread.currentThread().getName() + " 释放锁");
         });
     }
 
@@ -69,7 +68,6 @@ public class RedisReentrantLockUtil extends BaseRedisLockUtil {
                 value[0]++;
                 util.set(key, value);
             }
-            System.out.println(Thread.currentThread().getName() + " 加锁");
         });
     }
 
