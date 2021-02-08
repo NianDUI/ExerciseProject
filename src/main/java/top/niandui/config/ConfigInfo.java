@@ -47,14 +47,16 @@ public class ConfigInfo {
 
     public void setLayuiVersion(String layuiVersion) {
         this.layuiVersion = layuiVersion;
-        this.layuiBasePath = addContextPath(webjars + "/layui/" + layuiVersion);
+//        this.layuiBasePath = addContextPath(webjars + "/layui/" + layuiVersion);
+        this.layuiBasePath = addContextPath(webjars + "/layui");
         this.layuiCss = this.layuiBasePath + "/css/layui.css";
         this.layuiJs = this.layuiBasePath + "/layui.all.js";
     }
 
     public void setJqueryVersion(String jqueryVersion) {
         this.jqueryVersion = jqueryVersion;
-        this.jqueryBasePath = addContextPath(webjars + "/jquery/" + jqueryVersion);
+//        this.jqueryBasePath = addContextPath(webjars + "/jquery/" + jqueryVersion);
+        this.jqueryBasePath = addContextPath(webjars + "/jquery");
         this.jqueryJs = this.jqueryBasePath + "/jquery.js";
         this.jqueryMinJs = this.jqueryBasePath + "/jquery.min.js";
     }
