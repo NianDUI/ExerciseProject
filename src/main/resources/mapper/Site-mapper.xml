@@ -77,4 +77,11 @@
         DELETE FROM "site"
         WHERE "siteid" IN (${id})
     </delete>
+
+    <!-- 更新站点书籍配置 -->
+    <update id="updateSiteBookConfig">
+        UPDATE "book"
+        SET "configid" = #{configid}
+        WHERE "siteid" = #{siteid}
+    </update>
 </mapper>

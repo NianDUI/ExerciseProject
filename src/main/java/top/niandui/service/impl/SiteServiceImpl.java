@@ -43,6 +43,8 @@ public class SiteServiceImpl extends BaseServiceImpl implements ISiteService {
     public void update(Site site) throws Exception {
         // 检查重名
         checkName(new IdNameModel(site.getSiteid(), site.getName()));
+        // 更新站点书籍配置
+        iSiteDao.updateSiteBookConfig(site);
         iSiteDao.update(site);
     }
 
