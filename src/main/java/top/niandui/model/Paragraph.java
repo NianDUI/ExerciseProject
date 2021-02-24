@@ -19,8 +19,6 @@ import java.sql.Timestamp;
 @Data
 @ApiModel(description = "段落实体类")
 public class Paragraph extends BaseModel {
-    @ApiModelProperty(value = "段落id")
-    private Long paragraphid;
     @ApiModelProperty(value = "创建时间")
     private Timestamp createtime;
     @NotNull(message = "排序id不能为空")

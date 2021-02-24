@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          name="viewport"/>
     <title>书籍</title>
     <!-- 定制版 ionic 样式 -->
     <link href="https://unpkg.com/vonic@2.0.0-beta.11/dist/vonic.min.css" rel="stylesheet">
@@ -11,10 +12,17 @@
     <script src="https://unpkg.com/vue-router@2.2.1/dist/vue-router.min.js"></script>
     <!-- vonic 核心文件 -->
     <script src="https://unpkg.com/vonic@2.0.0-beta.11/dist/vonic.min.js"></script>
+    <script src="/webjars/jquery/jquery.js"></script>
+    <style>
+        .right {
+            float: right
+        }
+    </style>
 </head>
 <body>
 <von-app></von-app>
 
+</body>
 <script>
     // 获取token
     function getToken() {
@@ -27,30 +35,35 @@
         }
         return token;
     }
+    // 书籍id
+    let bookInfo = null;
+    // 书籍id
+    let chapterInfo = null;
 
-    const Index = {
+    // 书籍页面
+    const book = {
         template: `
 <div class="page has-navbar" v-nav="{ title: '书籍' }">
-  <div class="page-content">
-    <div class="padding light-bg">
-    <div class="entrance assertive">
-    <von-input type="text" v-model="prams.name" placeholder="请输入名称"></von-input>
+    <div class="page-content">
+        <search v-model="prams.name" placeholder="请输入名称" :on-search="onSearch" :on-cancel="onCancel" cancelText="重置"></search>
+        <list class="list-android">
+            <item v-for="i in data.list" :key="i.bookid">
+                <router-link to="/chapter" v-text="i.name" @click.native="bookInfo = i"></router-link>
+            </item>
+        </list>
+        <div align="center">
+            <md-button class="button" @click.native="data.hasPreviousPage && onPrevious()">上一页</md-button>
+            <span> 共{{data.pages}}页,{{data.total}}条 </span>
+            <md-button class="button" @click.native="data.hasNextPage && onNext()">下一页</md-button>
+        </div>
+        <div align="center">
+            <input type="number" v-model="prams.pageNum" @keyup.enter="onSearch" />
+        </div>
     </div>
-    <div class="entrance energized">
-    <md-button class="button button-positive" @click.native="queryBookList()">搜索</md-button>
-</div>
-    </div>
-    <list class="list-android">
-      <item v-for="i in data.list" :key="i.bookid">
-        <router-link to="/about/" v-text="i.name"></router-link>
-      </item>
-    </list>
-  </div>
 </div> `
         , data() {
             return {
-                msg: 'Hello! Vonic.'
-                , prams: {
+                prams: {
                     name: ""
                     , pageNum: 1
                     , pageSize: 10
@@ -60,15 +73,17 @@
                     , list: [{bookid: 0, name: ""}]
                     , hasPreviousPage: false
                     , hasNextPage: false
+                    , pageNum: 0
+                    , pages: 0
                 }
             }
         }
         , mounted() {
             // 生命周期方法
-            this.queryBookList();
+            this.onSearch();
         }
         , methods: {
-            queryBookList() {
+            onSearch() {
                 const o = this;
                 axios({
                     method: 'post'
@@ -77,28 +92,179 @@
                     , data: JSON.stringify(this.prams)
                 }).then(function (response) {
                     o.data = response.data.data;
+                    o.prams.pageNum = o.data.pageNum;
                 });
+            }
+            , onCancel() {
+                this.prams.pageNum = 1;
+                this.onSearch();
+            }
+            , onPrevious() {
+                this.prams.pageNum--;
+                this.onSearch();
+            }
+            , onNext() {
+                this.prams.pageNum++;
+                this.onSearch();
             }
         }
     }
 
-    const About = {
+    // 章节页面
+    const chapter = {
         template: `
-    <div class="page has-navbar" v-nav="{ title: 'About', showBackButton: true }">
-      <div class="page-content text-center">
-        <h2 class="padding">Nothing here.</h2>
-      </div>
+<div class="page has-navbar" v-nav="{ title: '章节', showBackButton: true }">
+    <div class="page-content">
+        <search v-model="prams.name" placeholder="请输入名称" :on-search="onSearch" :on-cancel="onCancel" cancelText="重置"></search>
+        <list class="list-android">
+            <item v-for="i in data.list" :key="i.chapterid">
+                <router-link to="/paragraph" v-text="i.name" @click.native="chapterInfo = i"></router-link>
+            </item>
+        </list>
+        <div align="center">
+            <md-button class="button" @click.native="data.hasPreviousPage && onPrevious()">上一页</md-button>
+            <span> 共{{data.pages}}页,{{data.total}}条 </span>
+            <md-button class="button right" @click.native="data.hasNextPage && onNext()">下一页</md-button>
+        </div>
+        <div align="center">
+            <input type="number" v-model="prams.pageNum" @keyup.enter="onSearch" />
+        </div>
     </div>
-  `
+</div> `
+        , data() {
+            return {
+                bookInfo: bookInfo
+                , prams: {
+                    name: ""
+                    , bookid: bookInfo.bookid
+                    , pageNum: 1
+                    , pageSize: 10
+                }
+                , data: {
+                    total: 0
+                    , list: [{chapterid: 0, name: ""}]
+                    , hasPreviousPage: false
+                    , hasNextPage: false
+                    , pageNum: 0
+                    , pages: 0
+                }
+            }
+        }
+        , mounted() {
+            // 生命周期方法
+            this.onSearch();
+            this.$nextTick(function () {
+                // 整个视图渲染完毕后调用
+                setTimeout(function(){
+                    // 休眠指定时间后调用，设置标题
+                    $("h1.title").html("<span>章节 - " + bookInfo.name + "</span>");
+                }, 1);
+            })
+        }
+        , methods: {
+            onSearch() {
+                const o = this;
+                axios({
+                    method: 'post'
+                    , headers: {"Content-Type": "application/json", "Token": getToken()}
+                    , url: '/api/queryChapterList'
+                    , data: JSON.stringify(this.prams)
+                }).then(function (response) {
+                    o.data = response.data.data;
+                    o.prams.pageNum = o.data.pageNum;
+                });
+            }
+            , onCancel() {
+                this.prams.pageNum = 1;
+                this.onSearch();
+            }
+            , onPrevious() {
+                this.prams.pageNum--;
+                this.onSearch();
+            }
+            , onNext() {
+                this.prams.pageNum++;
+                this.onSearch();
+            }
+        }
+    }
+
+    // 段落页面  style="font-size:20px"
+    const paragraph = {
+        template: `
+<div class="page has-navbar" v-nav="{ title: '段落', showBackButton: true }">
+    <div class="page-content">
+        <div>
+            <md-button class="button" @click.native="previd && onPrevious()">上一章</md-button>
+            <md-button class="button right" @click.native="nextid && onNext()">下一章</md-button>
+        </div>
+        <div>
+            <fieldset class="" style="background-color: #EDFCED;">
+                <div v-for="i in paragraphList" :key="i.seqid"><h4>&nbsp;&nbsp{{i.content}}</h4></div>
+            </fieldset>
+        </div>
+        <div>
+            <md-button class="button" @click.native="previd && onPrevious()">上一章</md-button>
+            <md-button class="button right" @click.native="nextid && onNext()">下一章</md-button>
+        </div>
+    </div>
+</div> `
+        , data() {
+            return {
+                book: {
+                    name: ""
+                }
+                , chapter: {
+                    chapterid: chapterInfo.chapterid
+                    , name: ""
+                }
+                , nextid: null
+                , previd: null
+                , paragraphList: [
+                    {
+                        content: ""
+                    }
+                ]
+            }
+        }
+        , mounted() {
+            // 生命周期方法
+            this.getData(this.chapter.chapterid);
+        }
+        , methods: {
+            getData(chapterid) {
+                const o = this;
+                axios({
+                    method: 'get'
+                    , headers: {"Content-Type": "application/json", "Token": getToken()}
+                    , url: "/api/queryChapterInfo/" + chapterid
+                }).then(function (response) {
+                    let data = response.data.data;
+                    for (let key in data) {
+                        o[key] = data[key];
+                    }
+                    // 设置标题
+                    $("h1.title").html("<span>" + o.chapter.name + " - " + o.book.name + "</span>");
+                    // 返回页面顶部
+                    scrollTo(0, 0);
+                });
+            }
+            , onPrevious() {
+                this.getData(this.previd);
+            }
+            , onNext() {
+                this.getData(this.nextid);
+            }
+        }
     }
 
     const routes = [
-        {path: '/', component: Index},
-        {path: '/about', component: About}
+        {path: '/', component: book}
+        , {path: '/chapter', component: chapter}
+        , {path: '/paragraph', component: paragraph}
     ]
     Vue.use(Vonic.app, {
         routes: routes
     })
 </script>
-</body>
 </html>

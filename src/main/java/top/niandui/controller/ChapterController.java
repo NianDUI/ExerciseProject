@@ -13,6 +13,7 @@ import top.niandui.common.model.IdNameModel;
 import top.niandui.common.model.PageList;
 import top.niandui.common.model.ResponseData;
 import top.niandui.model.Chapter;
+import top.niandui.model.vo.ChapterInfoReturnVO;
 import top.niandui.model.vo.ChapterListReturnVO;
 import top.niandui.model.vo.ChapterSearchVO;
 import top.niandui.model.vo.SpecifiedFollowUpGetVO;
@@ -102,6 +103,13 @@ public class ChapterController extends BaseController {
     public ResponseData reacquireSingleChapter(@PathVariable Long id) throws Exception {
         iChapterService.reacquireSingleChapter(id);
         return ResponseData.ok();
+    }
+
+    @GetMapping("/queryChapterInfo/{id}")
+    @ApiOperation(value = "查询章节信息", notes = "时间：2021/02/24")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "章节id", dataType = "Long", required = true))
+    public ResponseData<ChapterInfoReturnVO> queryChapterInfo(@PathVariable Long id) throws Exception {
+        return ResponseData.ok(iChapterService.queryChapterInfo(id));
     }
 
     @PostMapping("/getSpecifiedAndFollowUpChapter")
