@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title th:text="'索引：' + ${pathName}">索引：/</title>
     <style>
         .name {
             min-width: 200px;
             max-width: 300px;
+        }
+
+        .date {
+            min-width: 160px;
+            /**
+                思路：
+                1.设置inline-block属相
+                2.强制不换行
+                3.固定高度
+                4.隐藏超出部分
+                5.显示“……”
+            */
+            display: inline-block;
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .size {
@@ -22,6 +40,8 @@
 </head>
 <body>
 <h1>
+    <a th:href="@{/main}">首页</a>
+    <span> - </span>
     <a th:href="@{'/file/list/' + ${path}}" th:text="'索引：' + ${pathName}">索引：/</a>
 </h1>
 <hr>
@@ -31,8 +51,8 @@
         <td class="name">
             <a th:href="@{'/file/list/' + ${item.path}}" th:text="${item.name + (item.isDir ? '/' : '')}"></a>
         </td>
-        <td th:text="${item.lastModified}"></td>
-        <td class="size" th:text="${item.isDir ? '-' : item.size + item.unit}"></td>
+        <td class="size" th:text="${item.isDir ? '-' : item.size + item.unit} "></td>
+        <td class="date" th:text="${item.lastModified}"></td>
     </tr>
 </table>
 <hr>

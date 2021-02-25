@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>日志</title>
     <link th:href="@{${@configInfo.layuiCss}}" rel="stylesheet" media="all">
 </head>
@@ -23,7 +24,7 @@
     }
     let ws = new WebSocket(url + "[[@{/api/log/ws}]]");
     // 连接成功
-    ws.onopen= function() {
+    ws.onopen = function () {
         ws.send(getToken());
     }
     // 接收消息处理

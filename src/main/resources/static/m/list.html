@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-          name="viewport"/>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>书籍</title>
     <!-- 定制版 ionic 样式 -->
     <link href="https://unpkg.com/vonic@2.0.0-beta.11/dist/vonic.min.css" rel="stylesheet">
@@ -35,6 +35,7 @@
         }
         return token;
     }
+
     // 书籍id
     let bookInfo = null;
     // 书籍id
@@ -155,7 +156,7 @@
             this.onSearch();
             this.$nextTick(function () {
                 // 整个视图渲染完毕后调用
-                setTimeout(function(){
+                setTimeout(function () {
                     // 休眠指定时间后调用，设置标题
                     $("h1.title").html("<span>章节 - " + bookInfo.name + "</span>");
                 }, 1);
