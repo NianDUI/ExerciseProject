@@ -124,7 +124,7 @@
         <div align="center">
             <md-button class="button" @click.native="data.hasPreviousPage && onPrevious()">上一页</md-button>
             <span> 共{{data.pages}}页,{{data.total}}条 </span>
-            <md-button class="button right" @click.native="data.hasNextPage && onNext()">下一页</md-button>
+            <md-button class="button" @click.native="data.hasNextPage && onNext()">下一页</md-button>
         </div>
         <div align="center">
             <input type="number" v-model="prams.pageNum" @keyup.enter="onSearch" />
