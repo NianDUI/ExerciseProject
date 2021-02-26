@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" name="viewport"
-          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          name="viewport">
     <title th:text="'索引：' + ${pathName}">索引：/</title>
     <style>
         .inline-block {
             /**
+                在一行内显示
                 思路：
                 1.设置inline-block属相
                 2.强制不换行
@@ -20,21 +21,26 @@
             /*overflow: hidden;*/
             text-overflow: ellipsis;
         }
+
         .name {
+            /* 名称列 */
             min-width: 200px;
             max-width: 300px;
         }
 
-        .date {
-            min-width: 160px;
-        }
-
         .size {
+            /* 大小列 */
             text-align: right;
             min-width: 100px;
         }
 
+        .date {
+            /* 日期列 */
+            min-width: 160px;
+        }
+
         a {
+            /* 超链接 */
             color: black;
             text-decoration: none;
         }
