@@ -1,10 +1,64 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" name="viewport"
-          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          name="viewport">
     <title>日志</title>
-    <link th:href="@{${@configInfo.layuiCss}}" rel="stylesheet" media="all">
+    <link media="all" rel="stylesheet" th:href="@{${@configInfo.layuiCss}}">
+    <style>
+        .inline-block {
+            /**
+                在一行内显示
+                思路：
+                1.设置inline-block属相
+                2.强制不换行
+                3.固定高度
+                4.隐藏超出部分
+                5.显示“……”
+            */
+            display: inline-block;
+            white-space: nowrap;
+            width: 100%;
+            /*overflow: hidden;*/
+            text-overflow: ellipsis;
+        }
+
+        .gray {
+            /*灰色*/
+            color: #808080
+        }
+
+        .blue {
+            /*蓝色*/
+            color: #0000EE;
+        }
+
+        .red {
+            /*红色*/
+            color: #cd0000;
+        }
+
+        .magenta {
+            /*洋红*/
+            color: #CD00CD
+        }
+
+        .cyan {
+            /*青色*/
+            color: #00CCCC
+        }
+
+        .backgroundYellow {
+            /*背景黄色*/
+            background-color: #FFFF00
+        }
+
+        .backgroundOrange {
+            /*背景橙色*/
+            background-color: #FFC800
+        }
+    </style>
 </head>
 <body>
 <blockquote class="layui-elem-quote">
@@ -16,32 +70,67 @@
 <script th:src="@{/js/common/common.js}"></script>
 <script>
     // let $ = layui.$;
-    const div = '<div class="layui-field-box">[txt]</div>';
+    const debug = '<span class="gray">{date} {level} {thread} {logger} - {msg}</span>';
+    const info = '{date} <span class="blue">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}';
+    const warn = '<span class="backgroundYellow">{date} <span class="red">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}</span>';
+    const error = '<span class="backgroundOrange">{date} <span class="red">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}</span>';
+    const div = '<div class="layui-field-box inline-block">[txt]</div>';
     const field = $(".layui-elem-field");
     let url = "ws://" + window.location.host;
     if (window.location.port === '') {
         url += ":" + window.location.port;
     }
     let ws = new WebSocket(url + "[[@{/api/log/ws}]]");
+
     // 连接成功
     ws.onopen = function () {
         ws.send(getToken());
     }
+
     // 接收消息处理
     ws.onmessage = function (evt) {
         let boxs = $(".layui-field-box");
         if (boxs.size() > 1000) {
             boxs.eq(0).remove();
         }
-        field.append(div.replace("[txt]", evt.data));
+        // console.log(evt.data);
+        let data = JSON.parse(evt.data);
+        // console.log(data);
+        let txt;
+        if ("DEBUG" === data.level) {
+            txt = debug.format(data);
+        } else if ("WARN " === data.level) {
+            txt = warn.format(data);
+        } else if ("ERROR" === data.level) {
+            txt = error.format(data);
+        } else {
+            txt = info.format(data);
+        }
+        field.append(div.replace("[txt]", txt));
         // 滚动到页面底部
         scrollTo(0, $(document).height());
         // $("html").scrollTop($(document).height());
     }
+
     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
     window.onbeforeunload = function () {
         ws.close();
     }
+
+    // 字符串格式化方法
+    String.prototype.format = function (...args) {
+        if (args.length == 1 && typeof args[0] == 'object') {
+            let k = '', v = ''
+            return this.replace(/{[A-Za-z]+}/g, (it, i) => {
+                k = it.slice(1, -1)
+                v = args[0][k]
+                return typeof v != 'undefined' ? v : '';
+            })
+        }
+        return this.replace(/{(\d+)}/g, (it, i) => {
+            return typeof args[i] != 'undefined' ? args[i] : '';
+        });
+    };
 </script>
 </body>
 </html>
