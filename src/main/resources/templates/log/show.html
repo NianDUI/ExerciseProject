@@ -22,6 +22,13 @@
             width: 100%;
             /*overflow: hidden;*/
             text-overflow: ellipsis;
+
+            /* 设置每行上线和左右间隔 */
+            padding: 1px 15px;
+            /*padding-top: 1px;
+            padding-right: 15px;
+            padding-bottom: 1px;
+            padding-left: 15px;*/
         }
 
         .gray {
@@ -70,11 +77,11 @@
 <script th:src="@{/js/common/common.js}"></script>
 <script>
     // let $ = layui.$;
-    const debug = '<span class="gray">{date} {level} {thread} {logger} - {msg}</span>';
-    const info = '{date} <span class="blue">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}';
-    const warn = '<span class="backgroundYellow">{date} <span class="red">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}</span>';
-    const error = '<span class="backgroundOrange">{date} <span class="red">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}</span>';
-    const div = '<div class="layui-field-box inline-block">[txt]</div>';
+    const debug = '<span class="gray">{date} {level} {thread} {logger} - {msg}</span>{errorDetail}';
+    const info = '<span>{date} <span class="blue">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}</span>{errorDetail}';
+    const warn = '<span class="backgroundYellow">{date} <span class="red">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}</span>{errorDetail}';
+    const error = '<span class="backgroundOrange">{date} <span class="red">{level}</span> <span class="magenta">{thread}</span> <span class="cyan">{logger}</span> - {msg}</span>{errorDetail}';
+    const div = '<div class="inline-block">[txt]</div>';
     const field = $(".layui-elem-field");
     let url = "ws://" + window.location.host;
     if (window.location.port === '') {
