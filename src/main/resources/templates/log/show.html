@@ -126,7 +126,7 @@
 
     // 字符串格式化方法
     String.prototype.format = function (...args) {
-        if (args.length == 1 && typeof args[0] == 'object') {
+        if (args.length === 1 && typeof args[0] == 'object') {
             let k = '', v = ''
             return this.replace(/{[A-Za-z]+}/g, (it, i) => {
                 k = it.slice(1, -1)
