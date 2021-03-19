@@ -46,10 +46,10 @@ public class HandleUtil {
                 return title -> titleHandler(title, startIndex,
                         title.substring(startIndex).replaceAll("^\\d*", ""), 0);
             }
-            return title -> title.substring(startIndex);
+            return title -> title.substring(startIndex).trim();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return title -> title;
+            return String::trim;
         }
     }
 
@@ -88,7 +88,7 @@ public class HandleUtil {
         if (index > startIndex) {
             title = "第" + title.substring(startIndex, index).trim() + "章 " + title.substring(index + delLength).trim();
         }
-        return title;
+        return title.trim();
     }
 
     /**
