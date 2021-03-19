@@ -32,9 +32,14 @@ public class WebMvcConfig {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
                 // 添加拦截器
-                registry.addInterceptor(tokenInterceptor).addPathPatterns("/api/**")
-                        .excludePathPatterns("/api/*download*/**", "/api/**/*download*/**"
-                                , "/api/file/read", "/api/log/**");
+                registry.addInterceptor(tokenInterceptor)
+                        // 拦截链接
+                        .addPathPatterns("/api/**")
+                        // 排除链接
+                        .excludePathPatterns("/api/log/**")
+//                        .excludePathPatterns("/api/*download*/**", "/api/**/*download*/**"
+//                                , "/api/file/read", "/api/log/**")
+                ;
             }
         };
     }

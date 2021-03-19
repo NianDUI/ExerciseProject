@@ -3,6 +3,7 @@ package top.niandui.websocket;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
+import top.niandui.common.uitls.RSAUtil;
 import top.niandui.config.PublicBean;
 
 import javax.websocket.*;
@@ -99,7 +100,7 @@ public class LogWebSocketServer {
      */
     @OnMessage
     public void onMessage(Session session, String message) {
-        if (isCheck && token.equals(message)) {
+        if (isCheck && token.equals(RSAUtil.privateKeyDecrypt(message))) {
             AUTHORIZE_SESSIONS.add(session);
         }
     }

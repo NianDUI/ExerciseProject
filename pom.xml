@@ -168,6 +168,11 @@
             <artifactId>vue</artifactId>
             <version>2.6.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>jsencrypt</artifactId>
+            <version>3.0.0-rc.1</version>
+        </dependency>
         <!-- htmlunit -->
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>

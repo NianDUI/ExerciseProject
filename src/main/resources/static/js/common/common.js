@@ -64,7 +64,7 @@ function ajax(options) {
 
 // 获取请求头
 function headers() {
-    return {"Token": getToken()};
+    return {"token": getToken()};
 }
 
 // 获取token
@@ -74,6 +74,8 @@ function getToken() {
         do {
             token = prompt("请输入：");
         } while (token.trim().length === 0)
+        // 加密
+        token = encrypt.encrypt(token);
         sessionStorage.setItem("token", token);
     }
     return token;
@@ -213,3 +215,9 @@ function setAddIframeStyle() {
     parent.layer.style(thisIndex, getIframeStyle(thisIndex));
     // parent.layer.full(thisIndex);
 }
+
+
+/* 其他依赖js */
+// RSA加密解密
+document.write('<script src="/webjars/jsencrypt/bin/jsencrypt.js"></script>');
+document.write('<script src="/js/utils/rsa.js"></script>');

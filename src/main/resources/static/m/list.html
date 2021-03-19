@@ -13,6 +13,9 @@
     <!-- vonic 核心文件 -->
     <script src="https://unpkg.com/vonic@2.0.0-beta.11/dist/vonic.min.js"></script>
     <script src="/webjars/jquery/jquery.js"></script>
+    <!-- RSA加密解密 -->
+    <script src="/webjars/jsencrypt/bin/jsencrypt.js"></script>
+    <script src="/js/utils/rsa.js"></script>
     <style>
         .right {
             float: right
@@ -31,6 +34,8 @@
             do {
                 token = prompt("请输入：");
             } while (token.trim().length === 0)
+            // 加密
+            token = encrypt.encrypt(token);
             sessionStorage.setItem("token", token);
         }
         return token;

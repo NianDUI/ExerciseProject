@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import springfox.documentation.annotations.ApiIgnore;
+import top.niandui.common.base.BaseController;
 import top.niandui.config.ConfigInfo;
 import top.niandui.model.vo.ChapterInfoReturnVO;
 import top.niandui.service.*;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Map;
 
+import static top.niandui.interceptor.TokenInterceptor.TOKEN_KEY;
+import static top.niandui.interceptor.TokenInterceptor.checkToken;
 import static top.niandui.utils.PathUtil.getPath;
 
 /**
@@ -27,7 +30,7 @@ import static top.niandui.utils.PathUtil.getPath;
 @Slf4j
 @ApiIgnore
 @Controller
-public class PageController {
+public class PageController extends BaseController {
     @Autowired
     private IConfigService iConfigService;
     @Autowired
@@ -128,6 +131,19 @@ public class PageController {
     @SneakyThrows
     @GetMapping("/file/list/**")
     public String fileList(HttpServletRequest request, Map map) {
+        try {
+            // 获取token
+            String token = getPara(TOKEN_KEY);
+            // 校验token
+            if (!checkToken(token)) {
+                return "redirect:/";
+            }
+            // 替换特殊字符
+            map.put("token", token.replace("+", "%2B"));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return "redirect:/";
+        }
         String[] paths = getPath(request, "list");
         String path = paths[1];
         File file = new File(configInfo.getFilePath() + path);

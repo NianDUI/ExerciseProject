@@ -50,14 +50,14 @@
 <h3 class="inline-block">
     <a th:href="@{/main}">首页</a>
     <span> - </span>
-    <a th:href="@{'/file/list/' + ${path}}" th:text="'索引：' + ${pathName}">索引：/</a>
+    <a th:href="@{'/file/list/' + ${path} + '?token=' + ${token}}" th:text="'索引：' + ${pathName}">索引：/</a>
 </h3>
 <hr>
 <!--<pre></pre>-->
 <table>
     <tr th:each="item : ${list}">
         <td class="name">
-            <a th:href="@{'/file/list/' + ${item.path}}" th:text="${item.name + (item.isDir ? '/' : '')}"></a>
+            <a th:href="@{'/file/list/' + ${item.path} + '?token=' + ${token}}" th:text="${item.name + (item.isDir ? '/' : '')}"></a>
         </td>
         <td class="size" th:text="${item.isDir ? '-' : item.size + item.unit} "></td>
         <td class="date inline-block" th:text="${item.lastModified}"></td>

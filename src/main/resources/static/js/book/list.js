@@ -46,10 +46,10 @@ table.on("tool(table)", function (obj) {
         self.location.href = getBaseParams("showChapterUrl", data.bookid);
     } else if (obj.event === "download") {
         layer.msg("数据整理中请稍等！");
-        location.href = getBaseParams("downloadUrl", data.bookid);
+        location.href = getBaseParams("downloadUrl", data.bookid) + "?token=" + getToken();
     } else if (obj.event === "download2") {
         layer.msg("数据整理中请稍等！");
-        location.href = getBaseParams("downloadUrl2", data.bookid);
+        location.href = getBaseParams("downloadUrl2", data.bookid) + "?token=" + getToken();
     } else if (obj.event === "edit") {
         show(getBaseParams("addUrl", data.bookid));
     } else if (obj.event === "del") {
