@@ -69,17 +69,16 @@ public class ZipUtil {
         if (!file.exists()) {
             file.mkdirs();
         }
-        String name = file.getAbsolutePath() + File.separator + zipName;
-        if (!name.endsWith(".zip")) {
-            name += ".zip";
+        if (!zipName.endsWith(".zip")) {
+            zipName += ".zip";
         }
-        try (ZipOutputStream zos = getZipOutputStream(file.getAbsolutePath() + File.separator + zipName)) {
+        String filePath = file.getAbsolutePath() + File.separator + zipName;
+        try (ZipOutputStream zos = getZipOutputStream(filePath)) {
             writeZipRoot(source, zos);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException("创建ZIP文件失败");
         }
-        return name;
+        return filePath;
     }
 
     /**
@@ -163,7 +162,6 @@ public class ZipUtil {
                 FileUtils.copyFile(file, zos);
             }
         } catch (IOException e) {
-            e.printStackTrace();
             log.error("创建ZIP文件失败", e);
         }
     }
