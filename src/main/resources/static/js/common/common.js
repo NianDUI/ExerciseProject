@@ -62,25 +62,6 @@ function ajax(options) {
     $.ajax(options);
 }
 
-// 获取请求头
-function headers() {
-    return {"token": getToken()};
-}
-
-// 获取token
-function getToken() {
-    let token = sessionStorage.getItem("token");
-    if (token == null || token.length === 0) {
-        do {
-            token = prompt("请输入：");
-        } while (token.trim().length === 0)
-        // 加密
-        token = encrypt.encrypt(token);
-        sessionStorage.setItem("token", token);
-    }
-    return token;
-}
-
 /* 列表页面相关 */
 // 列表页面公用参数
 const tableRequest = {pageName: "pageNum", limitName: "pageSize"};

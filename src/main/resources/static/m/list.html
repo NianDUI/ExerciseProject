@@ -27,20 +27,6 @@
 
 </body>
 <script>
-    // 获取token
-    function getToken() {
-        let token = sessionStorage.getItem("token");
-        if (token == null || token.length === 0) {
-            do {
-                token = prompt("请输入：");
-            } while (token.trim().length === 0)
-            // 加密
-            token = encrypt.encrypt(token);
-            sessionStorage.setItem("token", token);
-        }
-        return token;
-    }
-
     // 书籍id
     let bookInfo = null;
     // 书籍id
