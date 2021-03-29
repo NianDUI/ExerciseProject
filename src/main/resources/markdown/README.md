@@ -35,13 +35,9 @@ ke.global.setAllHeader("Token", "token值");
 spring:
   # 运行环境
   profiles:
+    # 默认都包含的配置
     include: server,knife4j,mybatis,redis,datasource,info
-```
-- config/application-server.yml
-```yaml
-spring:
-  # 运行环境
-  profiles:
+    # 默认激活的配置
     active: dev
 ```
 - config/application-dev.yml

@@ -1,4 +1,7 @@
 spring:
   # 运行环境
   profiles:
+    # 默认都包含的配置
     include: server,knife4j,mybatis,redis,datasource,info
+    # 默认激活的配置
+    active: dev

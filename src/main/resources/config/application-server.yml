@@ -19,10 +19,6 @@ spring:
       # 单次所有文件上传最大值
       maxRequestSize: 10000MB
 
-  # 运行环境
-  profiles:
-    active: dev
-
   # jackson配置
   jackson:
     # 全局设置@JsonFormat的格式pattern
