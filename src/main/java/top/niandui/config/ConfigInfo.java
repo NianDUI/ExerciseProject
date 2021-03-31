@@ -19,15 +19,13 @@ public class ConfigInfo {
 //    private String contextPath;
     private String webjars = "/webjars";
     // layui
-    private String layuiVersion;
-    private String layuiBasePath;
-    private String layuiCss;
-    private String layuiJs;
+    private String layuiBasePath = addContextPath(webjars + "/layui");
+    private String layuiCss = layuiBasePath + "/css/layui.css";
+    private String layuiJs = layuiBasePath + "/layui.all.js";
     // jquery
-    private String jqueryVersion;
-    private String jqueryBasePath;
-    private String jqueryJs;
-    private String jqueryMinJs;
+    private String jqueryBasePath = addContextPath(webjars + "/jquery");
+    private String jqueryJs = jqueryBasePath + "/jquery.js";
+    private String jqueryMinJs = jqueryBasePath + "/jquery.min.js";
     // 文件路径
     private String filePath;
     private String winFilePath;
@@ -44,22 +42,6 @@ public class ConfigInfo {
 //            this.contextPath = null;
 //        }
 //    }
-
-    public void setLayuiVersion(String layuiVersion) {
-        this.layuiVersion = layuiVersion;
-//        this.layuiBasePath = addContextPath(webjars + "/layui/" + layuiVersion);
-        this.layuiBasePath = addContextPath(webjars + "/layui");
-        this.layuiCss = this.layuiBasePath + "/css/layui.css";
-        this.layuiJs = this.layuiBasePath + "/layui.all.js";
-    }
-
-    public void setJqueryVersion(String jqueryVersion) {
-        this.jqueryVersion = jqueryVersion;
-//        this.jqueryBasePath = addContextPath(webjars + "/jquery/" + jqueryVersion);
-        this.jqueryBasePath = addContextPath(webjars + "/jquery");
-        this.jqueryJs = this.jqueryBasePath + "/jquery.js";
-        this.jqueryMinJs = this.jqueryBasePath + "/jquery.min.js";
-    }
 
     public String addContextPath(String path) {
 //        return contextPath != null ? contextPath + path : path;

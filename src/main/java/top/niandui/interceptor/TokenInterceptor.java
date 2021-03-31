@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
+import top.niandui.common.base.BaseController;
 import top.niandui.common.expection.TokenCheckException;
 import top.niandui.common.uitls.RSAUtil;
 import top.niandui.config.ConfigInfo;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2020/11/9 11:14
  */
 @Component
-public class TokenInterceptor implements HandlerInterceptor {
+public class TokenInterceptor extends BaseController implements HandlerInterceptor {
     // token key
     public final static String TOKEN_KEY = "token";
     // token
@@ -39,10 +40,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             return true;
         }
         // 获取token
-        String token = request.getHeader(TOKEN_KEY);
-        if (!StringUtils.hasText(token)) {
-            token = request.getParameter(TOKEN_KEY);
-        }
+        String token = getPara(TOKEN_KEY);
         // 校验token
         if (checkToken(token)) {
             return true;

@@ -138,8 +138,6 @@ public class PageController extends BaseController {
             if (!checkToken(token)) {
                 return "redirect:/";
             }
-            // 替换特殊字符
-            map.put("token", token.replace("+", "%2B"));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return "redirect:/";

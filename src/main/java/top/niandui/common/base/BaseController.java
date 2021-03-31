@@ -4,7 +4,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * Controller基类
@@ -30,6 +32,18 @@ public abstract class BaseController {
         if (!StringUtils.hasText(value)) {
             // 从请求参数中获取指定key值
             value = request.getParameter(key);
+        }
+        if (!StringUtils.hasText(value)) {
+            // 从cookie中获取
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (Objects.equals(key, cookie.getName())) {
+                        value = cookie.getValue();
+                        break;
+                    }
+                }
+            }
         }
         return "null".equals(value) ? null : value;
     }

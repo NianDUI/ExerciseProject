@@ -199,8 +199,5 @@ function setAddIframeStyle() {
 
 
 /* 其他依赖js */
-// RSA加密解密
-document.write('<script src="/webjars/jsencrypt/bin/jsencrypt.js"></script>');
-document.write('<script src="/js/utils/rsa.js"></script>');
 // token相关方法
 document.write('<script src="/js/utils/token.js"></script>');
