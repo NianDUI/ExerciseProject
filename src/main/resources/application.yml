@@ -3,5 +3,5 @@ spring:
   profiles:
     # 默认都包含的配置
     include: server,knife4j,mybatis,redis,datasource,info
-    # 默认激活的配置
+    # 默认激活的配置。springboot2.4会先加载 active => include
     active: dev

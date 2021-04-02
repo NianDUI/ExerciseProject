@@ -20,14 +20,14 @@ ke.global.setAllHeader("Token", "token值");
 - project/config | jarDir/config
 #### 本项目中配置文件加载顺序
 - resources/application.yml
-  - application 使 server,knife4j,mybatis,redis,datasource,info 相关配置生效
-- resources/config/application-(server,knife4j,mybatis,redis,datasource,info).yml
-  - server 配置文件使 resources/config/application-(dev,run).yml 生效
-- project/下配置文件(application.yml 和 application-**.yml)
-- project/config/下配置文件(application.yml 和 application-**.yml)
+  - application 使 active(dev/run),inclue(server,knife4j,mybatis,redis,datasource,info) 相关配置生效
+- resources/config/application-(server,knife4j,mybatis,redis,datasource,info).yml 配置生效
+- project(或jar)/下配置文件(application.yml 和 application-**.yml)
+- project(或jar)/config/下配置文件(application.yml 和 application-**.yml)
   - application(-\**).yml 中的配置会覆盖之前加载的 application(-\**).yml 中相同配置
   - application-**.yml 中的配置会覆盖 application.yml 中相同配置
-  - active 中的配置会覆盖 include 中相同配置
+  - include 中的配置会覆盖 active 中相同配置
+  - springboot2.4会先加载 active => include
 
 ### 2)、文件示例
 - application.yml
@@ -37,7 +37,7 @@ spring:
   profiles:
     # 默认都包含的配置
     include: server,knife4j,mybatis,redis,datasource,info
-    # 默认激活的配置
+    # 默认激活的配置。springboot2.4会先加载 active => include
     active: dev
 ```
 - config/application-dev.yml
