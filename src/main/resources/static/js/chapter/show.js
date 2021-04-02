@@ -3,11 +3,13 @@ setBaseParams({
     showUrl: base + "chapter/show/"
 });
 setAddIframeStyle();
-if (nextid != null) {
-    const thisIndex = baseParams.thisIndex;
+const thisIndex = baseParams.thisIndex;
+if (previd != null) {
     $(".prev").click(function () {
         parent.layer.iframeSrc(thisIndex, getBaseParams("showUrl", previd))
     });
+}
+if (nextid != null) {
     $(".next").click(function () {
         parent.layer.iframeSrc(thisIndex, getBaseParams("showUrl", nextid))
     });
