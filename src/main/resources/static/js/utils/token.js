@@ -13,10 +13,8 @@ function handleUrlToken(token) {
 // 获取token
 function getToken() {
     let token = Cookies.get("token");
-    console.log("Cookies" + token)
     if (token == null || token.length === 0) {
         token = sessionStorage.getItem("token");
-        console.log("sessionStorage" + token)
         if (token == null || token.length === 0) {
             // 设置token
             token = setToken();
