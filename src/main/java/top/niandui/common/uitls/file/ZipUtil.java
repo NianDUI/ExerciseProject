@@ -1,13 +1,10 @@
 package top.niandui.common.uitls.file;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -44,13 +41,14 @@ public class ZipUtil {
                 if (zipEntry.isDirectory()) {
                     file.mkdirs();
                 } else {
-                    FileUtils.copyInputStreamToFile(zipFile.getInputStream(zipEntry), file);
+                    try (InputStream is = zipFile.getInputStream(zipEntry)) {
+                        Files.copy(is, file.toPath());
+                    }
                     fileList.add(file);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("文件解压失败");
+            throw new RuntimeException("文件解压失败", e);
         }
         return fileList;
     }
@@ -76,7 +74,7 @@ public class ZipUtil {
         try (ZipOutputStream zos = getZipOutputStream(filePath)) {
             writeZipRoot(source, zos);
         } catch (IOException e) {
-            throw new RuntimeException("创建ZIP文件失败");
+            throw new RuntimeException("创建ZIP文件失败", e);
         }
         return filePath;
     }
@@ -159,7 +157,7 @@ public class ZipUtil {
         try {
             if (file.exists() && file.isFile()) {
                 zos.putNextEntry(new ZipEntry(parent.concat(file.getName())));
-                FileUtils.copyFile(file, zos);
+                Files.copy(file.toPath(), zos);
             }
         } catch (IOException e) {
             log.error("创建ZIP文件失败", e);
