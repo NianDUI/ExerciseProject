@@ -261,10 +261,10 @@ public class MethodUtil {
      * @param descOrAsc 排序方式
      */
     public static void addDefaultSort(PageOrder pageOrder, String orderBy, String descOrAsc) {
-        if (StringUtils.isEmpty(pageOrder.getOrderBy()) && !StringUtils.isEmpty(orderBy)) {
+        if (!StringUtils.hasText(pageOrder.getOrderBy()) && StringUtils.hasText(orderBy)) {
             pageOrder.setOrderBy(orderBy.trim());
         }
-        if (StringUtils.isEmpty(pageOrder.getDescOrAsc()) && !StringUtils.isEmpty(descOrAsc)) {
+        if (!StringUtils.hasText(pageOrder.getDescOrAsc()) && StringUtils.hasText(descOrAsc)) {
             pageOrder.setDescOrAsc(descOrAsc.trim());
         }
     }
