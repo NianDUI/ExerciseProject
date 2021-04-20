@@ -7,7 +7,7 @@ import top.niandui.common.uitls.redis.RedisUtil;
 import top.niandui.dao.IBookDao;
 
 /**
- * 基本bean
+ * 公共bean
  *
  * @author liyongda
  * @version 1.0

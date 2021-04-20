@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import top.niandui.common.expection.ReStateException;
 import top.niandui.common.expection.TokenCheckException;
+import top.niandui.common.expection.TokenInvaLIDException;
 import top.niandui.common.model.ResponseData;
 import top.niandui.common.outher.StatusCode;
 
@@ -48,6 +49,8 @@ public class GlobalExceptionHandler {
                         .getFieldError().getDefaultMessage());
             } else if (e instanceof TokenCheckException) {
                 rd = ResponseData.fail(StatusCode.TOKEN_ERROR, e.getMessage());
+            } else if (e instanceof TokenInvaLIDException) {
+                rd = ResponseData.fail(StatusCode.TOKEN_INVALID, e.getMessage());
             } else if (e instanceof ReStateException) {
                 rd = ResponseData.fail(StatusCode.RESTATE, e.getMessage());
             } else {

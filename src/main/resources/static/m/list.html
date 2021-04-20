@@ -16,8 +16,8 @@
     <!-- RSA加密解密 -->
     <script src="/webjars/jsencrypt/bin/jsencrypt.js"></script>
     <script src="/js/utils/rsa.js"></script>
-    <!-- token相关方法 -->
-    <script src="/js/utils/token.js"></script>
+    <!-- 授权相关方法 -->
+    <script src="/js/utils/authorization.js"></script>
     <style>
         .right {
             float: right
@@ -81,7 +81,7 @@
                 const o = this;
                 axios({
                     method: 'post'
-                    , headers: {"Content-Type": "application/json", "Token": getToken()}
+                    , headers: {"Content-Type": "application/json", "Authorization": getAuthorization()}
                     , url: '/api/queryBookList'
                     , data: JSON.stringify(this.prams)
                 }).then(function (response) {
@@ -160,7 +160,7 @@
                 const o = this;
                 axios({
                     method: 'post'
-                    , headers: {"Content-Type": "application/json", "Token": getToken()}
+                    , headers: {"Content-Type": "application/json", "Authorization": getAuthorization()}
                     , url: '/api/queryChapterList'
                     , data: JSON.stringify(this.prams)
                 }).then(function (response) {
@@ -230,7 +230,7 @@
                 const o = this;
                 axios({
                     method: 'get'
-                    , headers: {"Content-Type": "application/json", "Token": getToken()}
+                    , headers: {"Content-Type": "application/json", "Authorization": getAuthorization()}
                     , url: "/api/queryChapterInfo/" + chapterid
                 }).then(function (response) {
                     let data = response.data.data;

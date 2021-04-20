@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import top.niandui.interceptor.TokenInterceptor;
+import top.niandui.interceptor.AuthorizationInterceptor;
 
 /**
  * @Title: WebMvcConfig.java
@@ -18,7 +18,7 @@ import top.niandui.interceptor.TokenInterceptor;
 @Configuration
 public class WebMvcConfig {
     @Autowired
-    private TokenInterceptor tokenInterceptor;
+    private AuthorizationInterceptor authorizationInterceptor;
 
     @Bean
     public WebMvcConfigurer myWebMvcConfigurer() {
@@ -32,7 +32,7 @@ public class WebMvcConfig {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
                 // 添加拦截器
-                registry.addInterceptor(tokenInterceptor)
+                registry.addInterceptor(authorizationInterceptor)
                         // 拦截链接
                         .addPathPatterns("/api/**")
                         // 排除链接

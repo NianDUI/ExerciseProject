@@ -18,6 +18,9 @@ public class PublicConstant {
     // 书籍代理信息缓存key
     public static final String BOOK_PROXY = "book_proxy:";
 
+    // token缓存key
+    public static final String TOKEN = "token:";
+
     // 1分钟的秒数
     public static final long MINUTE_SECOND = 60;
     // 1小时的秒数

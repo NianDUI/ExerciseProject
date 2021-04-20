@@ -41,7 +41,7 @@ function ajax(options) {
     if (options.headers == null) {
         options.headers = headers();
     } else {
-        options.headers.Token = getToken();
+        options.headers.Authorization = getAuthorization();
     }
     let success = options.success;
     if (typeof success === "function") {
@@ -199,5 +199,5 @@ function setAddIframeStyle() {
 
 
 /* 其他依赖js */
-// token相关方法
-document.write('<script src="/js/utils/token.js"></script>');
+// 授权相关方法
+document.write('<script src="/js/utils/authorization.js"></script>');

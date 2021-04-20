@@ -15,6 +15,8 @@ public class StatusCode {
 
     // token错误
     public static final int TOKEN_ERROR = 401;
+    // token失效
+    public static final int TOKEN_INVALID = 402;
 
     // 参数格式错误码
     public static final int PARAM_FORMAT_ERROR = 1001;

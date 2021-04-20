@@ -20,7 +20,7 @@ if (token != null && token.length > 0) {
     // // 更新文件列表链接
     // file.attr("href", fileHref + "?token=" + token);
 */
-// 获取token
-$(".file").click(getToken);
-// 设置token
-$(".setToken").click(setToken);
+// 获取授权
+$(".file").click(getAuthorization);
+// 设置授权
+$(".setAuthorization").click(setAuthorization);
