@@ -8,3 +8,6 @@ target/
 # */ 这个斜杠代表 * 下的文件夹
 # * 任意文件
 # ** 代表层次（目录）
+/src/main/java/top/niandui/controller/TestController.java
+/src/main/java/top/niandui/dao/ITestDao.java
+/src/main/resources/mapper/Test-mapper.xml

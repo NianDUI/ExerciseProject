@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Map;
 
-import static top.niandui.interceptor.TokenInterceptor.TOKEN_KEY;
 import static top.niandui.interceptor.TokenInterceptor.checkToken;
 import static top.niandui.utils.PathUtil.getPath;
 
@@ -131,15 +130,8 @@ public class PageController extends BaseController {
     @SneakyThrows
     @GetMapping("/file/list/**")
     public String fileList(HttpServletRequest request, Map map) {
-        try {
-            // 获取token
-            String token = getPara(TOKEN_KEY);
-            // 校验token
-            if (!checkToken(token)) {
-                return "redirect:/";
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        // 校验token
+        if (!checkToken()) {
             return "redirect:/";
         }
         String[] paths = getPath(request, "list");
