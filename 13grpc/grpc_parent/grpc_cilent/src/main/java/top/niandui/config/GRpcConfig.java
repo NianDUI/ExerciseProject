@@ -16,7 +16,7 @@ import top.niandui.grpc.HelloServiceGrpc;
  */
 @Configuration
 public class GRpcConfig {
-    private final ManagedChannel managedChannel;
+    public final ManagedChannel managedChannel;
 
     public GRpcConfig(@Value("${grpc.port}") Integer port) {
         managedChannel = ManagedChannelBuilder.forAddress("127.0.0.1", port).usePlaintext().build();

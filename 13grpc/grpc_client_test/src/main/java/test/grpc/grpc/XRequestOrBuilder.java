@@ -4,8 +4,8 @@
 package test.grpc.grpc;
 
 public interface XRequestOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:rpc_package.XRequest)
-    com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:rpc_package.XRequest)
+        com.google.protobuf.MessageOrBuilder {
 
   /**
    * <pre>
@@ -44,19 +44,19 @@ public interface XRequestOrBuilder extends
    * @return The bytes for username.
    */
   com.google.protobuf.ByteString
-      getUsernameBytes();
+  getUsernameBytes();
 
   /**
-   * <code>string password = 3;</code>
-   * @return The password.
+   * <code>string usermima = 3;</code>
+   * @return The usermima.
    */
-  java.lang.String getPassword();
+  java.lang.String getUsermima();
   /**
-   * <code>string password = 3;</code>
-   * @return The bytes for password.
+   * <code>string usermima = 3;</code>
+   * @return The bytes for usermima.
    */
   com.google.protobuf.ByteString
-      getPasswordBytes();
+  getUsermimaBytes();
 
   /**
    * <code>int32 serviceid = 4;</code>
@@ -80,7 +80,7 @@ public interface XRequestOrBuilder extends
    * @return The bytes for token.
    */
   com.google.protobuf.ByteString
-      getTokenBytes();
+  getTokenBytes();
 
   /**
    * <code>string client = 8;</code>
@@ -92,7 +92,7 @@ public interface XRequestOrBuilder extends
    * @return The bytes for client.
    */
   com.google.protobuf.ByteString
-      getClientBytes();
+  getClientBytes();
 
   /**
    * <code>int32 warnflag = 9;</code>
@@ -101,17 +101,29 @@ public interface XRequestOrBuilder extends
   int getWarnflag();
 
   /**
+   * <code>string appcoding = 10;</code>
+   * @return The appcoding.
+   */
+  java.lang.String getAppcoding();
+  /**
+   * <code>string appcoding = 10;</code>
+   * @return The bytes for appcoding.
+   */
+  com.google.protobuf.ByteString
+  getAppcodingBytes();
+
+  /**
    * <pre>
-   * 101 - 200, for command 
+   * 101 - 200, for command
    * </pre>
    *
    * <code>repeated .rpc_package.XCmd commands = 101;</code>
    */
-  java.util.List<test.grpc.grpc.XCmd> 
-      getCommandsList();
+  java.util.List<test.grpc.grpc.XCmd>
+  getCommandsList();
   /**
    * <pre>
-   * 101 - 200, for command 
+   * 101 - 200, for command
    * </pre>
    *
    * <code>repeated .rpc_package.XCmd commands = 101;</code>
@@ -119,7 +131,7 @@ public interface XRequestOrBuilder extends
   test.grpc.grpc.XCmd getCommands(int index);
   /**
    * <pre>
-   * 101 - 200, for command 
+   * 101 - 200, for command
    * </pre>
    *
    * <code>repeated .rpc_package.XCmd commands = 101;</code>
@@ -127,28 +139,28 @@ public interface XRequestOrBuilder extends
   int getCommandsCount();
   /**
    * <pre>
-   * 101 - 200, for command 
+   * 101 - 200, for command
    * </pre>
    *
    * <code>repeated .rpc_package.XCmd commands = 101;</code>
    */
-  java.util.List<? extends test.grpc.grpc.XCmdOrBuilder> 
-      getCommandsOrBuilderList();
+  java.util.List<? extends test.grpc.grpc.XCmdOrBuilder>
+  getCommandsOrBuilderList();
   /**
    * <pre>
-   * 101 - 200, for command 
+   * 101 - 200, for command
    * </pre>
    *
    * <code>repeated .rpc_package.XCmd commands = 101;</code>
    */
   test.grpc.grpc.XCmdOrBuilder getCommandsOrBuilder(
-      int index);
+          int index);
 
   /**
    * <code>repeated .rpc_package.XCmd extdcommands = 102;</code>
    */
-  java.util.List<test.grpc.grpc.XCmd> 
-      getExtdcommandsList();
+  java.util.List<test.grpc.grpc.XCmd>
+  getExtdcommandsList();
   /**
    * <code>repeated .rpc_package.XCmd extdcommands = 102;</code>
    */
@@ -160,19 +172,19 @@ public interface XRequestOrBuilder extends
   /**
    * <code>repeated .rpc_package.XCmd extdcommands = 102;</code>
    */
-  java.util.List<? extends test.grpc.grpc.XCmdOrBuilder> 
-      getExtdcommandsOrBuilderList();
+  java.util.List<? extends test.grpc.grpc.XCmdOrBuilder>
+  getExtdcommandsOrBuilderList();
   /**
    * <code>repeated .rpc_package.XCmd extdcommands = 102;</code>
    */
   test.grpc.grpc.XCmdOrBuilder getExtdcommandsOrBuilder(
-      int index);
+          int index);
 
   /**
    * <code>repeated .rpc_package.XFileCmd filecommands = 103;</code>
    */
-  java.util.List<test.grpc.grpc.XFileCmd> 
-      getFilecommandsList();
+  java.util.List<test.grpc.grpc.XFileCmd>
+  getFilecommandsList();
   /**
    * <code>repeated .rpc_package.XFileCmd filecommands = 103;</code>
    */
@@ -184,11 +196,11 @@ public interface XRequestOrBuilder extends
   /**
    * <code>repeated .rpc_package.XFileCmd filecommands = 103;</code>
    */
-  java.util.List<? extends test.grpc.grpc.XFileCmdOrBuilder> 
-      getFilecommandsOrBuilderList();
+  java.util.List<? extends test.grpc.grpc.XFileCmdOrBuilder>
+  getFilecommandsOrBuilderList();
   /**
    * <code>repeated .rpc_package.XFileCmd filecommands = 103;</code>
    */
   test.grpc.grpc.XFileCmdOrBuilder getFilecommandsOrBuilder(
-      int index);
+          int index);
 }

@@ -34,7 +34,7 @@ public class TestController {
         XRequest.Builder requestBuilder = XRequest.newBuilder();
         requestBuilder.setType(1001);
         requestBuilder.setUsername("liu123");
-        requestBuilder.setPassword("8a6a19710fa4a6274eb764dc2a2f1c98");
+        requestBuilder.setUsermima("8a6a19710fa4a6274eb764dc2a2f1c98");
         requestBuilder.setClient("192.168.1.78");
         requestBuilder.setServiceid(122);
         XCmd.Builder cmdBuilder = XCmd.newBuilder();
@@ -72,7 +72,7 @@ public class TestController {
         XRequest.Builder requestBuilder = XRequest.newBuilder();
         requestBuilder.setType(1002);
         requestBuilder.setUsername("liu123");
-        requestBuilder.setPassword("8a6a19710fa4a6274eb764dc2a2f1c98");
+        requestBuilder.setUsermima("8a6a19710fa4a6274eb764dc2a2f1c98");
         requestBuilder.setClient("192.168.1.78");
         requestBuilder.setServiceid(121);
         XCmd.Builder cmdBuilder = XCmd.newBuilder();

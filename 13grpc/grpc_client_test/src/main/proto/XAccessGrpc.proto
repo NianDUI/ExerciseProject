@@ -50,13 +50,14 @@ message XRequest{
   // 1-100 for control
   XRoute route = 1;
   string username = 2;
-  string password = 3;
+  string usermima = 3;
   int32 serviceid = 4;
   int32 type = 5;
   string token = 6;
   string client = 8;
   int32 warnflag = 9;
-  reserved 10 to 100;
+  string appcoding = 10;
+  reserved 11 to 100;
 
   // 101 - 200, for command 
   repeated XCmd commands = 101;
@@ -66,8 +67,8 @@ message XRequest{
 }
 
 message XResult {
-    string errorno = 1;
-    string errmsg = 2;
+  string errorno = 1;
+  string errmsg = 2;
 }
 
 message XCmdResult{
