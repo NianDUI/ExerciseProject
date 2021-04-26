@@ -1,5 +1,6 @@
 package top.niandui.common.uitls.file;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
  * @version 1.0
  * @date 2020/6/4 14:15
  */
+@Slf4j
 public class FTPUtil {
 
     /**
@@ -49,11 +51,9 @@ public class FTPUtil {
             }
             return ftp;
         } catch (SocketException e) {
-            e.printStackTrace();
-            throw new RuntimeException("FTP的IP地址可能错误");
+            throw new RuntimeException("FTP的IP地址可能错误", e);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("FTP的端口错误");
+            throw new RuntimeException("FTP的端口错误", e);
         }
     }
 
@@ -71,15 +71,14 @@ public class FTPUtil {
             ftp.logout();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 if (ftp.isConnected()) {
                     ftp.disconnect();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("FTP关闭失败");
+                log.error("FTP关闭失败", e);
             }
         }
         return false;

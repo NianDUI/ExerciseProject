@@ -50,6 +50,16 @@ public class GlobalExceptionHandler {
                 rd = ResponseData.fail(StatusCode.TOKEN_ERROR, e.getMessage());
             } else if (e instanceof ReStateException) {
                 rd = ResponseData.fail(StatusCode.RESTATE, e.getMessage());
+            } else if (e instanceof FeignException) {
+                // Feign内部服务调用错误处理。在配置文件中设置feign.hystrix.enabled: false，可以拦截到
+                FeignException fe = (FeignException) e;
+                try {
+                    Map errInfo = json.readValue(fe.contentUTF8(), Map.class);
+                    rd = ResponseData.fail((int) errInfo.get("code"), (String) errInfo.get("message"));
+                } catch (Exception ex) {
+                    rd = ResponseData.fail(StatusCode.EXECUTE_FAIL, e.getMessage());
+                    log.error("Feign异常转换异常: " + ex.getMessage(), ex);
+                }
             } else {
                 rd = ResponseData.fail(StatusCode.EXECUTE_FAIL, e.getMessage());
             }
@@ -65,7 +75,7 @@ public class GlobalExceptionHandler {
      * @param response 响应流
      * @param e        Feign调用错误
      */
-    @ExceptionHandler({FeignException.class})
+//    @ExceptionHandler({FeignException.class})
     public void feignExceptionHandler(HttpServletResponse response, FeignException e) {
         response.setStatus(StatusCode.EXECUTE_FAIL);
         response.setContentType("application/json;charset=utf-8");
