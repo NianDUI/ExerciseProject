@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
+// @EnableAutoConfiguration // 启用自动配置，@SpringBootApplication中包含
+// 为带有@ConfigurationProperties注解的Bean提供有效的支持。
+// 这个注解可以提供一种方便的方式来将带有@ConfigurationProperties注解的类注入为Spring容器的Bean。
+//@EnableConfigurationProperties(ConfigInfo.class) //开启属性注入,通过@autowired注入。在使用的类上注入
 @ConfigurationProperties(prefix = "config-info")
 public class ConfigInfo {
     public static final boolean IS_WIN = System.getProperty("os.name").contains("Windows");

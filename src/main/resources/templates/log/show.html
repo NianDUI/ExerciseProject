@@ -115,7 +115,9 @@
         }
         field.append(div.replace("[txt]", txt));
         // 滚动到页面底部
-        scrollTo(0, $(document).height());
+        scrollTo($(document).scrollLeft(), $(document).height());
+        // document.documentElement.scrollLeft 等于 $(document).scrollLeft()
+
         // $("html").scrollTop($(document).height());
     }
 
