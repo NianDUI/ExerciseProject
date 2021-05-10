@@ -13,9 +13,6 @@
     <!-- vonic 核心文件 -->
     <script src="https://unpkg.com/vonic@2.0.0-beta.11/dist/vonic.min.js"></script>
     <script src="/webjars/jquery/jquery.js"></script>
-    <!-- RSA加密解密 -->
-    <script src="/webjars/jsencrypt/bin/jsencrypt.js"></script>
-    <script src="/js/utils/rsa.js"></script>
     <!-- token相关方法 -->
     <script src="/js/utils/token.js"></script>
     <style>
@@ -188,7 +185,7 @@
         template: `
 <div class="page has-navbar" v-nav="{ title: '段落', showBackButton: true }">
     <div class="page-content">
-        <div>
+        <div id="topDiv">
             <md-button class="button" @click.native="previd && onPrevious()">上一章</md-button>
             <md-button class="button right" @click.native="nextid && onNext()">下一章</md-button>
         </div>
@@ -240,7 +237,7 @@
                     // 设置标题
                     $("h1.title").html("<span>" + o.chapter.name + " - " + o.book.name + "</span>");
                     // 返回页面顶部
-                    scrollTo(0, 0);
+                    $("#topDiv")[0].scrollIntoView(false);
                 });
             }
             , onPrevious() {
