@@ -25,6 +25,9 @@ if (id != null) {
             }).click();
         }
     });
+} else {
+    // 新增时不显示详情相关
+    $(".detailDiv").hide();
 }
 const titleType = $(".titleType");
 const endType = $(".endType");

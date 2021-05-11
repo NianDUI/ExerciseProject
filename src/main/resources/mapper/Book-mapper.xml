@@ -3,7 +3,7 @@
 <mapper namespace="top.niandui.dao.IBookDao">
     <!--表字段-->
     <sql id="tableField">
-        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus","taskswitch"
+        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus","taskswitch","detail"
     </sql>
 
     <!-- 新增书籍 -->
@@ -74,7 +74,7 @@
     <!-- 查询所有书籍列表 -->
     <select id="queryList" parameterType="top.niandui.model.vo.BookSearchVO" resultType="top.niandui.model.vo.BookListReturnVO">
         SELECT
-            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus",b."taskswitch"
+            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus",b."taskswitch",b."detail"
             ,c."name" "configname",s."name" "sitename"
             ,CASE b."taskstatus"
                 WHEN 1 THEN '重新获取全部'
@@ -164,4 +164,14 @@
         FROM "proxy"
         WHERE "proxyid" = #{id}
     </select>
+
+    <!-- 更新书籍详情 -->
+    <update id="updateDetail">
+        UPDATE "book" SET "detail" = #{detail} WHERE "bookid" = #{id}
+    </update>
+
+    <!-- 更新书籍任务开关为关闭 -->
+    <update id="updateTaskSwitch">
+        UPDATE "book" SET "taskswitch" = #{taskswitch} WHERE "bookid" = #{id}
+    </update>
 </mapper>

@@ -41,8 +41,9 @@ public class GetFollowUpChapterTask implements Runnable {
         }
     }
 
+    // 获取后续章节
     public void getFollowUpChapter() throws Exception {
-        log.info("定时任务启动...");
+        log.info("定时任务启动(获取后续章节)...");
         List<IdNameModel<Long>> option = iBookDao.option(PARAMS);
         for (IdNameModel<Long> idNameModel : option) {
             String name = idNameModel.getName();
@@ -51,10 +52,9 @@ public class GetFollowUpChapterTask implements Runnable {
                 iChapterService.getFollowUpChapter(idNameModel.getId());
                 log.info(String.format("获取 %s 后续章节结束。", name));
             } catch (Exception e) {
-                log.info(String.format("获取 %s 后续章节错误！：%s", name, e.getMessage()));
-                log.error(e.getMessage(), e);
+                log.error(String.format("获取 %s 后续章节错误！", name), e);
             }
         }
-        log.info("定时任务结束。");
+        log.info("定时任务结束(获取后续章节)。");
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 import top.niandui.common.base.IBaseScheduled;
+import top.niandui.common.uitls.redis.RedisLockUtil;
 import top.niandui.dao.ITaskDao;
 import top.niandui.model.vo.TaskListReturnVO;
 import top.niandui.model.vo.TaskSearchVO;
@@ -41,8 +42,11 @@ public class TaskManagerScheduled implements IBaseScheduled {
     private static final Map<Long, CronTask> RMV_TASK_MAP = new HashMap<>();
     // 触发表达式对象
     private static final CronTrigger CRON_TRIGGER = new CronTrigger("0 0/10 * * * ?");
+//    private static final String
     @Autowired
     private ITaskDao iTaskDao;
+    @Autowired
+    private RedisLockUtil redisLockUtil;
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -76,6 +80,7 @@ public class TaskManagerScheduled implements IBaseScheduled {
             if (cronTask == null) {
                 Object bean = getClassObject(task);
                 if (!(bean instanceof Runnable)) {
+                    // bean 不是 Runnable 实现类(包含 bean 为 null)
                     continue;
                 }
                 cronTask = new CronTask((Runnable) bean, task.getCron());

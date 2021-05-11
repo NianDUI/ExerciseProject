@@ -49,4 +49,10 @@ public interface IBookDao<T> extends IBaseDao<T> {
 
     // 查询单条代理信息
     Proxy modelProxy(Integer id);
+
+    // 更新书籍详情
+    int updateDetail(@Param("id") Long id, @Param("detail") String detail);
+
+    // 更新书籍任务开关为关闭
+    int updateTaskSwitch(@Param("id") Long id, @Param("taskswitch") Integer taskswitch);
 }

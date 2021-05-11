@@ -46,4 +46,6 @@ public class Book extends BaseModel {
     private Integer taskstatus;
     @ApiModelProperty(value = "任务开关：0关闭，1开启")
     private Integer taskswitch;
+    @ApiModelProperty(value = "书籍详情")
+    private String detail;
 }

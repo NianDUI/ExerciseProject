@@ -34,6 +34,7 @@ const tableList = table.render({
         , {field: "configname", title: "配置", minWidth: 180, event: "configAdd"}
         , {field: "taskstatusname", title: "任务状态", minWidth: 90}
         , {field: "taskswitchname", title: "任务开关", minWidth: 90}
+        , {field: "detail", title: "详情", minWidth: 180}
         , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
         , {field: "url", title: "链接", minWidth: 250}
         , {field: "starturl", title: "起始章节链接", minWidth: 300}
