@@ -8,7 +8,7 @@
 <body>
 <fieldset class="layui-elem-field ">
     <div class="layui-field-box">
-        <form class="layui-form" lay-filter="form">
+        <form class="layui-form layui-form-pane" lay-filter="form">
             <div class="layui-form-item">
                 <label class="layui-form-label">名称</label>
                 <div class="layui-input-block">
@@ -48,7 +48,7 @@
                            autocomplete="off" class="layui-input starturl">
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item" pane>
                 <label class="layui-form-label">任务开关</label>
                 <div class="layui-input-block">
                     <input type="radio" name="taskswitch" value="0" title="关闭">
@@ -107,7 +107,7 @@
             <div class="layui-form-item layui-form-text detailDiv">
                 <label class="layui-form-label">详情</label>
                 <div class="layui-input-block">
-                    <textarea name="detail" class="layui-textarea" readonly="true" disabled></textarea>
+                    <textarea name="detail" class="layui-textarea" readonly></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
