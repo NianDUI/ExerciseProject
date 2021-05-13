@@ -27,7 +27,7 @@ public class GetInfo extends PropertyDefinerBase {
         }
         SERVICE_IP = hostAddress;
         // 动态设置日志目录
-        LOG_DIR = new ApplicationHome(GetInfo.class).toString() + "/";
+        LOG_DIR = new ApplicationHome(GetInfo.class) + "/";
     }
 
     @Override

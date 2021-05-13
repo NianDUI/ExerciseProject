@@ -22,6 +22,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import static top.niandui.common.base.BaseRedisLockUtil.LOCK;
+import static top.niandui.config.PublicConstant.MINUTE_SECOND;
+
 /**
  * 任务管理器的定时任务
  *
@@ -42,7 +45,10 @@ public class TaskManagerScheduled implements IBaseScheduled {
     private static final Map<Long, CronTask> RMV_TASK_MAP = new HashMap<>();
     // 触发表达式对象
     private static final CronTrigger CRON_TRIGGER = new CronTrigger("0 0/10 * * * ?");
-//    private static final String
+    // 锁key
+    private static final String LOCK_KEY = LOCK + "task_manager";
+    // 锁时间
+    private static final long LOCK_TIME = MINUTE_SECOND * 11;
     @Autowired
     private ITaskDao iTaskDao;
     @Autowired
@@ -71,26 +77,41 @@ public class TaskManagerScheduled implements IBaseScheduled {
 
     // 任务管理方法
     private void taskManager() throws Exception {
+        // 尝试获取ip锁
+        if (!redisLockUtil.tryLockIp(LOCK_KEY, LOCK_TIME)) {
+            // 为获取锁
+            return;
+        }
+        // 将任务映射放入删除任务映射
         RMV_TASK_MAP.putAll(TASK_MAP);
+        // 任务映射清空
         TASK_MAP.clear();
         List<TaskListReturnVO> list = iTaskDao.queryList(new TaskSearchVO(1));
         for (TaskListReturnVO task : list) {
             Long taskid = task.getTaskid();
+            // 从删除任务映射中，根具任务id获取Cron任务类
             CronTask cronTask = RMV_TASK_MAP.remove(taskid);
             if (cronTask == null) {
+                // Cron任务类为null时，尝试进行加载
                 Object bean = getClassObject(task);
                 if (!(bean instanceof Runnable)) {
                     // bean 不是 Runnable 实现类(包含 bean 为 null)
                     continue;
                 }
+                // 获取到了任务类对象，创建Cron任务类
                 cronTask = new CronTask((Runnable) bean, task.getCron());
+                // 启动任务
                 cronTask.setScheduledFuture(TASK_SCHEDULER.schedule(cronTask.getRunnable(), cronTask.getTriggerHolder().value));
             } else {
+                // Cron任务类存在，尝试更新cron
                 cronTask.setExpression(task.getCron());
             }
+            // 将还需要继续执行的任务放入任务映射
             TASK_MAP.put(taskid, cronTask);
         }
+        // 对不需要继续执行的任务，停止
         RMV_TASK_MAP.forEach((taskid, cronTask) -> cronTask.getScheduledFuture().cancel(true));
+        // 清空删除任务映射
         RMV_TASK_MAP.clear();
     }
 
@@ -114,6 +135,7 @@ public class TaskManagerScheduled implements IBaseScheduled {
     private static class CronTask extends org.springframework.scheduling.config.Task {
         private String expression;
         private Trigger trigger;
+        // 使用Holder是为了防止，expression修改后不生效
         @Getter
         private final Holder<Trigger> triggerHolder = new Holder<>(
                 triggerContext -> trigger.nextExecutionTime(triggerContext));
@@ -127,6 +149,7 @@ public class TaskManagerScheduled implements IBaseScheduled {
             this.trigger = new CronTrigger(expression);
         }
 
+        // 设置更新expression
         public void setExpression(String expression) {
             if (!Objects.equals(this.expression, expression)) {
                 this.expression = expression;

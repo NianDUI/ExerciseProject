@@ -2,6 +2,7 @@ package top.niandui.common.base;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
+import top.niandui.common.uitls.GetInfo;
 import top.niandui.common.uitls.redis.RedisByteUtil;
 
 import java.util.concurrent.Future;
@@ -23,8 +24,8 @@ public abstract class BaseRedisLockUtil {
     // 锁线程池执行器
     protected static final ThreadPoolExecutor POOL = new ThreadPoolExecutor(2, 5, 5
             , TimeUnit.SECONDS, new LinkedBlockingQueue<>(), new CustomizableThreadFactory("redis-lock-pool-"));
-    // 1 byte[]
-    protected static final byte[] BYTES1 = new byte[]{1};
+    // 服务ip byte[]
+    protected static final byte[] IP_BYTES = GetInfo.SERVICE_IP.getBytes();
     // 休眠时间20ms
     protected static final long SLEEP_TIME = 20;
     protected final RedisByteUtil util;
@@ -57,7 +58,7 @@ public abstract class BaseRedisLockUtil {
     public void lock(String key) {
         try {
             String checkKey = checkKey(key);
-            while (!util.setNx(checkKey, BYTES1)) {
+            while (!util.setNx(checkKey, IP_BYTES)) {
                 Thread.sleep(SLEEP_TIME);
             }
         } catch (Exception e) {
@@ -76,7 +77,7 @@ public abstract class BaseRedisLockUtil {
     public void lock(String key, long lockTime) {
         try {
             String checkKey = checkKey(key);
-            while (!util.setNx(checkKey, BYTES1, lockTime)) {
+            while (!util.setNx(checkKey, IP_BYTES, lockTime)) {
                 Thread.sleep(SLEEP_TIME);
             }
         } catch (Exception e) {
@@ -93,7 +94,7 @@ public abstract class BaseRedisLockUtil {
      * @return true成功 false失败
      */
     public boolean tryLock(String key) {
-        return util.setNx(checkKey(key), BYTES1);
+        return util.setNx(checkKey(key), IP_BYTES);
     }
 
     /**
@@ -105,7 +106,7 @@ public abstract class BaseRedisLockUtil {
      * @return true成功 false失败
      */
     public boolean tryLock(String key, long lockTime) {
-        return util.setNx(checkKey(key), BYTES1, lockTime);
+        return util.setNx(checkKey(key), IP_BYTES, lockTime);
     }
 
     /**
@@ -120,7 +121,7 @@ public abstract class BaseRedisLockUtil {
     public boolean tryLock(String key, long timeout, TimeUnit unit) {
         String checkKey = checkKey(key);
         Future<Boolean> future = POOL.submit(() -> {
-            while (!util.setNx(checkKey, BYTES1)) {
+            while (!util.setNx(checkKey, IP_BYTES)) {
                 Thread.sleep(SLEEP_TIME);
             }
             return true;
@@ -141,7 +142,7 @@ public abstract class BaseRedisLockUtil {
     public boolean tryLock(String key, long lockTime, long timeout, TimeUnit unit) {
         String checkKey = checkKey(key);
         Future<Boolean> future = POOL.submit(() -> {
-            while (!util.setNx(checkKey, BYTES1, lockTime)) {
+            while (!util.setNx(checkKey, IP_BYTES, lockTime)) {
                 Thread.sleep(SLEEP_TIME);
             }
             return true;

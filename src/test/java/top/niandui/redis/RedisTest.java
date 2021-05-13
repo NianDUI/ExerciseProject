@@ -105,6 +105,12 @@ public class RedisTest {
         redisUtil.set("test:bytesjson", new byte[]{1});
 
         redisUtil.incr("test:json", 1);
+
+        byte[] bytes = redisByteUtil.get("test:bytes");
+        // null
+        byte[] bytes2 = redisByteUtil.get("test:bytes2");
+
+        System.out.println();
     }
 
     @Test
