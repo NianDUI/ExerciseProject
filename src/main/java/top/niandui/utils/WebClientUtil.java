@@ -2,12 +2,14 @@ package top.niandui.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.html.DomText;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import top.niandui.common.expection.ReStateException;
 import top.niandui.common.uitls.redis.RedisUtil;
 import top.niandui.dao.IBookDao;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static top.niandui.common.uitls.MethodUtil.convert;
 import static top.niandui.config.PublicConstant.BOOK_PROXY;
@@ -124,7 +127,7 @@ public class WebClientUtil {
                 if (!isFirstJump) {
                     Chapter chapter = new Chapter();
                     // 获取标题DOM列表
-                    List titleList = htmlPage.getByXPath(config.getTitlematch());
+                    List<DomText> titleList = htmlPage.getByXPath(config.getTitlematch());
                     // 调用自定义方法处理标题
                     try {
                         chapter.setRawname(titleList.get(0).toString().trim());
@@ -158,16 +161,18 @@ public class WebClientUtil {
                     iChapterDao.create(chapter);
                     // 获取段落列表
                     List<Paragraph> paragraphList = getParagraphList(config, chapter, htmlPage);
-                    // 创建段落列表
-                    iParagraphDao.createBatch(paragraphList);
+                    if (!paragraphList.isEmpty()) {
+                        // 创建段落列表
+                        iParagraphDao.createBatch(paragraphList);
+                    }
                 }
                 if (isFirstJump) {
                     isFirstJump = false;
                 }
                 // 获取跳转超链接DOM列表
-                List aList = htmlPage.getByXPath(config.getAmatch());
+                List<HtmlAnchor> aList = htmlPage.getByXPath(config.getAmatch());
                 // 获取下一页的超链接DOM
-                HtmlAnchor next = (HtmlAnchor) aList.get(config.getNexta());
+                HtmlAnchor next = aList.get(config.getNexta());
                 // 调用自定义方法判断下一页是否还有内容
                 if (isEndHref.apply(url, next.getHrefAttribute().trim())) {
                     break;
@@ -177,9 +182,7 @@ public class WebClientUtil {
             }
             log.info("获取结束...");
         } catch (Exception e) {
-            log.info("获取失败...");
             log.error("获取失败...", e);
-//            throw new RuntimeException(e);
         } finally {
             // 更新任务状态
             updateBookTaskStatus(book.getBookid(), 0);
@@ -210,7 +213,7 @@ public class WebClientUtil {
             int num = 0;
             while (num++ < 10) {
                 // 获取标题DOM列表
-                List titleList = htmlPage.getByXPath(config.getTitlematch());
+                List<DomText> titleList = htmlPage.getByXPath(config.getTitlematch());
                 // 标题是否存在
                 String title;
                 try {
@@ -232,13 +235,14 @@ public class WebClientUtil {
                 iParagraphDao.deleteByBookAndChapterId(chapter.getBookid(), chapter.getChapterid().toString());
                 // 获取段落列表
                 List<Paragraph> paragraphList = getParagraphList(config, chapter, htmlPage);
-                // 创建段落列表
-                iParagraphDao.createBatch(paragraphList);
+                if (!paragraphList.isEmpty()) {
+                    // 创建段落列表
+                    iParagraphDao.createBatch(paragraphList);
+                }
                 break;
             }
             log.info("获取结束...");
         } catch (Exception e) {
-            log.info("获取失败...");
             throw new ReStateException("获取失败", e);
         } finally {
             // 更新任务状态
@@ -258,24 +262,27 @@ public class WebClientUtil {
      */
     private List<Paragraph> getParagraphList(Config config, Chapter chapter, HtmlPage htmlPage) {
         // 获取内容DOM列表
-        List list = htmlPage.getByXPath(config.getConmatch());
-        List<Paragraph> paragraphList = new ArrayList<>();
-        long seqid = 0;
-        int end = list.size() + config.getEndoffset();
-        for (int i = config.getStartoffset(); i < end; i++, seqid++) {
-            String line = list.get(i).toString().trim();
+        List<DomText> list = htmlPage.getByXPath(config.getConmatch());
+        // 去除空行后的
+        List<String> lineList = list.stream().map(text -> {
+            // 去除每一行前面的空字符
+            String line = text.toString().trim();
             int start = 0;
             while (line.startsWith("　", start)) {
                 start++;
             }
-            line = line.substring(start).trim();
-            if (line.length() == 0) {
-                continue;
-            }
+            return line.substring(start).trim();
+            // 过滤出有内容的行
+        }).filter(StringUtils::hasText).collect(Collectors.toList());
+        // 生成行对象列表
+        List<Paragraph> paragraphList = new ArrayList<>();
+        long seqid = 0;
+        int end = lineList.size() + config.getEndoffset();
+        for (int i = config.getStartoffset(); i < end; i++, seqid++) {
             Paragraph paragraph = new Paragraph();
             paragraph.setBookid(chapter.getBookid());
             paragraph.setChapterid(chapter.getChapterid());
-            paragraph.setContent(line);
+            paragraph.setContent(lineList.get(i));
             paragraph.setSeqid(seqid);
             paragraphList.add(paragraph);
         }
