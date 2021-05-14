@@ -5,6 +5,12 @@ setBaseParams({
     , modelSiteUrl: base + "api/modelSite/"
     , contentType: "application/json"
 });
+// 先处理一下元素是否展示
+if (id != null) {
+    // 新增时不显示详情相关。
+    $(".detailDiv").show();
+}
+// 再根据处理后的调整页面
 setAddIframeStyle();
 const thisIndex = getBaseParams("thisIndex");
 if (id != null) {
@@ -25,9 +31,6 @@ if (id != null) {
             }).click();
         }
     });
-} else {
-    // 新增时不显示详情相关
-    $(".detailDiv").hide();
 }
 const titleType = $(".titleType");
 const endType = $(".endType");
