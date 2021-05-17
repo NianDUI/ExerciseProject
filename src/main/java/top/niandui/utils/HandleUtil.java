@@ -37,15 +37,21 @@ public class HandleUtil {
      */
     public static Function<String, String> getTitleHandler(Map handleInfo) {
         try {
+            // 处理类型
             Integer titleType = (Integer) handleInfo.get("titleType");
+            // 开始处理索引
             Integer startIndex = (Integer) handleInfo.get("startIndex");
             if (titleType == 1) {
+                // 分隔符拆分
                 String delimiter = (String) handleInfo.get("delimiter");
                 return title -> titleHandler(title, startIndex, delimiter, delimiter.length());
             } else if (titleType == 2) {
+                // 数字开头拆分。将数字后面的认为分隔符，定位非章节号部分，传递过去长度0，以拆分出章节名称。
                 return title -> titleHandler(title, startIndex,
-                        title.substring(startIndex).replaceAll("^\\d*", ""), 0);
+                        // ^[\d零一-龥百千万亿]*
+                        title.substring(startIndex).replaceAll("^[\\d\u96f6\u4e00-\u9fa5\u767e\u5343\u4e07\u4ebf]*", ""), 0);
             }
+            // 无处理
             return title -> title.substring(startIndex).trim();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
