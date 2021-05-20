@@ -7,7 +7,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -38,10 +37,8 @@ public class RSAUtil {
     }
 
     // 公钥加密，使用指定公钥编码密钥
-    public static String publicKeyEncrypt(String source, String rsaPublicEncodedKeyBase64) {
-        Base64.Decoder decoder = Base64.getDecoder();
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(rsaPublicEncodedKeyBase64));
-        byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 1, keySpec, source.getBytes());
+    public static String publicKeyEncrypt(String source, String publicEncodedKeyBase64) {
+        byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 1, publicEncodedKeyBase64, source.getBytes());
         return Base64.getEncoder().encodeToString(result);
     }
 
@@ -51,10 +48,9 @@ public class RSAUtil {
     }
 
     // 公钥解密，使用指定公钥编码密钥
-    public static String publicKeyDecrypt(String source, String rsaPublicEncodedKeyBase64) {
+    public static String publicKeyDecrypt(String source, String publicEncodedKeyBase64) {
         Base64.Decoder decoder = Base64.getDecoder();
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(rsaPublicEncodedKeyBase64));
-        byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 1, keySpec, decoder.decode(source));
+        byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 1, publicEncodedKeyBase64, decoder.decode(source));
         return new String(result);
     }
 
@@ -65,10 +61,8 @@ public class RSAUtil {
     }
 
     // 私钥加密，使用指定私钥编码密钥
-    public static String privateKeyEncrypt(String source, String rsaPrivateEncodedKeyBase64) {
-        Base64.Decoder decoder = Base64.getDecoder();
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(rsaPrivateEncodedKeyBase64));
-        byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 2, keySpec, source.getBytes());
+    public static String privateKeyEncrypt(String source, String privateEncodedKeyBase64) {
+        byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 2, privateEncodedKeyBase64, source.getBytes());
         return Base64.getEncoder().encodeToString(result);
     }
 
@@ -78,10 +72,9 @@ public class RSAUtil {
     }
 
     // 私钥解密，使用指定私钥编码密钥
-    public static String privateKeyDecrypt(String source, String rsaPrivateEncodedKeyBase64) {
+    public static String privateKeyDecrypt(String source, String privateEncodedKeyBase64) {
         Base64.Decoder decoder = Base64.getDecoder();
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(rsaPrivateEncodedKeyBase64));
-        byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 2, keySpec, decoder.decode(source));
+        byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 2, privateEncodedKeyBase64, decoder.decode(source));
         return new String(result);
     }
 
@@ -89,20 +82,30 @@ public class RSAUtil {
     /**
      * RSA加密解密
      *
-     * @param mode    操作模式：Cipher.ENCRYPT_MODE、Cipher.DECRYPT_MODE
-     * @param keyType 需要生成密钥的类型：1 公钥、2 私钥
-     * @param keySpec 生成相应公钥和私钥的密钥规范
-     * @param source  要加密或解密的原文
+     * @param mode             操作模式：Cipher.ENCRYPT_MODE、Cipher.DECRYPT_MODE
+     * @param keyType          需要生成密钥的类型：1 公钥、2 私钥
+     * @param encodedKeyBase64 base64编码后的密钥：1 公钥、2 私钥
+     * @param source           要加密或解密的原文
      * @return 返回加密或解密后的内容
      */
-    public static byte[] encryptDecrypt(int mode, int keyType, KeySpec keySpec, byte[] source) {
+    public static byte[] encryptDecrypt(int mode, int keyType, String encodedKeyBase64, byte[] source) {
         if (mode != Cipher.ENCRYPT_MODE && mode != Cipher.DECRYPT_MODE) {
             throw new RuntimeException("错误的操作模式");
         }
         try {
             KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-            // 1 公钥、2 私钥
-            Key key = keyType == 1 ? keyFactory.generatePublic(keySpec) : keyFactory.generatePrivate(keySpec);
+            // 密钥base64解密
+            byte[] encodedKey = Base64.getDecoder().decode(encodedKeyBase64);
+            Key key;
+            if (keyType == 1) {
+                // 1 公钥，密钥规范
+                X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
+                key = keyFactory.generatePublic(keySpec);
+            } else {
+                // 2 私钥，密钥规范
+                PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encodedKey);
+                key = keyFactory.generatePrivate(keySpec);
+            }
             Cipher cipher = Cipher.getInstance(RSA);
             cipher.init(mode, key);
             return cipher.doFinal(source);
