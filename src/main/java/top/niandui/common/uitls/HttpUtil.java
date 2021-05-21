@@ -123,11 +123,10 @@ public class HttpUtil {
      * @param url       请求url
      * @param token     token
      * @param valueType 响应值类型
-     * @param <P>       body参数类型
      * @param <R>       响应值类型
      * @return 响应对象
      */
-    public static <P, R> R get(String url, String token, Class<R> valueType) {
+    public static <R> R get(String url, String token, Class<R> valueType) {
         log.debug("==>  get uri: " + url);
         return exchange(url, HttpMethod.GET, null, token, valueType).getBody();
     }
