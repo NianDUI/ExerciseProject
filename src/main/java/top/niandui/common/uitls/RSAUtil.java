@@ -1,5 +1,7 @@
 package top.niandui.common.uitls;
 
+import org.springframework.util.StringUtils;
+
 import javax.crypto.Cipher;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -38,6 +40,9 @@ public class RSAUtil {
 
     // 公钥加密，使用指定公钥编码密钥
     public static String publicKeyEncrypt(String source, String publicEncodedKeyBase64) {
+        if (!StringUtils.hasText(source)) {
+            return source;
+        }
         byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 1, publicEncodedKeyBase64, source.getBytes());
         return Base64.getEncoder().encodeToString(result);
     }
@@ -49,6 +54,9 @@ public class RSAUtil {
 
     // 公钥解密，使用指定公钥编码密钥
     public static String publicKeyDecrypt(String source, String publicEncodedKeyBase64) {
+        if (!StringUtils.hasText(source)) {
+            return source;
+        }
         Base64.Decoder decoder = Base64.getDecoder();
         byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 1, publicEncodedKeyBase64, decoder.decode(source));
         return new String(result);
@@ -62,6 +70,9 @@ public class RSAUtil {
 
     // 私钥加密，使用指定私钥编码密钥
     public static String privateKeyEncrypt(String source, String privateEncodedKeyBase64) {
+        if (!StringUtils.hasText(source)) {
+            return source;
+        }
         byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 2, privateEncodedKeyBase64, source.getBytes());
         return Base64.getEncoder().encodeToString(result);
     }
@@ -73,6 +84,9 @@ public class RSAUtil {
 
     // 私钥解密，使用指定私钥编码密钥
     public static String privateKeyDecrypt(String source, String privateEncodedKeyBase64) {
+        if (!StringUtils.hasText(source)) {
+            return source;
+        }
         Base64.Decoder decoder = Base64.getDecoder();
         byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 2, privateEncodedKeyBase64, decoder.decode(source));
         return new String(result);
