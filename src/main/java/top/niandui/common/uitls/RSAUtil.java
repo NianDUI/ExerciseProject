@@ -1,5 +1,6 @@
 package top.niandui.common.uitls;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.Cipher;
@@ -21,6 +22,7 @@ import java.util.Base64;
  * @version 1.0
  * @date 2020/11/20 9:20
  */
+@Slf4j
 public class RSAUtil {
     // 加密算法
     private static final String RSA = "RSA";
@@ -40,11 +42,7 @@ public class RSAUtil {
 
     // 公钥加密，使用指定公钥编码密钥
     public static String publicKeyEncrypt(String source, String publicEncodedKeyBase64) {
-        if (!StringUtils.hasText(source)) {
-            return source;
-        }
-        byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 1, publicEncodedKeyBase64, source.getBytes());
-        return Base64.getEncoder().encodeToString(result);
+        return encryptDecrypt(Cipher.ENCRYPT_MODE, 1, publicEncodedKeyBase64, source);
     }
 
     // 公钥解密，使用默认公钥编码密钥
@@ -54,12 +52,7 @@ public class RSAUtil {
 
     // 公钥解密，使用指定公钥编码密钥
     public static String publicKeyDecrypt(String source, String publicEncodedKeyBase64) {
-        if (!StringUtils.hasText(source)) {
-            return source;
-        }
-        Base64.Decoder decoder = Base64.getDecoder();
-        byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 1, publicEncodedKeyBase64, decoder.decode(source));
-        return new String(result);
+        return encryptDecrypt(Cipher.DECRYPT_MODE, 1, publicEncodedKeyBase64, source);
     }
 
     /*************************私钥相关**************************/
@@ -70,11 +63,7 @@ public class RSAUtil {
 
     // 私钥加密，使用指定私钥编码密钥
     public static String privateKeyEncrypt(String source, String privateEncodedKeyBase64) {
-        if (!StringUtils.hasText(source)) {
-            return source;
-        }
-        byte[] result = encryptDecrypt(Cipher.ENCRYPT_MODE, 2, privateEncodedKeyBase64, source.getBytes());
-        return Base64.getEncoder().encodeToString(result);
+        return encryptDecrypt(Cipher.ENCRYPT_MODE, 2, privateEncodedKeyBase64, source);
     }
 
     // 私钥解密，使用默认私钥编码密钥
@@ -84,12 +73,7 @@ public class RSAUtil {
 
     // 私钥解密，使用指定私钥编码密钥
     public static String privateKeyDecrypt(String source, String privateEncodedKeyBase64) {
-        if (!StringUtils.hasText(source)) {
-            return source;
-        }
-        Base64.Decoder decoder = Base64.getDecoder();
-        byte[] result = encryptDecrypt(Cipher.DECRYPT_MODE, 2, privateEncodedKeyBase64, decoder.decode(source));
-        return new String(result);
+        return encryptDecrypt(Cipher.DECRYPT_MODE, 2, privateEncodedKeyBase64, source);
     }
 
     /*************************RSA加密解密**************************/
@@ -99,18 +83,27 @@ public class RSAUtil {
      * @param mode             操作模式：Cipher.ENCRYPT_MODE、Cipher.DECRYPT_MODE
      * @param keyType          需要生成密钥的类型：1 公钥、2 私钥
      * @param encodedKeyBase64 base64编码后的密钥：1 公钥、2 私钥
-     * @param source           要加密或解密的原文
+     * @param source           要加密的原文或解密的原文(base64编码后)
      * @return 返回加密或解密后的内容
      */
-    public static byte[] encryptDecrypt(int mode, int keyType, String encodedKeyBase64, byte[] source) {
+    public static String encryptDecrypt(int mode, int keyType, String encodedKeyBase64, String source) {
+        if (!StringUtils.hasText(source)) {
+            return source;
+        }
         if (mode != Cipher.ENCRYPT_MODE && mode != Cipher.DECRYPT_MODE) {
             throw new RuntimeException("错误的操作模式");
         }
+        // 生成的密钥
+        Key key;
+        // 处理后的原文
+        byte[] sourceBytes;
+        // 是否为加密
+        boolean isEncrypt = mode == Cipher.ENCRYPT_MODE;
         try {
+            // 生成密钥
             KeyFactory keyFactory = KeyFactory.getInstance(RSA);
             // 密钥base64解密
             byte[] encodedKey = Base64.getDecoder().decode(encodedKeyBase64);
-            Key key;
             if (keyType == 1) {
                 // 1 公钥，密钥规范
                 X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
@@ -120,6 +113,33 @@ public class RSAUtil {
                 PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encodedKey);
                 key = keyFactory.generatePrivate(keySpec);
             }
+            // 处理原文
+            if (isEncrypt) {
+                // 加密，直接获取原文
+                sourceBytes = source.getBytes();
+            } else {
+                // 解密，使用Base64先解密原文
+                sourceBytes = Base64.getDecoder().decode(source);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(isEncrypt ? "加密错误！" : "解密错误！", e);
+        }
+        // 加密解密
+        byte[] result = encryptDecrypt(mode, key, sourceBytes);
+        // 加密，对结果进行Base64加密、解密，直接生成字符串对象
+        return isEncrypt ? Base64.getEncoder().encodeToString(result) : new String(result);
+    }
+
+    /**
+     * RSA加密解密
+     *
+     * @param mode   操作模式：Cipher.ENCRYPT_MODE、Cipher.DECRYPT_MODE
+     * @param key    密钥
+     * @param source 要加密或解密的原文
+     * @return 返回加密或解密后的内容
+     */
+    public static byte[] encryptDecrypt(int mode, Key key, byte[] source) {
+        try {
             Cipher cipher = Cipher.getInstance(RSA);
             cipher.init(mode, key);
             return cipher.doFinal(source);
@@ -139,9 +159,11 @@ public class RSAUtil {
             keyPairGenerator.initialize(512);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
             RSAPublicKey rsaPublicKey = (RSAPublicKey) keyPair.getPublic();
-            System.out.println("经过java.util.Base64.getEncoder()处理后的公钥编码密钥 = " + Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
+            log.info("\n经过java.util.Base64.getEncoder()处理后的公钥编码密钥 = \n"
+                    + Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
             RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyPair.getPrivate();
-            System.out.println("经过java.util.Base64.getEncoder()处理后的私钥编码密钥 = " + Base64.getEncoder().encodeToString(rsaPrivateKey.getEncoded()));
+            log.info("\n经过java.util.Base64.getEncoder()处理后的私钥编码密钥 = \n"
+                    + Base64.getEncoder().encodeToString(rsaPrivateKey.getEncoded()));
             return keyPair;
         } catch (Exception e) {
             throw new RuntimeException("密钥对生成错误！", e);
