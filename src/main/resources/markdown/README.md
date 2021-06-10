@@ -80,3 +80,41 @@ spring:
           ├─static
           └─templates
 ```
+
+# Feign配置
+- [关于FeignClient的使用大全——进阶篇](https://www.cnblogs.com/sharpest/p/13709790.html)
+- [Feign配置feign.client.default-to-properties原理详解](https://blog.csdn.net/yaomingyang/article/details/115558129)
+## 超时时间
+###  feign.hystrix.enabled: true
+超时时间由 ```feign.client.config...``` 和 ```hystrix.command...``` 共同取最小生效。
+- feign时间小： ```feign.client.config...``` 配置的生效
+- hystrix时间小： ```hystrix.command...``` 的配置生效。
+  - 默认的时间小：默认的生效，其他指定不生效
+  - 默认的时间大：有指定指定的生效，否则默认的生效
+```yaml
+hystrix.command:
+  #断路器的超时时间,下级服务返回超出熔断器时间，即便成功，消费端消息也是TIMEOUT,所以一般断路器的超时时间需要大于ribbon的超时时间。
+  #服务的返回时间大于ribbon的超时时间，会触发重试
+  default.execution.timeout.enabled: true
+  # 默认熔断时（和指定的时间有关系：那个小那个生效）
+  default.execution.isolation.thread.timeoutInMilliseconds: 40000
+  # 访问密码模块熔断时长（和默认的时间有关系：那个小那个生效）
+  passwd-server.isolation.thread.timeoutInMilliseconds: 20000
+```
+### feign.hystrix.enabled: false
+超时时间由 ```feign.client.config...``` 单独生效。
+```yaml
+feign:
+  # 启用熔断器
+  hystrix.enabled: false
+  # 客户端设置
+  client.config:
+    # 默认设置
+    default:
+      # 连接超时时间
+      connectTimeout: 5000
+      # 响应超时时间（和其他的响应时间没有关系，没有指定默认生效）
+      readTimeout: 15000
+    # 访问passwd-server服务：响应超时时间（和默认时间没有关系，指定单独生效）
+    passwd-server.readTimeout: 20000
+```

@@ -44,5 +44,38 @@ public class ObjectTest01 implements Serializable {
     public class B implements Serializable {
         String name;
         A a;
+        // 瞬时的，序列化是不会被序列化。但是可以通过 readObject 和 writeObject 方法实现
+        transient String end = "B.end";
+
+        // 替换默认序列化机制的读写对象方法
+        private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+            // 默认写当前对象的方法
+            in.defaultReadObject();
+            end = in.readUTF();
+        }
+
+        private void writeObject(ObjectOutputStream out) throws IOException, ClassNotFoundException {
+            // 默认读当前对象的方法
+            out.defaultWriteObject();
+            out.writeUTF(end);
+        }
+    }
+
+    public class C implements Serializable, Externalizable {
+        String name;
+        // 瞬时的，序列化是不会被序列化
+        transient String end = "A.end";
+
+        // 除了让序列化机制来保存和恢复对象数据，类还可以定义它自己的机制。
+        // 为了做到这一点，这个类必须实现 Externalizable 接口，这需要它定义两个方法：
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+            out.writeUTF(name);
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+            name = in.readUTF();
+        }
     }
 }
