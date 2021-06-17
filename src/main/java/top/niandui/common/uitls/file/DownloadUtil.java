@@ -35,7 +35,8 @@ public class DownloadUtil {
         response.reset();
         response.setHeader("Accept-Ranges", "bytes");
 //        response.setHeader("Content-Length", String.valueOf(file.length()));
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        response.setHeader("Content-Disposition", "attachment;filename=" +
+                URLEncoder.encode(fileName, "UTF-8").replace('+', ' '));
         return response.getOutputStream();
     }
 
