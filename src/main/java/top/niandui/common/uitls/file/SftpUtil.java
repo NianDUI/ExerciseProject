@@ -1,7 +1,11 @@
 package top.niandui.common.uitls.file;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
 import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Iterator;
@@ -17,6 +21,13 @@ import java.util.Iterator;
 public class SftpUtil {
     // 分隔符字符
     private static final char SEPARATOR_CHAR = '/';
+
+    static {
+        // 设置当前日志打印机级别
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        Logger logger = context.getLogger(SftpUtil.class);
+        logger.setLevel(Level.DEBUG);
+    }
 
     private SftpUtil() {
     }
@@ -85,7 +96,7 @@ public class SftpUtil {
             localDir.mkdirs();
         }
         localPath = localDir.getAbsolutePath();
-        log.info("sftp d {} > {}", remotePath, localPath);
+        log.debug("sftp download {} > {}", remotePath, localPath);
         // 查询文件列表
         Iterator<ChannelSftp.LsEntry> it = sftp.ls(remotePath).iterator();
         // 遍历
@@ -122,7 +133,7 @@ public class SftpUtil {
      * @throws Exception
      */
     public static void upload(ChannelSftp sftp, String localPath, String remotePath) throws Exception {
-        log.info("sftp u {} > {}", localPath, remotePath);
+        log.debug("sftp upload {} > {}", localPath, remotePath);
         upload(sftp, new File(localPath), remotePath);
     }
 
@@ -143,11 +154,8 @@ public class SftpUtil {
         if (sftp == null || sftp.isClosed()) {
             throw new RuntimeException("sftp文件上传失败");
         }
-        // 判断远程路径是否为文件夹
-        if (!isDir(sftp, remotePath)) {
-            // 远程路径不存在，创建
-            sftp.mkdir(remotePath);
-        }
+        // 创建远程路径
+        mkdirRP(sftp, remotePath);
         // 远程文件、文件夹路径
         String remoteFilePath = remotePath + SEPARATOR_CHAR + localFile.getName();
         if (localFile.isDirectory()) {
@@ -160,6 +168,83 @@ public class SftpUtil {
         } else if (localFile.isFile()) {
             // 是文件。上传文件
             sftp.put(localFile.getAbsolutePath(), remoteFilePath);
+        }
+    }
+
+    /**
+     * 在sftp服务器上创建远程路径
+     * </br>支持多层，远端路径分隔符默认为"/"
+     *
+     * @param sftp       sftp通道对象
+     * @param remotePath 远程路径
+     * @throws Exception
+     */
+    public static void mkdirRP(ChannelSftp sftp, String remotePath) throws SftpException {
+        log.debug("sftp mkdir {}", remotePath);
+        // ["", "home"] 或 [".", "home"]
+        String[] rps = remotePath.split("/");
+        for (int i = 0; i < rps.length; i++) {
+            String path = rps[i];
+            if (i == 0 && "".equals(path)) {
+                path = "/";
+            } else if (!".".equals(path) && !"..".equals(path)) {
+                if (!isDir(sftp, path)) {
+                    // 目录不存在创建目录
+                    sftp.mkdir(path);
+                }
+            }
+            // 进入路径
+            sftp.cd(path);
+        }
+    }
+
+
+    /**
+     * 从sftp服务器上删除指定文件或文件夹
+     *
+     * @param sftp       sftp通道对象
+     * @param remotePath 远程路径
+     * @param rmThisDir  当远端路径为文件夹时是否删除该目录
+     * @throws Exception
+     */
+    public static void delete(ChannelSftp sftp, String remotePath, boolean rmThisDir) throws Exception {
+        // sftp为null、或sftp是关闭的
+        if (sftp == null || sftp.isClosed()) {
+            throw new RuntimeException("sftp文件下载失败");
+        }
+        log.debug("sftp rm {}", remotePath);
+        // 查询文件列表
+        Iterator<ChannelSftp.LsEntry> it = sftp.ls(remotePath).iterator();
+        // 遍历
+        while (it.hasNext()) {
+            ChannelSftp.LsEntry entry = it.next();
+            if (".".equals(entry.getFilename()) || "..".equals(entry.getFilename())) {
+                // 本页和上页跳过
+                continue;
+            }
+            String path = SEPARATOR_CHAR + entry.getFilename();
+            // 判断是否为为文件夹
+            if (entry.getAttrs().isDir()) {
+                // 该项为文件夹递归调用
+                String remoteDirPath = remotePath + path;
+                // 删除这个文件夹：不在内部处理，以减少一次请求
+                delete(sftp, remoteDirPath, false);
+                // 删除这个文件夹
+                sftp.rmdir(remoteDirPath);
+            } else {
+                // 为文件直接删除
+                String remoteFilePath = remotePath;
+                if (!remotePath.endsWith(entry.getFilename())) {
+                    // 远程文件路径不以文件名结尾
+                    remoteFilePath += path;
+                }
+                // 删除文件
+                sftp.rm(remoteFilePath);
+            }
+        }
+        // 如果是当前远程目录是文件夹，则删除文件夹
+        if (rmThisDir && isDir(sftp, remotePath)) {
+            sftp.rmdir(remotePath);
         }
     }
 
