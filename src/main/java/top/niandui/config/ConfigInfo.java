@@ -25,7 +25,7 @@ public class ConfigInfo {
     // layui
     private String layuiBasePath = addContextPath(webjars + "/layui");
     private String layuiCss = layuiBasePath + "/css/layui.css";
-    private String layuiJs = layuiBasePath + "/layui.all.js";
+    private String layuiJs = layuiBasePath + "/layui.js";
     // jquery
     private String jqueryBasePath = addContextPath(webjars + "/jquery");
     private String jqueryJs = jqueryBasePath + "/jquery.js";
