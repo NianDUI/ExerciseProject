@@ -26,6 +26,8 @@
         <thymeleaf-layout-dialect.version>2.4.1</thymeleaf-layout-dialect.version>
         <!-- 指定使用的ES版本为启动的ES版本 -->
         <elasticsearch.version>7.9.2</elasticsearch.version>
+        <!-- 打包跳过测试 -->
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -201,6 +203,35 @@
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
             <version>0.1.55</version>
+        </dependency>
+        <!-- 7-Zip-JBinding -->
+        <dependency>
+            <groupId>net.sf.sevenzipjbinding</groupId>
+            <artifactId>sevenzipjbinding</artifactId>
+            <version>16.02-2.01</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.sevenzipjbinding</groupId>
+            <artifactId>sevenzipjbinding-all-platforms</artifactId>
+            <version>16.02-2.01</version>
+        </dependency>
+        <!-- 和插件方式两种使用一种即可(https://www.cnblogs.com/kingsonfu/p/12692591.html)：
+            解决打包时 报jdk下 com.sun.javaws.jnl | com.sun.deploy.xml 不存在
+            。依赖文件夹下需要有 javaws.jar、deploy.jar
+        -->
+        <dependency>
+            <groupId>jdk.jre</groupId>
+            <artifactId>javaws</artifactId>
+            <version>1.8</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/javaws.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>jdk.jre</groupId>
+            <artifactId>deploy</artifactId>
+            <version>1.8</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/deploy.jar</systemPath>
         </dependency>
 
         <dependency>
