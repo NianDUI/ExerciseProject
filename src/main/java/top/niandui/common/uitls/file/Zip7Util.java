@@ -13,6 +13,10 @@ import java.util.List;
 
 /**
  * 7-Zip-JBinding工具
+ * <br/>7-Zip-JBinding 库提供两种不同的接口：标准接口和简单接口。标准接口直接映射所有提供类似 C++ 接口的本机 7-Zip 库方法。简单的界面是尝试提供更像Java的易于使用的界面。它的设计目的是为了快速编码和轻松启动，而不是为了功能丰富，也不是为了性能。
+ * <br/><a href="http://sevenzipjbind.sourceforge.net/extraction_snippets.html">解压：提取片段</a>
+ * <br/><a href="http://sevenzipjbind.sourceforge.net/compression_snippets.html">创建更新：压缩片段</a>
+ * <br/><a href="http://sevenzipjbind.sourceforge.net/javadoc/index.html">文档</a>
  *
  * @author liyongda
  * @version 1.0

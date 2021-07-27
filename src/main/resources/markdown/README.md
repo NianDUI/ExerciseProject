@@ -1,6 +1,8 @@
 # FictionWebAPI
 小说获取和下载Web页面API文档
 
+[toc]
+
 # knife4j相关
 ## 1、新版本令牌授权方式
 1. 添加全局Token
@@ -117,4 +119,20 @@ feign:
       readTimeout: 15000
     # 访问passwd-server服务：响应超时时间（和默认时间没有关系，指定单独生效）
     passwd-server.readTimeout: 20000
+```
+
+# Tomcat线程数
+```yaml
+# 最大连接数，默认为8192
+server.tomcat.max-connections=10000
+# 等待队列长度，默认100。队列也做缓冲池用，但也不能无限长，不但消耗内存，而且出队入队也消耗CPU
+server.tomcat.accept-count=1000
+# 最大工作线程数，默认200。（4核8g内存，线程数800，一般是核数*200。操作系统做线程之间的切换调度是有系统开销的，所以不是越多越好。）
+server.tomcat.threads.max=800
+# 最小工作空闲线程数，默认10。（适当增大一些，以便应对突然增长的访问量）
+server.tomcat.threads.min-spare=100
+
+# 查看tomcat线程数命令如下：
+# 获取tomcat进程pid ：ps -ef | grep tomcat
+# 统计该tomcat进程内的线程个数 ：ps -Lf 29295 | wc -l
 ```
