@@ -90,7 +90,7 @@ public class HandleUtil {
      * @return 处理后的标题
      */
     public static String titleHandler(String title, int startIndex, String delimiter, int delLength) {
-        int index = title.indexOf(delimiter);
+        int index = title.indexOf(delimiter, startIndex);
         if (index > startIndex) {
             title = "第" + title.substring(startIndex, index).trim() + "章 " + title.substring(index + delLength).trim();
         }
