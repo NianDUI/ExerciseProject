@@ -127,7 +127,11 @@ function search() {
         params.page.curr = pageNum;
         pageNum = 1;
     }
-    tableList.reload(params);
+    // 表格重载：tableIns.reload(options, deep)
+    // 参数 options 即为各项基础参数
+    // 参数 deep：是否采用深度重载（即参数深度克隆，也就是重载时始终携带初始时及上一次重载时的参数），默认 false
+    // 注意：deep 参数为 layui 2.6.0 开始新增。
+    tableList.reload(params, true);
 }
 
 // 列表页面跳转添加修改页面
