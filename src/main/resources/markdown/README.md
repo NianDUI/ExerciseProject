@@ -136,3 +136,96 @@ server.tomcat.threads.min-spare=100
 # 获取tomcat进程pid ：ps -ef | grep tomcat
 # 统计该tomcat进程内的线程个数 ：ps -Lf 29295 | wc -l
 ```
+
+# MyBatis
+## MyBatis数组
+### 1、默认有 org.apache.ibatis.type.ArrayTypeHandler 类
+```shell
+# 在 org.apache.ibatis.type.TypeHandlerRegistry.TypeHandlerRegistry() 构造方法中有注入
+register(Object.class, JdbcType.ARRAY, new ArrayTypeHandler());
+register(JdbcType.ARRAY, new ArrayTypeHandler());
+# 但是得在mybatis的xml文件中字段指定：javaType=Object
+# 如：#{f_relatemajorid,javaType=Object},
+```
+### 2、或者使用org.apache.ibatis.type.BaseTypeHandler实现自定义类型处理器
+在mybatis的xml文件中字段类型javaType和jdbcType不需要特殊指定
+
+```java
+package com.synqnc.config;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+
+import java.sql.*;
+
+/**
+ * 配置MyBatis基本类型包装类数组类型处理器
+ *
+ * @author liyongda
+ * @version 1.0
+ * @date 2021/8/11 14:33
+ */
+@Configuration
+public class BaseTypeArrayTypeHandlerConfig {
+
+  @Autowired
+  public void config(SqlSessionFactory sqlSessionFactory) {
+    // 配置基本类型包装类数组类型处理器
+    TypeHandlerRegistry typeHandlerRegistry = sqlSessionFactory.getConfiguration().getTypeHandlerRegistry();
+//        typeHandlerRegistry.register(Byte[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("bytea"));
+    typeHandlerRegistry.register(Short[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("int2"));
+    typeHandlerRegistry.register(Integer[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("int4"));
+    typeHandlerRegistry.register(Long[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("int8"));
+    typeHandlerRegistry.register(Float[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("float4"));
+    typeHandlerRegistry.register(Double[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("float8"));
+    typeHandlerRegistry.register(Boolean[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("bool"));
+//        typeHandlerRegistry.register(Character[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("char"));
+    typeHandlerRegistry.register(String[].class, JdbcType.ARRAY, new BaseTypeArrayTypeHandler<>("varchar"));
+  }
+
+  public static class BaseTypeArrayTypeHandler<T> extends BaseTypeHandler<T> {
+    // 数据库对应类型名称
+    private final String typeName;
+
+    public BaseTypeArrayTypeHandler(String typeName) {
+      this.typeName = typeName;
+    }
+
+    @Override
+    public void setNonNullParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException {
+      ps.setArray(i, ps.getConnection().createArrayOf(typeName, (Object[]) parameter));
+    }
+
+    @Override
+    public T getNullableResult(ResultSet rs, String columnName) throws SQLException {
+      return extractArray(rs.getArray(columnName));
+    }
+
+    @Override
+    public T getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+      return extractArray(rs.getArray(columnIndex));
+    }
+
+    @Override
+    public T getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+      return extractArray(cs.getArray(columnIndex));
+    }
+
+    protected T extractArray(Array array) throws SQLException {
+      if (array == null) {
+        return null;
+      }
+      Object result = array.getArray();
+      array.free();
+      if (result instanceof Object[]) {
+        return (T) result;
+      }
+      return null;
+    }
+  }
+}
+```
