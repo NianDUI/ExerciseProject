@@ -48,8 +48,8 @@ public class MethodUtil {
      * @param <R>      回调处理方法返回对象类型
      * @return 回调处理方法返回对象列表
      */
-    public static <T, R> List<R> createBatch(List<T> list, Function<List<T>, R> callBack) {
-        return createBatch(list, callBack, DEFAULT_ONE_COUNT);
+    public static <T, R> List<R> batch(List<T> list, Function<List<T>, R> callBack) {
+        return batch(list, callBack, DEFAULT_ONE_COUNT);
     }
 
     /**
@@ -62,25 +62,18 @@ public class MethodUtil {
      * @param <R>      回调处理方法返回对象类型
      * @return 回调处理方法返回对象列表
      */
-    public static <T, R> List<R> createBatch(List<T> list, Function<List<T>, R> callBack, int oneCount) {
+    public static <T, R> List<R> batch(List<T> list, Function<List<T>, R> callBack, int oneCount) {
         if (list == null) {
             return new ArrayList<>();
         }
-        List<R> rvList = new ArrayList<>(list.size());
+        List<R> rvList = new ArrayList<>();
         if (oneCount <= 0) {
             oneCount = DEFAULT_ONE_COUNT;
         }
-        int start = 0, end = oneCount;
-        while (list.size() > start) {
-            List<T> subList;
-            if (list.size() > end) {
-                subList = list.subList(start, end);
-            } else {
-                subList = list.subList(start, list.size());
-            }
+        int start, end = 0;
+        while (list.size() > (start = end)) {
+            List<T> subList = list.subList(start, Math.min((end = start + oneCount), list.size()));
             rvList.add(callBack.apply(subList));
-            start = end;
-            end = start + oneCount;
         }
         return rvList;
     }
@@ -96,8 +89,8 @@ public class MethodUtil {
      * @param <R>      回调方法的返回对象类型
      * @return 回调处理方法返回对象列表
      */
-    public static <T, U, R> List<R> createBatch(List<T> list, U u, BiFunction<List<T>, U, R> callBack) {
-        return createBatch(list, u, callBack, DEFAULT_ONE_COUNT);
+    public static <T, U, R> List<R> batch(List<T> list, U u, BiFunction<List<T>, U, R> callBack) {
+        return batch(list, u, callBack, DEFAULT_ONE_COUNT);
     }
 
     /**
@@ -112,25 +105,18 @@ public class MethodUtil {
      * @param <R>      回调方法的返回对象类型
      * @return 回调处理方法返回对象列表
      */
-    public static <T, U, R> List<R> createBatch(List<T> list, U u, BiFunction<List<T>, U, R> callBack, int oneCount) {
+    public static <T, U, R> List<R> batch(List<T> list, U u, BiFunction<List<T>, U, R> callBack, int oneCount) {
         if (list == null) {
             return new ArrayList<>();
         }
-        List<R> rvList = new ArrayList<>(list.size());
+        List<R> rvList = new ArrayList<>();
         if (oneCount <= 0) {
             oneCount = DEFAULT_ONE_COUNT;
         }
-        int start = 0, end = oneCount;
-        while (list.size() > start) {
-            List<T> subList;
-            if (list.size() > end) {
-                subList = list.subList(start, end);
-            } else {
-                subList = list.subList(start, list.size());
-            }
+        int start, end = 0;
+        while (list.size() > (start = end)) {
+            List<T> subList = list.subList(start, Math.min((end = start + oneCount), list.size()));
             rvList.add(callBack.apply(subList, u));
-            start = end;
-            end = start + oneCount;
         }
         return rvList;
     }
@@ -146,8 +132,8 @@ public class MethodUtil {
      * @param <R>      回调方法的返回对象类型
      * @return 回调处理方法返回对象列表
      */
-    public static <T, U, R> List<R> createBatch(T t, List<U> list, BiFunction<T, List<U>, R> callBack) {
-        return createBatch(t, list, callBack, DEFAULT_ONE_COUNT);
+    public static <T, U, R> List<R> batch(T t, List<U> list, BiFunction<T, List<U>, R> callBack) {
+        return batch(t, list, callBack, DEFAULT_ONE_COUNT);
     }
 
     /**
@@ -161,25 +147,18 @@ public class MethodUtil {
      * @param <R>      回调方法的返回对象类型
      * @return 回调处理方法返回对象列表
      */
-    public static <T, U, R> List<R> createBatch(T t, List<U> list, BiFunction<T, List<U>, R> callBack, int oneCount) {
+    public static <T, U, R> List<R> batch(T t, List<U> list, BiFunction<T, List<U>, R> callBack, int oneCount) {
         if (list == null) {
             return new ArrayList<>();
         }
-        List<R> rvList = new ArrayList<>(list.size());
+        List<R> rvList = new ArrayList<>();
         if (oneCount <= 0) {
             oneCount = DEFAULT_ONE_COUNT;
         }
-        int start = 0, end = oneCount;
-        while (list.size() > start) {
-            List<U> subList;
-            if (list.size() > end) {
-                subList = list.subList(start, end);
-            } else {
-                subList = list.subList(start, list.size());
-            }
+        int start, end = 0;
+        while (list.size() > (start = end)) {
+            List<U> subList = list.subList(start, Math.min((end = start + oneCount), list.size()));
             rvList.add(callBack.apply(t, subList));
-            start = end;
-            end = start + oneCount;
         }
         return rvList;
     }
@@ -195,8 +174,8 @@ public class MethodUtil {
      * @param <R>      回调方法返回类型
      * @return 回调处理方法返回对象
      */
-    public static <T, R> R createBatch(List<T> list, T t, Function<List<T>, R> callBack) {
-        return createBatch(list, t, callBack, DEFAULT_ONE_COUNT);
+    public static <T, R> R batch(List<T> list, T t, Function<List<T>, R> callBack) {
+        return batch(list, t, callBack, DEFAULT_ONE_COUNT);
     }
 
     /**
@@ -210,7 +189,7 @@ public class MethodUtil {
      * @param <R>      回调方法返回类型
      * @return 回调处理方法返回对象
      */
-    public static <T, R> R createBatch(List<T> list, T t, Function<List<T>, R> callBack, int oneCount) {
+    public static <T, R> R batch(List<T> list, T t, Function<List<T>, R> callBack, int oneCount) {
         R r = null;
         if (list == null) {
             return r;
@@ -439,7 +418,7 @@ public class MethodUtil {
         if (sb.length() != 0) {
             sb.delete(sb.length() - 2, sb.length());
         }
-        log.info("Parameters: " + sb.toString());
+        log.info("Parameters: " + sb);
         return sql;
     }
 

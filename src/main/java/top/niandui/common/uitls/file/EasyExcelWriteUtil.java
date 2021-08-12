@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static top.niandui.common.uitls.MethodUtil.createBatch;
+import static top.niandui.common.uitls.MethodUtil.batch;
 import static top.niandui.common.uitls.file.DownloadUtil.getDownloadOS;
 
 /**
@@ -159,7 +159,7 @@ public class EasyExcelWriteUtil {
             int[] num = {0};
             for (String key : sheets) {
                 num[0] = 0;
-                createBatch(data.get(key), ts -> {
+                batch(data.get(key), ts -> {
                     String sheetName = num[0] > 0 ? key + num[0] : key;
                     // 写该sheet的数据
                     T t = ts.get(0);
