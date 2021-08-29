@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 import top.niandui.config.ConfigInfo;
 import top.niandui.model.Papers;
 import top.niandui.service.IFileService;
+import top.niandui.utils.PathUtil;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -37,9 +38,11 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public void read(String path, HttpServletResponse response) throws Exception {
-        if (!StringUtils.isEmpty(path)) {
+        if (StringUtils.hasText(path)) {
+            // 获取请求目录文件对象
             File file = new File(configInfo.getFilePath(), path.replace("..", "."));
             if (file.exists() && file.isFile()) {
+                // 文件存在并且是文件
                 ServletOutputStream os = response.getOutputStream();
                 Files.copy(file.toPath(), os);
                 os.close();
@@ -56,11 +59,14 @@ public class FileServiceImpl implements IFileService {
     @Override
     public List<Papers> list(String path) throws Exception {
         List<Papers> list;
+        // 获取请求目录文件夹对象
         File file = new File(configInfo.getFilePath() + path);
         if (file.exists() && file.isDirectory()) {
             File[] files = file.listFiles();
+            // 返回数据列表
             list = new ArrayList<>(files.length + 1);
             if (!"/".equals(path)) {
+                // 当前目录不是根目录，添加父目录
                 Papers papers = getPapers(file.getParentFile());
                 papers.setName("..");
                 papers.setIsDir(true);
@@ -68,8 +74,10 @@ public class FileServiceImpl implements IFileService {
                 papers.setIsExists(true);
                 list.add(papers);
             }
-            Arrays.stream(files).filter(File::isDirectory).forEach(f -> list.add(getPapers(f)));
-            Arrays.stream(files).filter(File::isFile).forEach(f -> list.add(getPapers(f)));
+            // 处理添加目录下文件夹
+            Arrays.stream(files).filter(File::isDirectory).map(PathUtil::getPapers).forEach(list::add);
+            // 处理添加目录下文件
+            Arrays.stream(files).filter(File::isFile).map(PathUtil::getPapers).forEach(list::add);
             log.info("读取目录：" + file.getAbsolutePath());
         } else {
             list = Collections.emptyList();
@@ -79,7 +87,9 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String path = getPath(request, "download")[1];
-        downloadFile(request, response, configInfo.getFilePath() + path);
+        // 获取请求路径
+        String filePath = configInfo.getFilePath() + getPath(request, "download")[1];
+        log.info("下载文件：" + filePath);
+        downloadFile(request, response, filePath);
     }
 }

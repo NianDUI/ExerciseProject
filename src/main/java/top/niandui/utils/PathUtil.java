@@ -23,7 +23,14 @@ public class PathUtil {
     // 文件路径长度
     public static int filePathLength = configInfo.getFilePath().length();
 
-    // 获取路径
+    /**
+     * 获取路径
+     *
+     * @param request 请求对象
+     * @param endStr  路径结束符
+     * @return [请求路径(md5), 对应具体路径]
+     * @throws Exception
+     */
     public static String[] getPath(HttpServletRequest request, String endStr) throws Exception {
         String path = request.getRequestURI().trim();
         path = path.substring(path.indexOf(endStr) + endStr.length());
@@ -48,7 +55,12 @@ public class PathUtil {
         return paths;
     }
 
-    // 获取路径md5
+    /**
+     * 获取路径md5
+     *
+     * @param path 路径
+     * @return 路径md5
+     */
     public static String getMd5(String path) {
         path = path.replace("\\", "/");
         if (path.startsWith(configInfo.getFilePath())) {
@@ -66,7 +78,12 @@ public class PathUtil {
         return path;
     }
 
-    // 获取 Papers 对象
+    /**
+     * 获取 Papers 对象
+     *
+     * @param file File文件或文件夹对象
+     * @return Papers文件包装对象
+     */
     public static Papers getPapers(File file) {
         Papers papers = new Papers();
         papers.setFile(file);
