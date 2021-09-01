@@ -66,6 +66,7 @@ public class RedisTest {
         template.setValueSerializer(RedisSerializer.json());
         // hash的value序列化方式采用 自定义byte数组的序列化方式
         template.setHashValueSerializer(RedisSerializer.json());
+//        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(json));
         template.afterPropertiesSet();
         redisUtil = new RedisUtil(template);
         redisByteUtil = new RedisByteUtil(factory);
@@ -144,11 +145,16 @@ public class RedisTest {
         map.put("array", new int[]{1, 2, 3, 4, 5, 6});
         map.put("array2", new long[]{1L, 2L, 3L, 4L, 5L, 6L});
         map.put("list", Arrays.asList("1", "2", "3"));
-        redisUtil.setNx("test", map);
+        redisUtil.hSet("test", "1", map);
         map.put("a", 2);
-        redisUtil.set("test", map);
+        redisUtil.hSet("test", "1", map);
 
-        Object test = redisUtil.get("test");
+        redisUtil.hSet("test", "3", "asdf");
+        redisUtil.hSet("test", "4", 123);
+
+        Object test = redisUtil.hGet("test", "1");
+        Object test3 = redisUtil.hGet("test", "3");
+        Object test4 = redisUtil.hGet("test", "4");
         System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(test));
     }
 }
