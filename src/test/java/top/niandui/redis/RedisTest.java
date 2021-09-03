@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import top.niandui.common.uitls.redis.RedisByteUtil;
 import top.niandui.common.uitls.redis.RedisLockUtil;
@@ -58,15 +59,18 @@ public class RedisTest {
         factory.afterPropertiesSet();
         template.setConnectionFactory(factory);
 
+        // 标准json序列化
+        GenericJackson2JsonRedisSerializer jsonRedisSerializer = new GenericJackson2JsonRedisSerializer(json);
         // key采用String的序列化方式
         template.setKeySerializer(RedisSerializer.string());
         // hash的key也采用String的序列化方式
         template.setHashKeySerializer(RedisSerializer.string());
         // value序列化方式采用 自定义byte数组的序列化方式
-        template.setValueSerializer(RedisSerializer.json());
+//        template.setValueSerializer(RedisSerializer.json());
+        template.setValueSerializer(jsonRedisSerializer);
         // hash的value序列化方式采用 自定义byte数组的序列化方式
-        template.setHashValueSerializer(RedisSerializer.json());
-//        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(json));
+//        template.setHashValueSerializer(RedisSerializer.json());
+        template.setHashValueSerializer(jsonRedisSerializer);
         template.afterPropertiesSet();
         redisUtil = new RedisUtil(template);
         redisByteUtil = new RedisByteUtil(factory);
@@ -100,7 +104,7 @@ public class RedisTest {
     }
 
     @Test
-    public void test2() throws Exception {
+    public void testByte() throws Exception {
         redisUtil.set("test:json", 1);
         redisByteUtil.set("test:bytes", new byte[]{1});
         redisUtil.set("test:bytesjson", new byte[]{1});
@@ -127,7 +131,7 @@ public class RedisTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testObject() throws Exception {
         Map map = new HashMap<>();
         map.put("a", 1);
         map.put("Integr", 1);
@@ -156,5 +160,16 @@ public class RedisTest {
         Object test3 = redisUtil.hGet("test", "3");
         Object test4 = redisUtil.hGet("test", "4");
         System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(test));
+    }
+
+    @Test
+    public void testSet() {
+        // 测试set类型
+        String[] ss = {"O28", "4x7", "3htvaA", "oP9AAq", "M3qEK7"};
+        long l = redisUtil.sAdd("test:set", 600, ss);
+        Set<Object> objects = redisUtil.sGet("test:set");
+        long l2 = redisUtil.sAdd("test:set2", 600, objects);
+        Set<Object> objects2 = redisUtil.sGet("test:set2");
+        System.out.println(objects2);
     }
 }
