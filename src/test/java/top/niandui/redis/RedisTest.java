@@ -168,7 +168,8 @@ public class RedisTest {
         String[] ss = {"O28", "4x7", "3htvaA", "oP9AAq", "M3qEK7"};
         long l = redisUtil.sAdd("test:set", 600, ss);
         Set<Object> objects = redisUtil.sGet("test:set");
-        long l2 = redisUtil.sAdd("test:set2", 600, objects);
+        Object[] values = {objects};
+        long l2 = redisUtil.sAdd("test:set2", 600, values);
         Set<Object> objects2 = redisUtil.sGet("test:set2");
         System.out.println(objects2);
     }
