@@ -14,10 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static top.niandui.common.uitls.file.DownloadUtil.downloadFile;
 import static top.niandui.utils.PathUtil.getPapers;
@@ -75,9 +72,9 @@ public class FileServiceImpl implements IFileService {
                 list.add(papers);
             }
             // 处理添加目录下文件夹
-            Arrays.stream(files).filter(File::isDirectory).map(PathUtil::getPapers).forEach(list::add);
+            Arrays.stream(files).filter(File::isDirectory).sorted(Comparator.comparing(File::getName)).map(PathUtil::getPapers).forEach(list::add);
             // 处理添加目录下文件
-            Arrays.stream(files).filter(File::isFile).map(PathUtil::getPapers).forEach(list::add);
+            Arrays.stream(files).filter(File::isFile).sorted(Comparator.comparing(File::getName)).map(PathUtil::getPapers).forEach(list::add);
             log.info("读取目录：" + file.getAbsolutePath());
         } else {
             list = Collections.emptyList();

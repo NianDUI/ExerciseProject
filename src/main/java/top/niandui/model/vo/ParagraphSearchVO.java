@@ -5,8 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.niandui.common.model.PageOrder;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @author 李永达
  * @version 1.0

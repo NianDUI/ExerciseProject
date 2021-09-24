@@ -3,7 +3,6 @@ package top.niandui.model.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.niandui.model.Book;
 import top.niandui.model.Chapter;
 
 /**
