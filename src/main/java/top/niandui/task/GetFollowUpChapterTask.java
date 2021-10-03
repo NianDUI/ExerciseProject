@@ -8,6 +8,7 @@ import top.niandui.dao.IBookDao;
 import top.niandui.service.IChapterService;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,11 @@ public class GetFollowUpChapterTask implements Runnable {
     // 获取后续章节
     public void getFollowUpChapter() throws Exception {
         log.info("定时任务启动(获取后续章节)...");
-        List<IdNameModel<Long>> option = iBookDao.option(PARAMS);
+        // 参数Map
+        Map params = new HashMap(PARAMS);
+        // 4 - 6个小时
+        params.put("lastgettime", (int) (Math.random() * 3 + 4));
+        List<IdNameModel<Long>> option = iBookDao.option(params);
         for (IdNameModel<Long> idNameModel : option) {
             String name = idNameModel.getName();
             log.info(String.format("获取 %s 后续章节...", name));

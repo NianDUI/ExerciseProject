@@ -3,7 +3,7 @@
 <mapper namespace="top.niandui.dao.IBookDao">
     <!--表字段-->
     <sql id="tableField">
-        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus","taskswitch","detail"
+        "bookid","name","url","configid","createtime","starturl","handlerinfo","siteid","taskstatus","taskswitch","detail","lastgettime"
     </sql>
 
     <!-- 新增书籍 -->
@@ -68,13 +68,16 @@
             <if test="taskswitch != null">
                 AND "taskswitch" = #{taskswitch}
             </if>
+            <if test="lastgettime != null">
+                AND "lastgettime" &lt;= now() + '-${lastgettime} h'
+            </if>
         </where>
     </select>
 
     <!-- 查询所有书籍列表 -->
     <select id="queryList" parameterType="top.niandui.model.vo.BookSearchVO" resultType="top.niandui.model.vo.BookListReturnVO">
-        SELECT
-            b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus",b."taskswitch",b."detail"
+        SELECT b."bookid",b."name",b."url",b."configid",b."createtime",b."starturl",b."handlerinfo",b."siteid",b."taskstatus"
+            ,b."taskswitch",b."detail",b."lastgettime"
             ,c."name" "configname",s."name" "sitename"
             ,CASE b."taskstatus"
                 WHEN 1 THEN '重新获取全部'
@@ -129,6 +132,9 @@
     <update id="updateTaskstatusByRawStatus">
         UPDATE "book"
         SET "taskstatus" = #{newStatus}
+        <if test="newStatus == 1 or newStatus == 2">
+            ,"lastgettime" = now()
+        </if>
         WHERE "bookid" = #{bookid} AND "taskstatus" = #{rawStatus}
     </update>
 

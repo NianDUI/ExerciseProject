@@ -48,4 +48,6 @@ public class Book extends BaseModel {
     private Integer taskswitch;
     @ApiModelProperty(value = "书籍详情")
     private String detail;
+    @ApiModelProperty(value = "最后获取时间")
+    private Timestamp lastgettime;
 }
