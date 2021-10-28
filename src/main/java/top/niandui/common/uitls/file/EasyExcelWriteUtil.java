@@ -3,20 +3,22 @@ package top.niandui.common.uitls.file;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.Head;
-import com.alibaba.excel.util.CollectionUtils;
-import com.alibaba.excel.util.StyleUtil;
+import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.handler.CellWriteHandler;
+import com.alibaba.excel.write.handler.WriteHandler;
+import com.alibaba.excel.write.handler.context.WorkbookWriteHandlerContext;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
+import com.alibaba.excel.write.style.DefaultStyle;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.springframework.util.CollectionUtils;
 import top.niandui.common.base.IBaseExcel;
 
 import javax.servlet.http.HttpServletResponse;
@@ -193,27 +195,25 @@ public class EasyExcelWriteUtil {
     public static class CustomizeWriteHandler implements IBaseExcel<CustomizeWriteHandler> {
         // 最大列宽度：单位：一个字符的1/256；最大256个字符宽度。
         private static final int MAX_COLUMN_WIDTH = 256 * 25; // 255 * 256;
-        // 头部写单元格样式
-        private static final WriteCellStyle HEAD_WRITE_CELL_STYLE = new WriteCellStyle();
+        // 默认头部写单元格样式
+        private static final WriteCellStyle DEFAULT_HEAD_WRITE_CELL_STYLE = new WriteCellStyle();
         // 全角字符，正则匹配表达式
         private static final Pattern PATTERN = Pattern.compile("[^\\x00-\\xff]+");
 
         static {
             // 背景设置为白色
-            // HEAD_WRITE_CELL_STYLE.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+//            DEFAULT_HEAD_WRITE_CELL_STYLE.setFillForegroundColor(IndexedColors.WHITE.getIndex());
             // 字体设置
             WriteFont headFont = new WriteFont();
             // 设置字体大小
             headFont.setFontHeightInPoints((short) 11);
             // 是否加粗
             headFont.setBold(Boolean.FALSE);
-            HEAD_WRITE_CELL_STYLE.setWriteFont(headFont);
+            DEFAULT_HEAD_WRITE_CELL_STYLE.setWriteFont(headFont);
         }
 
         // sheet中的各列最大宽度
         private final Map<Integer, Integer> columnMaxWidthMap = new HashMap<>();
-        // 头部单元格样式
-        private CellStyle headCellStyle;
 
         @Override
         public String uniqueValue() {
@@ -222,28 +222,42 @@ public class EasyExcelWriteUtil {
         }
 
         @Override
-        public void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
+        public void afterWorkbookCreate(WorkbookWriteHandlerContext context) {
             // 字符串、表头等数据自动trim
-            writeWorkbookHolder.getWriteWorkbook().setAutoTrim(Boolean.TRUE);
-            if (HEAD_WRITE_CELL_STYLE != null) {
-                // 生成头部样式对象
-                headCellStyle = StyleUtil.buildHeadCellStyle(writeWorkbookHolder.getWorkbook(), HEAD_WRITE_CELL_STYLE);
+            context.getWriteWorkbookHolder().getWriteWorkbook().setAutoTrim(Boolean.TRUE);
+            // 获取单元格写处理器列表
+            for (WriteHandler writeHandler : context.getWriteWorkbookHolder().getWriteHandlerMap().get(CellWriteHandler.class)) {
+                // 判断是否为默认样式处理器
+                if (writeHandler instanceof DefaultStyle) {
+                    // 设置头自定义默认配置
+                    WriteCellStyle.merge(DEFAULT_HEAD_WRITE_CELL_STYLE, ((DefaultStyle) writeHandler).getHeadWriteCellStyle());
+                    break;
+                }
             }
+        }
+
+        @Override
+        public void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
             // 清除原有信息
             columnMaxWidthMap.clear();
         }
 
         @Override
-        public void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
+        public void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, List<WriteCellData<?>> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
             // 该方法会在单元格上的所有操作完成后调用
-            if (isHead != null && isHead && headCellStyle != null && head != null) {
-                // 设置头部样式
-                cell.setCellStyle(headCellStyle);
-            }
-            // 是否需要设置宽度
-            boolean needSetWidth = isHead || !CollectionUtils.isEmpty(cellDataList);
-            if (!needSetWidth) {
+            if (isHead == null || CollectionUtils.isEmpty(cellDataList)) {
                 return;
+            }
+            if (isHead && !CollectionUtils.isEmpty(cellDataList)) {
+                // 由head生成的头部写单元格样式(注解)
+                WriteCellStyle headWriteCellStyle = WriteCellStyle.build(head.getHeadStyleProperty(), head.getHeadFontProperty());
+                // 设置头部样式
+                cellDataList.forEach(wcd -> {
+//                    // 先设置头默认配置
+//                    WriteCellStyle.merge(DEFAULT_HEAD_WRITE_CELL_STYLE, wcd.getWriteCellStyle());
+                    // 使实体类上注解配置生效
+                    WriteCellStyle.merge(headWriteCellStyle, wcd.getWriteCellStyle());
+                });
             }
             // 获取单元格的数据长度
             Integer dataLength = dataLength(cellDataList, cell, isHead);
@@ -276,11 +290,11 @@ public class EasyExcelWriteUtil {
         }
 
         // 获取数据的长度
-        private Integer dataLength(List<CellData> cellDataList, Cell cell, Boolean isHead) {
+        private Integer dataLength(List<WriteCellData<?>> cellDataList, Cell cell, Boolean isHead) {
             if (isHead) {
                 return getStringLength(cell.getStringCellValue().trim());
             }
-            CellData cellData = cellDataList.get(0);
+            WriteCellData<?> cellData = cellDataList.get(0);
             CellDataTypeEnum type = cellData.getType();
             if (type == null) {
                 return -1;

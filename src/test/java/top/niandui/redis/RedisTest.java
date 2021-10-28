@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -17,6 +19,8 @@ import top.niandui.common.uitls.redis.RedisReentrantLockUtil;
 import top.niandui.common.uitls.redis.RedisUtil;
 import top.niandui.model.Site;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,12 +38,12 @@ import java.util.concurrent.Executors;
  */
 public class RedisTest {
     static ExecutorService executor = Executors.newFixedThreadPool(10);
+    private final ObjectMapper json = new ObjectMapper();
+    public RedisTemplate<String, Object> template;
     public RedisUtil redisUtil;
     public RedisByteUtil redisByteUtil;
     public RedisLockUtil lockUtil;
     public RedisReentrantLockUtil reentrantLockUtil;
-
-    private final ObjectMapper json = new ObjectMapper();
 
     {
         // 设置日志显示等级
@@ -47,7 +51,7 @@ public class RedisTest {
         Logger root = context.getLogger("root");
         root.setLevel(Level.INFO);
 
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template = new RedisTemplate<>();
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setHostName("192.168.1.14");
         config.setPort(6379);
@@ -173,4 +177,35 @@ public class RedisTest {
         Set<Object> objects2 = redisUtil.sGet("test:set2");
         System.out.println(objects2);
     }
+
+
+    @Test
+    public void testScript() throws Exception {
+        String path = "D:\\JavaWorkSpace\\IdeaProjects\\fictionweb\\config\\test.lua";
+        byte[] script = Files.readAllBytes(Paths.get(path));
+
+        String key = "testKey";
+        String value = "testValue";
+        byte[] value2 = {10};
+
+        byte[][] keysAndArgs = {key.getBytes(), value.getBytes(), value2};
+
+        RedisCallback<Object> callback = (connection) -> {
+            return connection.eval(script, ReturnType.STATUS, 1, keysAndArgs);
+        };
+        Object execute = template.execute(callback);
+        System.out.println("execute = " + execute);
+    }
+
+    @Test
+    public void test01() throws Exception {
+
+        Map<String, Object> map = redisUtil.hmGet("access_service:1964");
+        Object whiteKeys = map.get("whiteKeys");
+        System.out.println(whiteKeys + " " + ((whiteKeys != null) ? whiteKeys.getClass() : ""));
+
+        System.out.println();
+    }
+
+
 }

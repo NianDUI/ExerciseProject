@@ -1,7 +1,11 @@
 package top.niandui.excel;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.*;
 import lombok.Data;
+import org.apache.poi.ss.usermodel.Font;
 import org.junit.jupiter.api.Test;
 import top.niandui.common.uitls.file.EasyExcelWriteUtil;
 
@@ -19,11 +23,24 @@ public class EasyExcelTest01 {
 
     @Test
     public void test01() throws Exception {
-        EasyExcel.write("D:/zzz.xlsx")
+        EasyExcel.write("D:/ztest/zzz.xlsx")
                 // 注册写处理器
                 .registerWriteHandler(new EasyExcelWriteUtil.CustomizeWriteHandler())
                 // 动态设置头
                 .head(head())
+                // sheet名称
+                .sheet("数据")
+                // 数据
+                .doWrite(data1());
+    }
+
+    @Test
+    public void test02() throws Exception {
+        EasyExcel.write("D:/ztest/zzz.xlsx")
+                // 注册写处理器
+                .registerWriteHandler(new EasyExcelWriteUtil.CustomizeWriteHandler())
+                // 动态设置头
+                .head(D.class)
                 // sheet名称
                 .sheet("数据")
                 // 数据
@@ -33,9 +50,9 @@ public class EasyExcelTest01 {
     // 实体类对象列表作为数据
     private List<D> data2() {
         List<D> list = new ArrayList<>();
-        list.add(new D("北京", "12MB", "2", "23MB", "3"));
-        list.add(new D("河南", "14MB", "4", "25MB", "5"));
-        list.add(new D("河北", "16MB", "6", "27MB", "7"));
+        list.add(new D("北京", " 12MB", "2", "23MB", "3"));
+        list.add(new D("河asdfasdfasdasdfcxvczxcv南", "14MB", "4", "25MB", "5"));
+        list.add(new D("河北", "16MB", "6", "27asdfasdfascvfawradMB", "7"));
         return list;
     }
 
@@ -80,8 +97,8 @@ public class EasyExcelTest01 {
         List<String> head2 = new ArrayList<>();
         head2.add("2020/12/30");
         head2.add("文件数量");
-
         list.add(head2);
+
         head1 = new ArrayList<>();
         head1.add("2020/12/31");
         head1.add("文件大小");
@@ -93,12 +110,24 @@ public class EasyExcelTest01 {
         return list;
     }
 
+
     @Data
+    @ColumnWidth(30)
+    @HeadRowHeight(30)
+    @ContentRowHeight(30)
+    @ExcelIgnoreUnannotated
+    @HeadFontStyle(fontHeightInPoints = 16, color = Font.COLOR_RED)
+    @ContentFontStyle(fontHeightInPoints = 16, color = Font.COLOR_RED)
     public class D {
+        @ExcelProperty("省份")
         private String col0;
+        @ExcelProperty({"2020/12/30", "文件大小"})
         private String col1;
+        @ExcelProperty({"2020/12/30", "文件数量"})
         private String col2;
+        @ExcelProperty({"2020/12/31", "文件大小"})
         private String col3;
+        @ExcelProperty({"2020/12/31", "文件数量"})
         private String col4;
 
         public D(String col0, String col1, String col2, String col3, String col4) {

@@ -2,17 +2,12 @@ package top.niandui.common.base;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.NotRepeatExecutor;
-import com.alibaba.excel.metadata.CellData;
-import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.handler.CellWriteHandler;
 import com.alibaba.excel.write.handler.RowWriteHandler;
 import com.alibaba.excel.write.handler.SheetWriteHandler;
-import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
-import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
+import com.alibaba.excel.write.handler.WorkbookWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 import javax.xml.ws.Holder;
 import java.util.List;
@@ -25,7 +20,7 @@ import java.util.function.Consumer;
  * @version 1.0
  * @date 2020/1/21 16:20
  */
-public interface IBaseExcel<T extends IBaseExcel<T>> extends SheetWriteHandler, RowWriteHandler, CellWriteHandler, NotRepeatExecutor {
+public interface IBaseExcel<T extends IBaseExcel<T>> extends WorkbookWriteHandler, SheetWriteHandler, RowWriteHandler, CellWriteHandler, NotRepeatExecutor {
 
     /**
      * 获取sheet的最后行索引
@@ -46,43 +41,10 @@ public interface IBaseExcel<T extends IBaseExcel<T>> extends SheetWriteHandler, 
     }
 
     // Sheet 回调方法
-    @Override
-    default void beforeSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
-    }
-
-    @Override
-    default void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
-    }
 
     // Row 回调方法
-    @Override
-    default void beforeRowCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Integer rowIndex, Integer relativeRowIndex, Boolean isHead) {
-    }
-
-    @Override
-    default void afterRowCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row, Integer relativeRowIndex, Boolean isHead) {
-    }
-
-    @Override
-    default void afterRowDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row, Integer relativeRowIndex, Boolean isHead) {
-    }
 
     // Cell 回调方法
-    @Override
-    default void beforeCellCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row, Head head, Integer columnIndex, Integer relativeRowIndex, Boolean isHead) {
-    }
-
-    @Override
-    default void afterCellCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
-    }
-
-    @Override
-    default void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
-    }
-
-    @Override
-    default void afterCellDataConverted(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, CellData cellData, Cell cell, Head head, Integer integer, Boolean aBoolean) {
-    }
 
     /****************读取数据回调****************/
 
