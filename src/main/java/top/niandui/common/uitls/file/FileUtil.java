@@ -41,9 +41,8 @@ public class FileUtil {
     public static String getFileCharset(File file) {
         String charset = "GBK";
         byte[] first3Bytes = new byte[3];
-        try {
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
             boolean checked = false;
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
             bis.mark(0);
             int read = bis.read(first3Bytes, 0, 3);
             if (read == -1) {
@@ -90,9 +89,7 @@ public class FileUtil {
                     }
                 }
             }
-            bis.close();
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("文件编码读取错误", e);
         }
         return charset;
