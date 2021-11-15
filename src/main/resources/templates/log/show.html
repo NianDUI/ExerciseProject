@@ -97,7 +97,7 @@
     // 接收消息处理
     ws.onmessage = function (evt) {
         let boxs = $(".layui-field-box");
-        if (boxs.size() > 1000) {
+        if (boxs.size() > 200) {
             boxs.eq(0).remove();
         }
         // console.log(evt.data);

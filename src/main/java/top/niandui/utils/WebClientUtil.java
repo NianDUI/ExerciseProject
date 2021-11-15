@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import top.niandui.common.expection.ReStateException;
 import top.niandui.common.uitls.redis.RedisUtil;
+import top.niandui.config.AsyncConfig;
 import top.niandui.dao.IBookDao;
 import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IParagraphDao;
@@ -106,7 +107,7 @@ public class WebClientUtil {
      * @param seqid       章节序号
      * @param isFirstJump 第一次是否跳过,t跳过、f不跳过
      */
-    @Async
+    @Async(AsyncConfig.GET_BOOK_TASK_EXECUTOR_BEAN_NAME)
     public void getBook(Config config, Book book, long seqid, boolean isFirstJump) {
         try {
             // 更新任务状态
