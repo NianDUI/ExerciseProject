@@ -48,7 +48,8 @@ public class GetFollowUpChapterTask implements Runnable {
         // 参数Map
         Map params = new HashMap(PARAMS);
         // 4 - 6个小时
-        params.put("lastgettime", (int) (Math.random() * 3 + 4));
+//        params.put("lastgettime", (int) (Math.random() * 3 + 4));
+        params.put("lastgettime", 4);
         List<IdNameModel<Long>> option = iBookDao.option(params);
         for (IdNameModel<Long> idNameModel : option) {
             String name = idNameModel.getName();
