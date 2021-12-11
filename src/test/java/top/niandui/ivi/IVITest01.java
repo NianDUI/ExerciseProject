@@ -5,10 +5,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlDivision;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
+import com.gargoylesoftware.htmlunit.html.*;
 import org.slf4j.LoggerFactory;
 import top.niandui.utils.WebClientUtil;
 
@@ -42,12 +39,12 @@ public class IVITest01 {
         List<HtmlDivision> divList = page.getByXPath("//div[@class='2u -2u' or @class='2u']");
         Map<String, Map<String, String>> mapMap = divList.stream().collect(Collectors.toMap(
                 // CCTV-1高清
-                div -> ((HtmlParagraph) div.getFirstByXPath("./p")).asText()
+                div -> ((HtmlParagraph) div.getFirstByXPath("./p")).asNormalizedText()
                 , div -> {
                     List<HtmlAnchor> aList = div.getByXPath("./a");
                     return aList.stream().collect(Collectors.toMap(
                             // PC端
-                            a -> a.asText(),
+                            DomNode::asNormalizedText,
                             // http://ivi.bupt.edu.cn/player.html?channel=cctv1hd
                             a -> a.getBaseURI() + a.getHrefAttribute()
                             , (s, s2) -> s

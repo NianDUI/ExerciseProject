@@ -45,9 +45,9 @@ public class Test01 {
 
 //        HtmlPage page = client.getPage("https://www.ip138.com/");
         HtmlPage page = client.getPage("https://www.baidu.com/s?ie=UTF-8&wd=ip");
-        String text = page.asText();
+        String text = page.asNormalizedText();
 //        System.out.println("text = " + text);
-        Stream.of(text.split("\r\n")).filter(s -> s.contains("本机IP: "))
+        Stream.of(text.split("\r?\n")).filter(s -> s.contains("本机IP: "))
                 .forEach(System.out::println);
     }
 }

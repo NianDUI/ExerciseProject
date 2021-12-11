@@ -6,7 +6,6 @@ import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
-import com.alibaba.excel.write.handler.CellWriteHandler;
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.handler.context.WorkbookWriteHandlerContext;
 import com.alibaba.excel.write.metadata.WriteSheet;
@@ -226,7 +225,7 @@ public class EasyExcelWriteUtil {
             // 字符串、表头等数据自动trim
             context.getWriteWorkbookHolder().getWriteWorkbook().setAutoTrim(Boolean.TRUE);
             // 获取单元格写处理器列表
-            for (WriteHandler writeHandler : context.getWriteWorkbookHolder().getWriteHandlerMap().get(CellWriteHandler.class)) {
+            for (WriteHandler writeHandler : context.getWriteWorkbookHolder().getWriteHandlerList()) {
                 // 判断是否为默认样式处理器
                 if (writeHandler instanceof DefaultStyle) {
                     // 设置头自定义默认配置
