@@ -132,6 +132,8 @@ public class WebClientUtil {
                     // 调用自定义方法处理标题
                     try {
                         chapter.setRawname(titleList.get(0).toString().trim());
+                        // 章节序号
+                        handleInfo.put("seqNum", seqid + 1);
                         String title = titleHandler.apply(chapter.getRawname());
                         chapter.setName(title);
                         log.info(title + " <- " + chapter.getRawname());

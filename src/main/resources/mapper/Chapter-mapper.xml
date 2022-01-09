@@ -97,12 +97,6 @@
                 AND c."name" ILIKE '%${name}%'
             </if>
         </where>
-        <if test="orderBy != null and orderBy != ''">
-            ORDER BY ${orderBy}
-            <if test="descOrAsc != null and descOrAsc != ''">
-                ${descOrAsc}
-            </if>
-        </if>
     </select>
 
     <!-- 删除章节 -->
@@ -210,5 +204,29 @@
     <!-- 更新null章节名称为原名称 -->
     <update id="updateNullNameToRawname">
         UPDATE "chapter" SET "name" = "rawname" WHERE "bookid" = #{bookid} AND "name" IS NULL
+    </update>
+
+    <!-- 查询章节名列表 -->
+    <select id="queryChapterNameList" resultType="map">
+        SELECT "chapterid","name","rawname"
+        FROM "chapter"
+        <where>
+            <if test="bookid != null">
+                AND "bookid" = #{bookid}
+            </if>
+        </where>
+        ORDER BY "seqid"
+    </select>
+
+    <!-- 通过id更新批量章节名 -->
+    <update id="updateBatchChapterNameById">
+        UPDATE "chapter" c
+        SET "name" = t."name"
+        FROM (
+        <foreach collection="list" item="it" separator="," open="VALUES">
+            (#{it.chapterid},#{it.name})
+        </foreach>
+        ) t("chapterid","name")
+        WHERE c."chapterid" = t."chapterid"
     </update>
 </mapper>

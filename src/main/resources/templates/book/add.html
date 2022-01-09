@@ -59,9 +59,13 @@
                 <label class="layui-form-label">标题处理方式</label>
                 <div class="layui-input-block">
                     <select name="titleType" class="titleType" lay-verify="required" lay-filter="titleType">
-                        <option value="0">无处理</option>
+                        <option value="-1">无处理</option>
+                        <option value="0" selected>自动匹配</option>
                         <option value="1">使用分隔符</option>
                         <option value="2">数字开头无分隔符</option>
+                        <option value="3">提取第x章...</option>
+                        <option value="4">提取数字</option>
+                        <option value="5">使用序号</option>
                     </select>
                 </div>
             </div>
