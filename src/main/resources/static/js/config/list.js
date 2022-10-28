@@ -23,7 +23,7 @@ const tableList = table.render({
     , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
-        , {field: "name", title: "名称", minWidth: 180}
+        , {field: "name", title: "名称", minWidth: 180, event: "edit"}
         , {field: "titlematch", title: "标题匹配", minWidth: 300}
         , {field: "titlelnnum", title: "标题后换行", sort: true}
         , {field: "conmatch", title: "内容匹配", minWidth: 250}

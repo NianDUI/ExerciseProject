@@ -29,7 +29,7 @@ const tableList = table.render({
     , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
-        , {field: "name", title: "名称", minWidth: 180}
+        , {field: "name", title: "名称", minWidth: 180, event: "edit"}
         , {field: "sitename", title: "站点", minWidth: 180, event: "siteAdd"}
         , {field: "configname", title: "配置", minWidth: 180, event: "configAdd"}
         , {field: "taskstatusname", title: "任务状态", minWidth: 90}

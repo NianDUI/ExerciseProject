@@ -25,7 +25,7 @@ const tableList = table.render({
     , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
-        , {field: "name", title: "名称", minWidth: 180}
+        , {field: "name", title: "名称", minWidth: 180, event: "edit"}
         , {field: "configname", title: "配置", minWidth: 180, event: "configAdd"}
         , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
         , {field: "url", title: "链接", minWidth: 250}

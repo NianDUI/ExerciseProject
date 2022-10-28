@@ -33,8 +33,8 @@ const tableList = table.render({
     , text: tableText
     , cols: [[
         {checkbox: true, fixed: "left"}
-        , {field: "name", title: "名称", minWidth: 200}
-        , {field: "rawname", title: "原名称", minWidth: 200}
+        , {field: "name", title: "名称", minWidth: 200, event: "edit"}
+        , {field: "rawname", title: "原名称", minWidth: 200, event: "edit"}
         , {field: "bookname", title: "书籍", minWidth: 180, event: "bookAdd"}
         , {field: "configname", title: "配置", minWidth: 180, event: "configAdd"}
         , {field: "createtime", title: "创建时间", sort: true, minWidth: 180}
