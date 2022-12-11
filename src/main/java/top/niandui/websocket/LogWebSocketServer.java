@@ -43,6 +43,7 @@ public class LogWebSocketServer {
                         txt = txt.substring(0, 500);
                     }
                     for (Session session : AUTHORIZE_SESSIONS) {
+                        // 改为使用异步
                         session.getAsyncRemote().sendText(txt);
                     }
                 } catch (Exception e) {
