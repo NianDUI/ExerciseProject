@@ -3,7 +3,7 @@ package top.niandui.utils;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.seimicrawler.xpath.JXDocument;
 import org.seimicrawler.xpath.JXNode;
 import org.springframework.util.StringUtils;
@@ -36,11 +36,13 @@ public class SeleniumUtil {
      *
      * @return web驱动
      */
-    private static FirefoxDriver newDriver() {
+    private static WebDriver newDriver() {
         // 加载驱动
-        WebDriverManager.firefoxdriver().setup();
+//        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.edgedriver().setup();
         // 创建驱动
-        return new FirefoxDriver();
+//        return new FirefoxDriver();
+        return new EdgeDriver();
     }
 
     /**
