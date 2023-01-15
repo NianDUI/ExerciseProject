@@ -63,7 +63,8 @@ form.on("submit(submit)", function (data) {
     const field = data.field;
     field.bookid = id;
     field.handlerinfo = JSON.stringify({
-        titleType: parseInt(field.titleType)
+        getUtil: field.getUtil
+        , titleType: parseInt(field.titleType)
         , startIndex: parseInt(field.startIndex)
         , delimiter: field.delimiter
         , endType: parseInt(field.endType)

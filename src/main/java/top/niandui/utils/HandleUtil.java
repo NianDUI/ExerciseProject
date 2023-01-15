@@ -181,4 +181,26 @@ public class HandleUtil {
     public static Boolean isEndHrefDefaultMethod(String thisLink, String nextLink) {
         return !nextLink.toLowerCase().endsWith("html") || thisLink.endsWith(nextLink);
     }
+
+    /**
+     * 获取根uri
+     *
+     * @param url URL
+     * @return 根uri
+     */
+    public static String getRootUri(String url) {
+        if (url == null) {
+            return url;
+        }
+        // https://www.147xs.org/book/150820/226230160.html
+        int fromIndex = url.indexOf("://");
+        if (fromIndex > -1) {
+            int index = url.indexOf('/', fromIndex + 3);
+            if (index > -1) {
+                // 截取
+                url = url.substring(0, index);
+            }
+        }
+        return url;
+    }
 }

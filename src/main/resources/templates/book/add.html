@@ -56,6 +56,15 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">获取工具</label>
+                <div class="layui-input-block">
+                    <select name="getUtil" class="getUtil" lay-verify="required" lay-filter="getUtil">
+                        <option value="htmlunit" selected>htmlunit</option>
+                        <option value="selenium">selenium</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">标题处理方式</label>
                 <div class="layui-input-block">
                     <select name="titleType" class="titleType" lay-verify="required" lay-filter="titleType">

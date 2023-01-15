@@ -86,7 +86,8 @@ if (taskswitch !== 0) {
     function schedule() {
         if (timer == null) {
             stopGet.show();
-            timer = window.setInterval("pageNum = 0x7fffffff;searchBtn.click();", 5000);
+            // timer = window.setInterval("pageNum = 0x7fffffff - 20;searchBtn.click();", 5000);
+            timer = window.setInterval("pageNum = 9999999;searchBtn.click();", 5000);
         }
     }
 
