@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.seimicrawler.xpath.JXDocument;
 import org.seimicrawler.xpath.JXNode;
 import org.springframework.util.StringUtils;
@@ -42,7 +43,16 @@ public class SeleniumUtil {
         WebDriverManager.edgedriver().setup();
         // 创建驱动
 //        return new FirefoxDriver();
-        return new EdgeDriver();
+        EdgeOptions edgeOptions = new EdgeOptions();
+        // –no-sandbox”参数是让Chrome在root权限下跑
+        edgeOptions.addArguments("--no-sandbox");
+        edgeOptions.addArguments("--disable-dev-shm-usage");
+        // “–headless”参数是不用打开图形界面
+        edgeOptions.addArguments("--headless");
+        // 外加这些参数获得更好体验
+        edgeOptions.addArguments("blink-settings=imagesEnabled=false");
+        edgeOptions.addArguments("--disable-gpu");
+        return new EdgeDriver(edgeOptions);
     }
 
     /**
