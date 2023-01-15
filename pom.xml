@@ -317,10 +317,10 @@
                     <layout>ZIP</layout>
                     <includes>
                         <!-- 打包时不包含依赖包,打包瘦身 -->
-                        <include>
+                        <!--<include>
                             <groupId>nothing</groupId>
                             <artifactId>nothing</artifactId>
-                        </include>
+                        </include>-->
                     </includes>
                 </configuration>
             </plugin>
