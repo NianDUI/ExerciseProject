@@ -49,7 +49,7 @@ public class SeleniumUtil {
         edgeOptions.addArguments("--disable-dev-shm-usage");
         edgeOptions.addArguments("--disable-extensions");
         // “–headless”参数是不用打开图形界面
-        edgeOptions.addArguments("--headless");
+//        edgeOptions.addArguments("--headless");
         // 外加这些参数获得更好体验
 //        edgeOptions.addArguments("blink-settings=imagesEnabled=false");
 //        edgeOptions.addArguments("--disable-gpu");
