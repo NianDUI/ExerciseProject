@@ -47,11 +47,12 @@ public class SeleniumUtil {
         // –no-sandbox”参数是让Chrome在root权限下跑
         edgeOptions.addArguments("--no-sandbox");
         edgeOptions.addArguments("--disable-dev-shm-usage");
+        edgeOptions.addArguments("--disable-extensions");
         // “–headless”参数是不用打开图形界面
         edgeOptions.addArguments("--headless");
         // 外加这些参数获得更好体验
-        edgeOptions.addArguments("blink-settings=imagesEnabled=false");
-        edgeOptions.addArguments("--disable-gpu");
+//        edgeOptions.addArguments("blink-settings=imagesEnabled=false");
+//        edgeOptions.addArguments("--disable-gpu");
         return new EdgeDriver(edgeOptions);
     }
 
