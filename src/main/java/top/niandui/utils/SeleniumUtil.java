@@ -32,6 +32,18 @@ import static top.niandui.utils.TaskStateUtil.getBookTaskStatus;
 public class SeleniumUtil {
 
     /**
+     * 创建驱动
+     *
+     * @return web驱动
+     */
+    private static FirefoxDriver newDriver() {
+        // 加载驱动
+        WebDriverManager.firefoxdriver().setup();
+        // 创建驱动
+        return new FirefoxDriver();
+    }
+
+    /**
      * 获取书籍各章节内容
      *
      * @param config       配置信息
@@ -44,10 +56,8 @@ public class SeleniumUtil {
      */
     public static void getBook(WebClientUtil webClientUtil, Config config, Book book, long seqid, boolean isFirstJump
             , Map handleInfo, Function<String, String> titleHandler, BiFunction<String, String, Boolean> isEndHref) throws Exception {
-        // 加载驱动
-        WebDriverManager.firefoxdriver().setup();
         // 创建驱动
-        WebDriver driver = new FirefoxDriver();
+        WebDriver driver = newDriver();
         try {
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
@@ -131,10 +141,8 @@ public class SeleniumUtil {
      * @param handleInfo 处理信息
      */
     public static void getChapter(WebClientUtil webClientUtil, Config config, Chapter chapter, Map handleInfo) throws Exception {
-        // 加载驱动
-        WebDriverManager.firefoxdriver().setup();
         // 创建驱动
-        WebDriver driver = new FirefoxDriver();
+        WebDriver driver = newDriver();
         try {
             // 获取开始结束时间
             long startTime = System.currentTimeMillis(), endTimes;
