@@ -174,10 +174,12 @@ public class SeleniumUtil {
                 // 调用休眠处理方法
                 HandleUtil.sleepHandler.get();
                 // 跳转下一页
-                String nextUrl = rootUri + nextHref;
+                String nextUrl;
                 if (nextHref.contains("http") && nextHref.contains("://")) {
+                    // 下一页url：http://www.77dushu.la/chapter/105444/44091664.html
                     nextUrl = nextHref;
                 } else {
+                    // 下一页url：/chapter/105444/44091664.html
                     nextUrl = rootUri + nextHref;
                 }
                 driver.get(nextUrl);
