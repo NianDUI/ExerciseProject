@@ -174,7 +174,13 @@ public class SeleniumUtil {
                 // 调用休眠处理方法
                 HandleUtil.sleepHandler.get();
                 // 跳转下一页
-                driver.get(rootUri + nextHref);
+                String nextUrl = rootUri + nextHref;
+                if (nextHref.contains("http") && nextHref.contains("://")) {
+                    nextUrl = nextHref;
+                } else {
+                    nextUrl = rootUri + nextHref;
+                }
+                driver.get(nextUrl);
             }
         } finally {
             driver.quit();
