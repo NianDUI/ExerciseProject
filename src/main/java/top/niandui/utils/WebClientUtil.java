@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import top.niandui.common.expection.ReStateException;
 import top.niandui.common.uitls.redis.RedisUtil;
 import top.niandui.config.AsyncConfig;
@@ -15,10 +16,13 @@ import top.niandui.dao.IChapterDao;
 import top.niandui.dao.IParagraphDao;
 import top.niandui.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static top.niandui.common.uitls.MethodUtil.convert;
 import static top.niandui.config.PublicConstant.BOOK_PROXY;
@@ -168,6 +172,44 @@ public class WebClientUtil {
             // 删除书籍代理缓存
             redisUtil.del(BOOK_PROXY + chapter.getBookid());
         }
+    }
+
+    /**
+     * 获取段落列表
+     *
+     * @param config     配置信息
+     * @param chapter    章节信息
+     * @param listStream 段落流
+     * @return 段落列表
+     */
+    public static List<Paragraph> getParagraphList(Config config, Chapter chapter, Stream<String> listStream) {
+        // 去除空行后的
+        List<String> lineList = listStream.map(line -> {
+            // 去除每一行前面的空字符
+            line = line.trim();
+            int start = 0;
+            while (line.startsWith("　", start)) {
+                start++;
+            }
+            return line.substring(start).trim();
+            // 过滤出有内容的行
+        }).filter(StringUtils::hasText)
+                // 过滤出段落内容：不是以"【"开头，并且不包含"换源App" 的
+                .filter(line -> !line.startsWith("【") && !line.contains("换源App"))
+                .collect(Collectors.toList());
+        // 生成行对象列表
+        List<Paragraph> paragraphList = new ArrayList<>();
+        long seqid = 0;
+        int end = lineList.size() + config.getEndoffset();
+        for (int i = config.getStartoffset(); i < end; i++, seqid++) {
+            Paragraph paragraph = new Paragraph();
+            paragraph.setBookid(chapter.getBookid());
+            paragraph.setChapterid(chapter.getChapterid());
+            paragraph.setContent(lineList.get(i));
+            paragraph.setSeqid(seqid);
+            paragraphList.add(paragraph);
+        }
+        return paragraphList;
     }
 
     /**

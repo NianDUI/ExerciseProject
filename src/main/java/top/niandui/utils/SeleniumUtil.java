@@ -7,18 +7,16 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.seimicrawler.xpath.JXDocument;
 import org.seimicrawler.xpath.JXNode;
-import org.springframework.util.StringUtils;
 import top.niandui.model.Book;
 import top.niandui.model.Chapter;
 import top.niandui.model.Config;
 import top.niandui.model.Paragraph;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static top.niandui.utils.TaskStateUtil.getBookTaskStatus;
 
@@ -75,7 +73,7 @@ public class SeleniumUtil {
 //        return new FirefoxDriver();
         EdgeOptions edgeOptions = new EdgeOptions();
         // 无头模式 不用打开图形界面
-        edgeOptions.addArguments("--headless");
+//        edgeOptions.addArguments("--headless");
         // 禁用GPU加速
         edgeOptions.addArguments("--disable-gpu");
         // 盒模式运行 Chrome在root权限下跑
@@ -172,7 +170,8 @@ public class SeleniumUtil {
                     break;
                 }
                 // 调用休眠处理方法
-                HandleUtil.sleepHandler.get();
+//                HandleUtil.sleepHandler.get();
+                Thread.sleep(400);
                 // 跳转下一页
                 String nextUrl;
                 if (nextHref.contains("http") && nextHref.contains("://")) {
@@ -251,29 +250,8 @@ public class SeleniumUtil {
     private static List<Paragraph> getParagraphList(Config config, Chapter chapter, JXDocument jxDocument) {
         // 获取内容DOM列表
         List<JXNode> list = jxDocument.selN(config.getConmatch());
-        // 去除空行后的
-        List<String> lineList = list.stream().map(text -> {
-            // 去除每一行前面的空字符
-            String line = text.asString().trim();
-            int start = 0;
-            while (line.startsWith("　", start)) {
-                start++;
-            }
-            return line.substring(start).trim();
-            // 过滤出有内容的行
-        }).filter(StringUtils::hasText).collect(Collectors.toList());
-        // 生成行对象列表
-        List<Paragraph> paragraphList = new ArrayList<>();
-        long seqid = 0;
-        int end = lineList.size() + config.getEndoffset();
-        for (int i = config.getStartoffset(); i < end; i++, seqid++) {
-            Paragraph paragraph = new Paragraph();
-            paragraph.setBookid(chapter.getBookid());
-            paragraph.setChapterid(chapter.getChapterid());
-            paragraph.setContent(lineList.get(i));
-            paragraph.setSeqid(seqid);
-            paragraphList.add(paragraph);
-        }
-        return paragraphList;
+        Stream<String> listStream = list.stream().map(JXNode::asString);
+        // 获取段落列表，生成行对象列表
+        return WebClientUtil.getParagraphList(config, chapter, listStream);
     }
 }
