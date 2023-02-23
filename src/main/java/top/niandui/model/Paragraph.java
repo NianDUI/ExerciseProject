@@ -1,12 +1,11 @@
 package top.niandui.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 /**
@@ -17,20 +16,20 @@ import java.sql.Timestamp;
  * @version: 1.0
  */
 @Data
-@ApiModel(description = "段落实体类")
+@Schema(description = "段落实体类")
 public class Paragraph extends BaseModel {
-    @ApiModelProperty(value = "创建时间")
+    @Schema(description = "创建时间")
     private Timestamp createtime;
     @NotNull(message = "排序id不能为空")
-    @ApiModelProperty(value = "排序id", required = true)
+    @Schema(description = "排序id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long seqid;
     @NotBlank(message = "段落内容不能为空")
-    @ApiModelProperty(value = "段落内容", required = true)
+    @Schema(description = "段落内容", requiredMode = Schema.RequiredMode.REQUIRED)
     private String content;
     @NotNull(message = "书籍id不能为空")
-    @ApiModelProperty(value = "书籍id", required = true)
+    @Schema(description = "书籍id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long bookid;
     @NotNull(message = "章节id不能为空")
-    @ApiModelProperty(value = "章节id", required = true)
+    @Schema(description = "章节id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long chapterid;
 }

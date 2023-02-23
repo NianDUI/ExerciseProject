@@ -1,7 +1,6 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.niandui.model.Book;
 
@@ -13,14 +12,14 @@ import top.niandui.model.Book;
  * @version: 1.0
  */
 @Data
-@ApiModel(description = "书籍列表查询返回vo")
+@Schema(description = "书籍列表查询返回vo")
 public class BookListReturnVO extends Book {
-    @ApiModelProperty(value = "配置名称")
+    @Schema(description = "配置名称")
     private String configname;
-    @ApiModelProperty(value = "站点名称")
+    @Schema(description = "站点名称")
     private String sitename;
-    @ApiModelProperty(value = "任务状态：无，重新获取，获取后续")
+    @Schema(description = "任务状态：无，重新获取，获取后续")
     private String taskstatusname;
-    @ApiModelProperty(value = "任务开关：关闭，开启")
+    @Schema(description = "任务开关：关闭，开启")
     private String taskswitchname;
 }

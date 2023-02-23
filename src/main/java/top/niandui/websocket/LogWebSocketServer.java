@@ -1,13 +1,13 @@
 package top.niandui.websocket;
 
+import jakarta.websocket.*;
+import jakarta.websocket.server.ServerEndpoint;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 import top.niandui.common.uitls.RSAUtil;
 import top.niandui.config.PublicBean;
 
-import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.*;

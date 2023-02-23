@@ -1,5 +1,6 @@
 package top.niandui.common.config;
 
+import jakarta.servlet.ServletException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,6 @@ import top.niandui.common.expection.ReStateException;
 import top.niandui.common.expection.TokenCheckException;
 import top.niandui.common.outher.StatusCode;
 
-import javax.servlet.ServletException;
 import java.util.Map;
 
 /**

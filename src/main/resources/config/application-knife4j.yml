@@ -1,9 +1,33 @@
-# Knife4j配置
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    # swagger-ui
+    enabled: true
+    #自定义swagger前端请求路径，输入http：127.0.0.1:8080/test会自动重定向到swagger页面
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    # 是否开启文档功能
+    enabled: true
+    # swagger后端请求地址
+    path: /v3/api-docs
+  # 这里定义了两个分组，可定义多个，也可以不定义
+  group-configs:
+    # 分组名
+    - group: ${spring.application.name}
+      # 按路径匹配
+      paths-to-match: '/**'
+      # 按包路径匹配
+      packages-to-scan: top.niandui.controller
+# knife4j的增强配置，不需要增强可以不配
 knife4j:
   # 开启Knife4j提供的增强
   enable: true
   # 前端Ui的个性化配置属性
   setting:
+    # 语言中文
+    language: zh_cn
     # 是否显示Footer(页脚)
     enable-footer: false
     # 重命名SwaggerModel名称

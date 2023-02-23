@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.7</version>
+        <version>3.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>top.niandui</groupId>
@@ -17,17 +17,17 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <spring-cloud.version>2020.0.3</spring-cloud.version>
-        <thymeleaf.version>3.0.12.RELEASE</thymeleaf.version>
+        <java.version>17</java.version>
+        <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
         <!-- 注意：布局功能的支持程序：thymeleaf3主程序 适配 layout2以上版本 -->
         <!-- thymeleaf2 和 layout1 这是一个适配 -->
         <!-- layout：是来做布局功能扩展的 -->
-        <thymeleaf-layout-dialect.version>2.5.3</thymeleaf-layout-dialect.version>
+        <thymeleaf-layout-dialect.version>3.2.0</thymeleaf-layout-dialect.version>
         <!-- 指定使用的ES版本为启动的ES版本 -->
         <elasticsearch.version>7.9.2</elasticsearch.version>
         <!-- 指定使用的selenium版本：覆盖springboot指定的版本，修复ClassDefFoundError: org/openqa/selenium -->
-        <selenium.version>4.7.2</selenium.version>
+        <selenium.version>4.8.1</selenium.version>
         <!-- 打包跳过测试 -->
         <skipTests>true</skipTests>
     </properties>
@@ -127,12 +127,12 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.2.0</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.8</version>
+            <version>1.2.16</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -147,69 +147,69 @@
         <!--swagger-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>2.0.9</version>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.0.0</version>
         </dependency>
         <!-- 分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.4.1</version>
+            <version>1.4.6</version>
         </dependency>
         <!-- webjars -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator</artifactId>
-            <version>0.42</version>
+            <version>0.46</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.6.0</version>
+            <version>3.6.3</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>layui</artifactId>
-            <version>2.6.8</version>
+            <version>2.7.6</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>vue</artifactId>
-            <version>2.6.14</version>
+            <version>2.7.8</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>jsencrypt</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>js-cookie</artifactId>
-            <version>3.0.0-rc.1</version>
+            <version>3.0.1</version>
         </dependency>
         <!-- htmlunit -->
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.69.0</version>
+            <version>2.70.0</version>
         </dependency>
         <!-- xercesImpl-2.12.1.jar -->
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <version>2.12.1</version>
+            <version>2.12.2</version>
         </dependency>
         <!-- Jsoup -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.15.3</version>
+            <version>1.15.4</version>
         </dependency>
         <!-- JsoupXpath -->
         <dependency>
             <groupId>cn.wanghaomiao</groupId>
             <artifactId>JsoupXpath</artifactId>
-            <version>2.5.1</version>
+            <version>2.5.2</version>
         </dependency>
         <!-- selenium -->
         <dependency>
@@ -226,19 +226,19 @@
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.3.1</version>
+            <version>5.3.2</version>
         </dependency>
         <!-- easyexcel -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
-            <version>3.0.5</version>
+            <version>3.2.1</version>
         </dependency>
         <!-- sshj -->
         <dependency>
             <groupId>com.hierynomus</groupId>
             <artifactId>sshj</artifactId>
-            <version>0.32.0</version>
+            <version>0.35.0</version>
         </dependency>
         <!-- jsch:另一种ssh实现方式 -->
         <dependency>
@@ -261,7 +261,7 @@
             解决打包时 报jdk下 com.sun.javaws.jnl | com.sun.deploy.xml 不存在
             。依赖文件夹下需要有 javaws.jar、deploy.jar
         -->
-        <dependency>
+        <!--<dependency>
             <groupId>jdk.jre</groupId>
             <artifactId>javaws</artifactId>
             <version>1.8</version>
@@ -274,12 +274,12 @@
             <version>1.8</version>
             <scope>system</scope>
             <systemPath>${java.home}/lib/deploy.jar</systemPath>
-        </dependency>
+        </dependency>-->
         <!-- WebSocket -->
         <dependency>
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
-            <version>1.5.2</version>
+            <version>1.5.3</version>
         </dependency>
 
         <dependency>

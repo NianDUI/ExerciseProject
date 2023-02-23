@@ -1,12 +1,10 @@
 package top.niandui.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * 任务实体类
@@ -16,25 +14,25 @@ import javax.validation.constraints.NotNull;
  * @date 2020/12/1 11:03
  */
 @Data
-@ApiModel(description = "任务实体类")
+@Schema(description = "任务实体类")
 public class Task extends BaseModel {
-    @ApiModelProperty(value = "任务id")
+    @Schema(description = "任务id")
     private Long taskid;
     @NotBlank(message = "任务名称不能为空")
-    @ApiModelProperty(value = "任务名称", required = true)
+    @Schema(description = "任务名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
     @NotBlank(message = "cron表达式不能为空")
-    @ApiModelProperty(value = "cron表达式", required = true)
+    @Schema(description = "cron表达式", requiredMode = Schema.RequiredMode.REQUIRED)
     private String cron;
     @NotNull(message = "任务开关不能为空")
-    @ApiModelProperty(value = "任务开关：0 关闭，1 开启", required = true)
+    @Schema(description = "任务开关：0 关闭，1 开启", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer taskswitch;
     @NotBlank(message = "任务类路径不能为空")
-    @ApiModelProperty(value = "任务类路径", required = true)
+    @Schema(description = "任务类路径", requiredMode = Schema.RequiredMode.REQUIRED)
     private String classpath;
     @NotNull(message = "类加载方式不能为空")
-    @ApiModelProperty(value = "类加载方式：0 反射、1 IOC容器", required = true)
+    @Schema(description = "类加载方式：0 反射、1 IOC容器", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer loadmanner;
-    @ApiModelProperty(value = "任务描述")
+    @Schema(description = "任务描述")
     private String description;
 }

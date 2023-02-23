@@ -1,7 +1,5 @@
 package top.niandui.xml;
 
-import com.sun.deploy.xml.XMLNode;
-import com.sun.javaws.jnl.XMLFormat;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.junit.jupiter.api.Test;
@@ -35,11 +33,13 @@ public class XmlTest01 {
      * 最终能够实现的
      * @throws Exception
      */
-    @Test
+    /*@Test
     public void xmlFormat() throws Exception {
+        import com.sun.deploy.xml.XMLNode;
+        import com.sun.javaws.jnl.XMLFormat;
         XMLNode xmlNode = XMLFormat.parseBits(xml.getBytes());
         System.out.println(xmlNode);
-    }
+    }*/
 
     @Test
     public void xmlFormat01() throws Exception {

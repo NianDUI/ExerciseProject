@@ -1,6 +1,6 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import top.niandui.model.Task;
 
 /**
@@ -10,6 +10,6 @@ import top.niandui.model.Task;
  * @version 1.0
  * @date 2020/12/1 11:32
  */
-@ApiModel(description = "任务列表查询返回vo")
+@Schema(description = "任务列表查询返回vo")
 public class TaskListReturnVO extends Task {
 }

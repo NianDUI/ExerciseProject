@@ -1,7 +1,6 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.niandui.common.model.PageOrder;
 
@@ -13,10 +12,10 @@ import top.niandui.common.model.PageOrder;
  * @time: 2020/3/28 14:54
  */
 @Data
-@ApiModel(description = "书籍查询VO")
+@Schema(description = "书籍查询VO")
 public class BookSearchVO extends PageOrder {
-    @ApiModelProperty(value = "书籍名称")
+    @Schema(description = "书籍名称")
     private String name;
-    @ApiModelProperty(value = "站点id")
+    @Schema(description = "站点id")
     private Long siteid;
 }

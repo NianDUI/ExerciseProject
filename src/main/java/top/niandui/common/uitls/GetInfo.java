@@ -27,7 +27,16 @@ public class GetInfo extends PropertyDefinerBase {
         }
         SERVICE_IP = hostAddress;
         // 动态设置日志目录
-        LOG_DIR = new ApplicationHome(GetInfo.class) + "/";
+        // 动态设置日志目录
+        ApplicationHome applicationHome = new ApplicationHome(GetInfo.class);
+        String homePath = applicationHome.toString();
+        if (homePath.endsWith("target\\classes")) {
+            // 是开发环境，日志存放在项目目录下
+            LOG_DIR = homePath + "/../../log/";
+        } else {
+            // 不是开发环境，存放在启动目录下
+            LOG_DIR = applicationHome + "/";
+        }
     }
 
     @Override

@@ -1,18 +1,18 @@
 package top.niandui.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import springfox.documentation.annotations.ApiIgnore;
 import top.niandui.common.base.BaseController;
 import top.niandui.config.ConfigInfo;
 import top.niandui.model.vo.ChapterInfoReturnVO;
 import top.niandui.service.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ import static top.niandui.utils.PathUtil.getPath;
  * @version: 1.0
  */
 @Slf4j
-@ApiIgnore
+@Hidden
 @Controller
 public class PageController extends BaseController {
     @Autowired

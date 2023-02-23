@@ -1,7 +1,6 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.niandui.common.model.PageOrder;
 
@@ -13,8 +12,8 @@ import top.niandui.common.model.PageOrder;
  * @time: 2020/3/28 14:54
  */
 @Data
-@ApiModel(description = "站点查询VO")
+@Schema(description = "站点查询VO")
 public class SiteSearchVO extends PageOrder {
-    @ApiModelProperty(value = "站点名称")
+    @Schema(description = "站点名称")
     private String name;
 }

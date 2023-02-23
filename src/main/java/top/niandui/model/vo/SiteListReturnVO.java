@@ -1,7 +1,6 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.niandui.model.Site;
 
@@ -13,8 +12,8 @@ import top.niandui.model.Site;
  * @version: 1.0
  */
 @Data
-@ApiModel(description = "站点列表查询返回vo")
+@Schema(description = "站点列表查询返回vo")
 public class SiteListReturnVO extends Site {
-    @ApiModelProperty(value = "配置名称")
+    @Schema(description = "配置名称")
     private String configname;
 }

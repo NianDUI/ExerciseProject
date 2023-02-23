@@ -1,9 +1,9 @@
 package top.niandui.validation;
 
+import jakarta.validation.constraints.Min;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.constraints.Min;
 
 /**
  * ValidationTest

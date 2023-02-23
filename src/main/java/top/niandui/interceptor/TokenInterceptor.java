@@ -1,5 +1,7 @@
 package top.niandui.interceptor;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,9 +10,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import top.niandui.common.expection.TokenCheckException;
 import top.niandui.common.uitls.RSAUtil;
 import top.niandui.config.ConfigInfo;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import static top.niandui.common.base.BaseController.getPara;
 

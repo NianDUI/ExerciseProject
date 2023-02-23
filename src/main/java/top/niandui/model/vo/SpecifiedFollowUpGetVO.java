@@ -1,12 +1,10 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * @Title: SpecifiedFollowUpGetVO.java
@@ -16,12 +14,12 @@ import javax.validation.constraints.NotNull;
  * @version: 1.0
  */
 @Data
-@ApiModel(description = "获取指定章节和后续章节vo")
+@Schema(description = "获取指定章节和后续章节vo")
 public class SpecifiedFollowUpGetVO extends BaseModel {
     @NotNull(message = "书籍id不能为空")
-    @ApiModelProperty(value = "书籍id")
+    @Schema(description = "书籍id")
     private Long bookid;
     @NotBlank(message = "章节链接不能为空")
-    @ApiModelProperty(value = "章节链接", required = true)
+    @Schema(description = "章节链接", requiredMode = Schema.RequiredMode.REQUIRED)
     private String url;
 }

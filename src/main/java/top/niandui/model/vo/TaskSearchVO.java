@@ -1,7 +1,6 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +16,8 @@ import top.niandui.common.base.BaseModel;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "任务查询vo")
+@Schema(description = "任务查询vo")
 public class TaskSearchVO extends BaseModel {
-    @ApiModelProperty(value = "任务开关：0 关闭，1 开启")
+    @Schema(description = "任务开关：0 关闭，1 开启")
     private Integer taskswitch;
 }

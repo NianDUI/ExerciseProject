@@ -1,7 +1,6 @@
 package top.niandui.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
 import top.niandui.model.Book;
@@ -18,16 +17,16 @@ import java.util.List;
  * @version: 1.0
  */
 @Data
-@ApiModel(description = "查询章节信息返回vo")
+@Schema(description = "查询章节信息返回vo")
 public class ChapterInfoReturnVO extends BaseModel {
-    @ApiModelProperty(value = "书籍")
+    @Schema(description = "书籍")
     private Book book;
-    @ApiModelProperty(value = "章节")
+    @Schema(description = "章节")
     private Chapter chapter;
-    @ApiModelProperty(value = "下一章id")
+    @Schema(description = "下一章id")
     private Long nextid;
-    @ApiModelProperty(value = "下上一章id")
+    @Schema(description = "下上一章id")
     private Long previd;
-    @ApiModelProperty(value = "段落列表")
+    @Schema(description = "段落列表")
     private List<Paragraph> paragraphList;
 }

@@ -2,6 +2,7 @@ package top.niandui.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,7 +13,6 @@ import top.niandui.common.expection.TokenCheckException;
 import top.niandui.common.model.ResponseData;
 import top.niandui.common.outher.StatusCode;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
@@ -50,9 +50,8 @@ public class GlobalExceptionHandler {
                 rd = ResponseData.fail(StatusCode.TOKEN_ERROR, e.getMessage());
             } else if (e instanceof ReStateException) {
                 rd = ResponseData.fail(StatusCode.RESTATE, e.getMessage());
-            } else if (e instanceof FeignException) {
+            } else if (e instanceof FeignException fe) {
                 // Feign内部服务调用错误处理。在配置文件中设置feign.hystrix.enabled: false，可以拦截到
-                FeignException fe = (FeignException) e;
                 try {
                     Map errInfo = json.readValue(fe.contentUTF8(), Map.class);
                     rd = ResponseData.fail((int) errInfo.get("code"), (String) errInfo.get("message"));

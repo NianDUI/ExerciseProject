@@ -1,13 +1,12 @@
 package top.niandui.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 
 /**
@@ -18,36 +17,36 @@ import java.sql.Timestamp;
  * @version: 1.0
  */
 @Data
-@ApiModel(description = "书籍实体类")
+@Schema(description = "书籍实体类")
 public class Book extends BaseModel {
-    @ApiModelProperty(value = "书籍id")
+    @Schema(description = "书籍id")
     private Long bookid;
     @NotBlank(message = "书籍名称不能为空")
-    @ApiModelProperty(value = "书籍名称", required = true)
+    @Schema(description = "书籍名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
-    @ApiModelProperty(value = "书籍链接")
+    @Schema(description = "书籍链接")
     private String url;
     @NotNull(message = "配置id不能为空")
-    @ApiModelProperty(value = "配置id", required = true)
+    @Schema(description = "配置id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long configid;
-    @ApiModelProperty(value = "创建时间")
+    @Schema(description = "创建时间")
     private Timestamp createtime;
     @Pattern(regexp = "https?://[-A-Za-z0-9+@#/%=~_|.:\\u4e00-\\u9fa5]+(\\?[-A-Za-z0-9+&@#/%=~_|\\u4e00-\\u9fa5]*)?", message = "起始地址错误")
     @NotBlank(message = "起始章节链接不能为空")
-    @ApiModelProperty(value = "起始章节链接", required = true)
+    @Schema(description = "起始章节链接", requiredMode = Schema.RequiredMode.REQUIRED)
     private String starturl;
     @NotBlank(message = "处理信息不能为空")
-    @ApiModelProperty(value = "处理信息", required = true)
+    @Schema(description = "处理信息", requiredMode = Schema.RequiredMode.REQUIRED)
     private String handlerinfo;
     @NotNull(message = "站点id不能为空")
-    @ApiModelProperty(value = "站点id", required = true)
+    @Schema(description = "站点id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long siteid;
-    @ApiModelProperty(value = "任务状态：0无，1重新获取全部，2获取后续章节，3重新获取单章")
+    @Schema(description = "任务状态：0无，1重新获取全部，2获取后续章节，3重新获取单章")
     private Integer taskstatus;
-    @ApiModelProperty(value = "任务开关：0关闭，1开启")
+    @Schema(description = "任务开关：0关闭，1开启")
     private Integer taskswitch;
-    @ApiModelProperty(value = "书籍详情")
+    @Schema(description = "书籍详情")
     private String detail;
-    @ApiModelProperty(value = "最后获取时间")
+    @Schema(description = "最后获取时间")
     private Timestamp lastgettime;
 }

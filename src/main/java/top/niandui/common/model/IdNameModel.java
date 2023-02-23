@@ -1,11 +1,10 @@
 package top.niandui.common.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
 
-import javax.validation.constraints.NotBlank;
 
 /**
  * 检查重名公共model
@@ -15,12 +14,12 @@ import javax.validation.constraints.NotBlank;
  * @time 2020/3/22 17:28
  */
 @Data
-@ApiModel(description = "检查重名公共model")
+@Schema(description = "检查重名公共model")
 public class IdNameModel<T> extends BaseModel {
-    @ApiModelProperty(value = "id")
+    @Schema(description = "id")
     private T id;
     @NotBlank(message = "名不能为空")
-    @ApiModelProperty(value = "名", required = true)
+    @Schema(description = "名", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
 
     public IdNameModel() {

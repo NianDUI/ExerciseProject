@@ -406,7 +406,7 @@ public class MethodUtil {
         String sql = boundSql.getSql().replaceAll("\r?\n", "");
         log.info("getExecuteSql: statementId = " + statementId);
         log.info(" Preparing: " + sql);
-        List<NativeQuery> queries = Parser.parseJdbcSql(sql, false, true, true, false, "");
+        List<NativeQuery> queries = Parser.parseJdbcSql(sql, true, true, true, false, true, "");
         sql = queries.get(0).nativeSql;
         StringBuilder sb = new StringBuilder();
         for (ParameterMapping mapping : boundSql.getParameterMappings()) {

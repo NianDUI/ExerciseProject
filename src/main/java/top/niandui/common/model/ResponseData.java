@@ -1,7 +1,6 @@
 package top.niandui.common.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
 import top.niandui.common.outher.StatusCode;
@@ -14,13 +13,13 @@ import top.niandui.common.outher.StatusCode;
  * @date 2020/3/22 16:45
  */
 @Data
-@ApiModel(description = "公共返回数据")
+@Schema(description = "公共返回数据")
 public class ResponseData<T> extends BaseModel {
-    @ApiModelProperty(value = "响应码")
+    @Schema(description = "响应码")
     private int code = StatusCode.EXECUTE_SUCCESS;
-    @ApiModelProperty(value = "响应消息")
+    @Schema(description = "响应消息")
     private String message = "";
-    @ApiModelProperty(value = "响应内容")
+    @Schema(description = "响应内容")
     private T data;
 
     public ResponseData() {

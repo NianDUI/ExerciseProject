@@ -44,7 +44,7 @@
 // * @version: 1.0
 // */
 //@RestController
-//@Api(tags = "测试")
+//@Tag(name = "测试")
 //@RequestMapping("/test")
 //public class TestController {
 //

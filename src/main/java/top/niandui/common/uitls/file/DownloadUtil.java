@@ -1,13 +1,14 @@
 package top.niandui.common.uitls.file;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.util.StreamUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 /**
@@ -37,7 +38,7 @@ public class DownloadUtil {
 //        response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Type", "application/octet-stream");
         response.setHeader("Content-Disposition", "attachment;filename=" +
-                URLEncoder.encode(fileName, "UTF-8").replace('+', ' '));
+                URLEncoder.encode(fileName, StandardCharsets.UTF_8).replace('+', ' '));
         return response.getOutputStream();
     }
 

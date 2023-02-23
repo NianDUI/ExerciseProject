@@ -1,11 +1,9 @@
 package top.niandui.common.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import top.niandui.common.base.BaseModel;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 分页排序公共model
@@ -15,16 +13,16 @@ import javax.validation.constraints.NotNull;
  * @date 2020/3/22 16:28
  */
 @Data
-@ApiModel(description = "分页排序公共model")
+@Schema(description = "分页排序公共model")
 public class PageOrder extends BaseModel {
     @NotNull(message = "页数不能为空")
-    @ApiModelProperty(value = "页数", required = true, example = "1")
+    @Schema(description = "页数", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Integer pageNum;
     @NotNull(message = "每页条数不能为空")
-    @ApiModelProperty(value = "每页条数", required = true, example = "10")
+    @Schema(description = "每页条数", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
     private Integer pageSize;
-    @ApiModelProperty(value = "排序字段", notes = "与数据库一致,多个用逗号隔开")
+    @Schema(description = "排序字段。与数据库一致,多个用逗号隔开")
     private String orderBy;
-    @ApiModelProperty(value = "正序倒序", notes = "Desc为倒序,Asc为正序")
+    @Schema(description = "正序倒序。Desc为倒序,Asc为正序")
     private String descOrAsc;
 }

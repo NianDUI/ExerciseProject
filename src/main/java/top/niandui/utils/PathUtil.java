@@ -1,9 +1,9 @@
 package top.niandui.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.DigestUtils;
 import top.niandui.model.Papers;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 
 import static top.niandui.common.uitls.DateUtil.dateFormat;

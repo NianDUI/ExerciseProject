@@ -1,11 +1,11 @@
 package top.niandui.common.base;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.niandui.common.model.PageOrder;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * ServiceImpl基类

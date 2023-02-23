@@ -17,7 +17,11 @@ import top.niandui.model.vo.TaskListReturnVO;
 import top.niandui.model.vo.TaskSearchVO;
 
 import javax.xml.ws.Holder;
-import java.util.*;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -66,8 +70,8 @@ public class TaskManagerScheduled implements IBaseScheduled {
     }
 
     @Override
-    public Date nextExecutionTime(TriggerContext triggerContext) {
-        return CRON_TRIGGER.nextExecutionTime(triggerContext);
+    public Instant nextExecution(TriggerContext triggerContext) {
+        return CRON_TRIGGER.nextExecution(triggerContext);
     }
 
     @Override
@@ -138,7 +142,7 @@ public class TaskManagerScheduled implements IBaseScheduled {
         // 使用Holder是为了防止，expression修改后不生效
         @Getter
         private final Holder<Trigger> triggerHolder = new Holder<>(
-                triggerContext -> trigger.nextExecutionTime(triggerContext));
+                triggerContext -> trigger.nextExecution(triggerContext));
         @Setter
         @Getter
         private ScheduledFuture<?> scheduledFuture;
