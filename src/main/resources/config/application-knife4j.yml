@@ -31,8 +31,8 @@ knife4j:
     # 是否显示Footer(页脚)
     enable-footer: false
     # 重命名SwaggerModel名称
-    swagger_model_name: 实体类列表
+    swagger-model-name: 实体类列表
     # 开启自定义主页内容
-    enable_home_custom: true
+    enable-home-custom: true
     # 主页内容Markdown文件路径
-    home_custom_location: classpath:markdown/README.md
+    home-custom-location: classpath:markdown/README.md
