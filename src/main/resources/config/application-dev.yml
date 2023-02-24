@@ -1,7 +1,8 @@
 # dev环境配置
 spring:
-  redis:
-    password: ''
+  data:
+    redis:
+      password: ''
   thymeleaf:
     # 禁用 thymeleaf 的缓存
     cache: false

@@ -1,7 +1,8 @@
 # run环境配置
 spring:
-  redis:
-    password: 'root'
+  data:
+    redis:
+      password: 'root'
 
 # Knife4j配置
 knife4j:
