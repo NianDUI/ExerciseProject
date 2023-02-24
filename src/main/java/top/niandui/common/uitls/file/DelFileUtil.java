@@ -1,5 +1,7 @@
 package top.niandui.common.uitls.file;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,6 +13,7 @@ import java.util.Date;
  * @version 1.0
  * @date 2019/3/27 10:34
  */
+@Slf4j
 public class DelFileUtil {
     /**
      * 删除文件夹
@@ -23,7 +26,7 @@ public class DelFileUtil {
             File myFilePath = new File(folderPath);
             myFilePath.delete(); // 删除空文件夹
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -75,7 +78,7 @@ public class DelFileUtil {
         }
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String Days = sdf.format(date.getTime() - dateNum * 24 * 60 * 60 * 1000);//获取n天前日期
+        String Days = sdf.format(date.getTime() - (long) dateNum * 24 * 60 * 60 * 1000);//获取n天前日期
         int aa = Integer.parseInt(Days);
 
         if (file.isDirectory()) {

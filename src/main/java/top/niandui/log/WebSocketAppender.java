@@ -1,8 +1,8 @@
 package top.niandui.log;
 
 import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
+import ch.qos.logback.core.encoder.Encoder;
 import ch.qos.logback.core.spi.DeferredProcessingAware;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,10 +24,16 @@ public class WebSocketAppender<E> extends UnsynchronizedAppenderBase<E> {
     // json格式化器
     private final ObjectMapper json = new ObjectMapper();
     // 布局对象
-    private Layout<E> layout;
+//    private Layout<E> layout;
+    // 编码器：内部还是调用了Layout<E>
+    private Encoder<E> encoder;
 
-    public void setLayout(Layout<E> layout) {
+    /*public void setLayout(Layout<E> layout) {
         this.layout = layout;
+    }*/
+
+    public void setEncoder(Encoder<E> encoder) {
+        this.encoder = encoder;
     }
 
     /**
@@ -59,7 +65,7 @@ public class WebSocketAppender<E> extends UnsynchronizedAppenderBase<E> {
      */
     private String processEvent(E event) {
         // 格式化消息
-        String txt = this.layout.doLayout(event);
+        String txt = new String(this.encoder.encode(event));
         // 对ERROR中的错误信息详情进行处理
         String errorDetail = "";
         int lastIndex = txt.lastIndexOf('}') + 1;
@@ -76,16 +82,15 @@ public class WebSocketAppender<E> extends UnsynchronizedAppenderBase<E> {
             try {
                 LoggingEvent le = (LoggingEvent) event;
                 // 处理响应json字符串
-                txt = new StringBuilder(txt.substring(0, txt.length() - 1))
+                txt = txt.substring(0, txt.length() - 1) +
                         // 拼接信息字段
-                        .append(",\"msg\":")
-                        .append(json.writeValueAsString(le.getFormattedMessage()))
+                        ",\"msg\":" +
+                        json.writeValueAsString(le.getFormattedMessage()) +
                         // 拼接错误详情字段
-                        .append(",\"errorDetail\":")
-                        .append(json.writeValueAsString(errorDetail))
+                        ",\"errorDetail\":" +
+                        json.writeValueAsString(errorDetail) +
                         // 拼接结束符
-                        .append(txt.substring(txt.length() - 1))
-                        .toString();
+                        txt.substring(txt.length() - 1);
             } catch (JsonProcessingException e) {
             }
         }

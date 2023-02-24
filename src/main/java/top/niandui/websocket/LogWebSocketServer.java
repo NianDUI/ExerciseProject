@@ -2,6 +2,7 @@ package top.niandui.websocket;
 
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
@@ -20,6 +21,7 @@ import java.util.concurrent.*;
  * @version 1.0
  * @date 2020/12/18 14:41
  */
+@Slf4j
 @Component
 @ServerEndpoint(value = "/api/log/ws") //WebSocket客户端建立连接的地址
 public class LogWebSocketServer {
@@ -44,10 +46,10 @@ public class LogWebSocketServer {
                     }
                     for (Session session : AUTHORIZE_SESSIONS) {
                         // 改为使用异步
-                        session.getAsyncRemote().sendText(txt);
+                        session.getBasicRemote().sendText(txt);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
         });

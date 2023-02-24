@@ -1,5 +1,7 @@
 package top.niandui.common.uitls;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.crypto.Cipher;
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 /**
  * RSA非对称加密
  */
+@Slf4j
 public class _RSAUtil {
     //模
     public static String modulus = "92849302597737335358817683729836944752659086531992772851478792241847037112498209795104633856447269277926936388774694567305027526880985266227911129005385581856958874874222975241229653663671152517502703964374671023979742791092438789773369451726540979250778035945092746528190884515997218294788440010914391975663";
@@ -105,7 +108,7 @@ public class _RSAUtil {
             RSAPublicKeySpec keySpec = new RSAPublicKeySpec(b1, b2);
             return (RSAPublicKey) keyFactory.generatePublic(keySpec);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -127,7 +130,7 @@ public class _RSAUtil {
             RSAPrivateKeySpec keySpec = new RSAPrivateKeySpec(b1, b2);
             return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
     }

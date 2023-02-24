@@ -4,6 +4,8 @@ spring:
     url: jdbc:postgresql://127.0.0.1:5432/fiction
     username: postgres
     password: root
+    # 使用Druid连接池
+    type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: org.postgresql.Driver
     druid:
       # 初始化大小，最小，最大

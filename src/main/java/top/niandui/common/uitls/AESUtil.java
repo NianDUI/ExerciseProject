@@ -35,8 +35,7 @@ public class AESUtil {
             SecretKey secretKey = keyGenerator.generateKey();
             return secretKey.getEncoded();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("密匙生成失败");
+            throw new RuntimeException("密匙生成失败", e);
         }
     }
 
@@ -74,8 +73,7 @@ public class AESUtil {
             cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, ENCODE_TYPE));
             return Base64.getEncoder().encodeToString(cipher.doFinal(src.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("加密失败");
+            throw new RuntimeException("加密失败", e);
         }
     }
 
@@ -115,8 +113,7 @@ public class AESUtil {
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, ENCODE_TYPE));
             return new String(cipher.doFinal(Base64.getDecoder().decode(src)), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("解密失败");
+            throw new RuntimeException("解密失败", e);
         }
     }
 }

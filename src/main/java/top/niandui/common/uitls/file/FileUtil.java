@@ -114,7 +114,6 @@ public class FileUtil {
         try (OutputStreamWriter os = new FileWriter(path + "/" + fileName, append)) {
             os.write(content);
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("写入到文件错误", e);
         }
     }
