@@ -40,10 +40,6 @@ public class LogWebSocketServer {
             while (true) {
                 try {
                     String txt = LOG_QUEUE.take();
-                    if (txt.length() > 500) {
-                        // 长度超过500，截取前500个字符
-                        txt = txt.substring(0, 500);
-                    }
                     for (Session session : AUTHORIZE_SESSIONS) {
                         // 改为使用异步
                         session.getBasicRemote().sendText(txt);

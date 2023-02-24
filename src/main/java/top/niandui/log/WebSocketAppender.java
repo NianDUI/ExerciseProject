@@ -82,15 +82,19 @@ public class WebSocketAppender<E> extends UnsynchronizedAppenderBase<E> {
             try {
                 LoggingEvent le = (LoggingEvent) event;
                 // 处理响应json字符串
-                txt = txt.substring(0, txt.length() - 1) +
-                        // 拼接信息字段
-                        ",\"msg\":" +
-                        json.writeValueAsString(le.getFormattedMessage()) +
-                        // 拼接错误详情字段
-                        ",\"errorDetail\":" +
-                        json.writeValueAsString(errorDetail) +
-                        // 拼接结束符
-                        txt.substring(txt.length() - 1);
+                StringBuilder txtSB = new StringBuilder(txt);
+                // 拼接信息字段
+                String msg = le.getFormattedMessage();
+                if (msg.length() > 500) {
+                    // 长度超过500，截取前500个字符
+                    msg = msg.substring(0, 500);
+                }
+                txtSB.insert(txtSB.length() - 1, ",\"msg\":");
+                txtSB.insert(txtSB.length() - 1, json.writeValueAsString(msg));
+                // 拼接错误详情字段
+                txtSB.insert(txtSB.length() - 1, ",\"errorDetail\":");
+                txtSB.insert(txtSB.length() - 1, json.writeValueAsString(errorDetail));
+                txt = txtSB.toString();
             } catch (JsonProcessingException e) {
             }
         }
