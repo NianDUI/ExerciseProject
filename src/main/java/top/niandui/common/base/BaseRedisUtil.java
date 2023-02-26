@@ -99,7 +99,7 @@ public abstract class BaseRedisUtil<T> {
     public Set<String> scan(String pattern) {
         Set<String> keys = new HashSet<>();
         redisTemplate.execute((RedisConnection connection) -> {
-            try (Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().count(Long.MAX_VALUE).match(pattern).build())) {
+            try (Cursor<byte[]> cursor = connection.scan(KeyScanOptions.scanOptions().count(Long.MAX_VALUE).match(pattern).build())) {
                 cursor.forEachRemaining(bytes -> keys.add(new String(bytes)));
             } catch (Exception e) {
                 log.error(e.getMessage(), e);

@@ -313,21 +313,28 @@ public class MethodUtil {
      * @throws Exception
      */
     public static long copyIn(JdbcTemplate jdbcTemplate, InputStream is, String table, String delimiter, String charsetName, String other) throws Exception {
-        if (StringUtils.isEmpty(delimiter)) {
+        if (StringUtils.hasText(delimiter)) {
             delimiter = ",";
         }
-        if (StringUtils.isEmpty(charsetName)) {
+        if (StringUtils.hasText(charsetName)) {
             charsetName = "UTF-8";
         }
         if (other == null) {
             other = "";
         }
         String sql = String.format("COPY %s FROM STDIN DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
-        Connection conn = jdbcTemplate.getDataSource().getConnection();
-        CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
-        log.info(sql);
-        long num = copyManager.copyIn(sql, is);
-        DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
+        Connection conn = null;
+        long num;
+        try {
+            conn = jdbcTemplate.getDataSource().getConnection();
+            CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
+            log.info(sql);
+            num = copyManager.copyIn(sql, is);
+        } finally {
+            if (conn != null) {
+                DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
+            }
+        }
         log.info("COPY 导入 " + num + " 条数据");
         return num;
     }
@@ -373,10 +380,10 @@ public class MethodUtil {
      * @throws Exception
      */
     public static long copyOut(JdbcTemplate jdbcTemplate, OutputStream os, String table, String delimiter, String charsetName, String other) throws Exception {
-        if (StringUtils.isEmpty(delimiter)) {
+        if (StringUtils.hasText(delimiter)) {
             delimiter = ",";
         }
-        if (StringUtils.isEmpty(charsetName)) {
+        if (StringUtils.hasText(charsetName)) {
             charsetName = "UTF-8";
         }
         if (other == null) {
@@ -384,10 +391,17 @@ public class MethodUtil {
         }
         String sql = String.format("COPY %s TO STDOUT DELIMITER '%s' ENCODING '%s' %s", table, delimiter, charsetName, other);
         log.info(sql);
-        Connection conn = jdbcTemplate.getDataSource().getConnection();
-        CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
-        long num = copyManager.copyOut(sql, os);
-        DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
+        Connection conn = null;
+        long num;
+        try {
+            conn = jdbcTemplate.getDataSource().getConnection();
+            CopyManager copyManager = new CopyManager((BaseConnection) conn.getMetaData().getConnection());
+            num = copyManager.copyOut(sql, os);
+        } finally {
+            if (conn != null) {
+                DataSourceUtils.releaseConnection(conn, jdbcTemplate.getDataSource());
+            }
+        }
         log.info("COPY 导出 " + num + " 条数据");
         return num;
     }
