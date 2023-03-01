@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import top.niandui.common.base.BaseController;
 import top.niandui.config.ConfigInfo;
 import top.niandui.model.vo.ChapterInfoReturnVO;
@@ -92,8 +93,10 @@ public class PageController extends BaseController {
     }
 
     @GetMapping("/config/add/{id}")
-    public String configAdd(@PathVariable String id, Map map) {
+    public String configAdd(@PathVariable String id, Map map
+            , @RequestParam(defaultValue = "false") Boolean copy) {
         map.put("id", id);
+        map.put("copy", copy != null && copy);
         return "config/add";
     }
 

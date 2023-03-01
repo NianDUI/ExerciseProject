@@ -194,7 +194,9 @@ function setAddIframeStyle() {
     const thisIndex = parent.layer.getFrameIndex(window.name);
     setBaseParams("thisIndex", thisIndex);
     const titleRaw = parent.layui.$("#layui-layer" + thisIndex + " .layui-layer-title").html()
-        , title = titleRaw === "添加" ? "修改" : titleRaw + "修改";
+        // "title" 在 id != null 的时候被使用。不是修改、就是复制
+        // , title = titleRaw === "添加" ? "修改" : titleRaw + "修改"; // 20230301 注释
+        , title = titleRaw === "复制" ? "复制" : (titleRaw === "添加" ? "修改" : titleRaw + "修改");
     setBaseParams("title", title);
     parent.layer.iframeAuto(thisIndex);
     parent.layer.style(thisIndex, getIframeStyle(thisIndex));

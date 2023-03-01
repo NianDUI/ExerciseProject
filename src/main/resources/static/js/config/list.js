@@ -32,13 +32,15 @@ const tableList = table.render({
         , {field: "endoffset", title: "结束偏移量", sort: true}
         , {field: "amatch", title: "跳转匹配", minWidth: 280}
         , {field: "nexta", title: "下一页索引", sort: true}
-        , {title: "操作", fixed: "right", minWidth: 120, align: "center", toolbar: "#toolbar"}
+        , {title: "操作", fixed: "right", minWidth: 165, align: "center", toolbar: "#toolbar"}
     ]]
 });
 table.on("tool(table)", function (obj) {
     var data = obj.data;
     if (obj.event === "edit") {
         show(getBaseParams("addUrl", data.configid));
+    } else if (obj.event === "copy") {
+        show(getBaseParams("addUrl", data.configid + "?copy=true"), "复制");
     } else if (obj.event === "del") {
         layer.confirm("确认删除该信息？", function (index) {
             del(data.configid);

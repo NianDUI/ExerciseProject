@@ -49,7 +49,8 @@ form.verify({
 });
 form.on("submit(submit)", function (data) {
     const field = data.field;
-    field.configid = id;
+    // 复制内容时设置为null
+    field.configid = copy ? null : id;
     ajax({
         type: "post"
         , contentType: getBaseParams("contentType")
