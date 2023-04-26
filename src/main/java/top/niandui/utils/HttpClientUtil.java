@@ -10,10 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
@@ -108,14 +105,38 @@ public class HttpClientUtil {
         CloseableHttpClient httpClient = getHttpClientBuilder(uri).build();
         HttpPost httpPost = new HttpPost(uri);
         // 标识是什么请求
-        httpPost.setHeader("method-post", "true");
+        httpPost.setHeader("application-json", "true");
         // 设置请求头
         setHeaders(httpPost, headers);
-        httpPost.removeHeaders("method-post");
+        httpPost.removeHeaders("application-json");
         String bodyStr = body instanceof String ? (String) body : json.writeValueAsString(body);
         log.debug("==>  request: " + bodyStr);
         httpPost.setEntity(new StringEntity(bodyStr, StandardCharsets.UTF_8));
         return httpClient.execute(httpPost);
+    }
+
+    /**
+     * PUT请求
+     *
+     * @param uri     请求URI
+     * @param headers 请求头Map
+     * @param body    请求体
+     * @return Http响应
+     * @throws Exception
+     */
+    public static HttpResponse doPut(String uri, Map<String, String> headers, Object body) throws Exception {
+        log.debug("==>  put uri: " + uri);
+        CloseableHttpClient httpClient = getHttpClientBuilder(uri).build();
+        HttpPut httpPut = new HttpPut(uri);
+        // 标识是什么请求
+        httpPut.setHeader("application-json", "true");
+        // 设置请求头
+        setHeaders(httpPut, headers);
+        httpPut.removeHeaders("application-json");
+        String bodyStr = body instanceof String ? (String) body : json.writeValueAsString(body);
+        log.debug("==>  request: " + bodyStr);
+        httpPut.setEntity(new StringEntity(bodyStr, StandardCharsets.UTF_8));
+        return httpClient.execute(httpPut);
     }
 
     /**
@@ -149,7 +170,7 @@ public class HttpClientUtil {
             }
         }
         // 判断内容类型是否存在
-        if (httpRequest.containsHeader("method-post") && !httpRequest.containsHeader("Content-Type")) {
+        if (httpRequest.containsHeader("application-json") && !httpRequest.containsHeader("Content-Type")) {
             // 不存在，设置默认内容类型
             httpRequest.setHeader("Content-Type", "application/json;charset=utf-8");
         }
@@ -254,6 +275,26 @@ public class HttpClientUtil {
     // POST请求
     public static <T> T doPost(String uri, Map<String, String> headers, Object body, TypeReference<T> valueTypeReference) throws Exception {
         return getResponseBody(doPost(uri, headers, body), valueTypeReference);
+    }
+
+    /**
+     * PUT请求
+     *
+     * @param uri       请求URI
+     * @param headers   请求头Map
+     * @param body      请求体
+     * @param valueType 返回类型
+     * @param <T>       返回泛型
+     * @return Http响应
+     * @throws Exception
+     */
+    public static <T> T doPut(String uri, Map<String, String> headers, Object body, Class<T> valueType) throws Exception {
+        return getResponseBody(doPut(uri, headers, body), valueType);
+    }
+
+    // PUT请求
+    public static <T> T doPut(String uri, Map<String, String> headers, Object body, TypeReference<T> valueTypeReference) throws Exception {
+        return getResponseBody(doPut(uri, headers, body), valueTypeReference);
     }
 
     /**
