@@ -99,7 +99,7 @@ public class HttpClientUtil {
      * @return Http响应
      * @throws Exception
      */
-    public static HttpResponse doGet(String uri, Map<Object, Object> headers) throws Exception {
+    public static CloseableHttpResponse doGet(String uri, Map<Object, Object> headers) throws Exception {
         log.debug("==>  get uri: " + uri);
         CloseableHttpClient httpClient = getHttpClientBuilder(uri).build();
         HttpGet httpGet = new HttpGet(uri);
@@ -117,7 +117,7 @@ public class HttpClientUtil {
      * @return Http响应
      * @throws Exception
      */
-    public static HttpResponse doPost(String uri, Map<Object, Object> headers, Object body) throws Exception {
+    public static CloseableHttpResponse doPost(String uri, Map<Object, Object> headers, Object body) throws Exception {
         log.debug("==> post uri: " + uri);
         CloseableHttpClient httpClient = getHttpClientBuilder(uri).build();
         HttpPost httpPost = new HttpPost(uri);
@@ -141,7 +141,7 @@ public class HttpClientUtil {
      * @return Http响应
      * @throws Exception
      */
-    public static HttpResponse doPut(String uri, Map<Object, Object> headers, Object body) throws Exception {
+    public static CloseableHttpResponse doPut(String uri, Map<Object, Object> headers, Object body) throws Exception {
         log.debug("==>  put uri: " + uri);
         CloseableHttpClient httpClient = getHttpClientBuilder(uri).build();
         HttpPut httpPut = new HttpPut(uri);
@@ -164,7 +164,7 @@ public class HttpClientUtil {
      * @return Http响应
      * @throws Exception
      */
-    public static HttpResponse doDelete(String uri, Map<Object, Object> headers) throws Exception {
+    public static CloseableHttpResponse doDelete(String uri, Map<Object, Object> headers) throws Exception {
         log.debug("==> delete uri: " + uri);
         CloseableHttpClient httpClient = getHttpClientBuilder(uri).build();
         HttpDelete httpDelete = new HttpDelete(uri);
@@ -180,16 +180,16 @@ public class HttpClientUtil {
      * @param headers     请求头Map
      */
     public static void setHeaders(HttpRequestBase httpRequest, Map<Object, Object> headers) {
-        // 请求配置
-        if (headers.get("requestConfig") instanceof RequestConfig) {
-            // 有传请求配置
-            httpRequest.setConfig((RequestConfig) headers.remove("requestConfig"));
-        } else {
-            // 使用默认请求配置
-            httpRequest.setConfig(getRequestConfigBuilder().build());
-        }
         // 设置自定义请求头
         if (MapUtils.isNotEmpty(headers)) {
+            // 请求配置
+            if (headers.get("requestConfig") instanceof RequestConfig) {
+                // 有传请求配置
+                httpRequest.setConfig((RequestConfig) headers.remove("requestConfig"));
+            } else {
+                // 使用默认请求配置
+                httpRequest.setConfig(getRequestConfigBuilder().build());
+            }
             // 自定义请求头不为空，设置请求头
             for (Map.Entry<Object, Object> header : headers.entrySet()) {
                 httpRequest.setHeader(String.valueOf(header.getKey()), String.valueOf(header.getValue()));
@@ -281,12 +281,16 @@ public class HttpClientUtil {
      * @throws Exception
      */
     public static <T> T doGet(String uri, Map<Object, Object> headers, Class<T> valueType) throws Exception {
-        return getResponseBody(doGet(uri, headers), valueType);
+        try (CloseableHttpResponse httpResponse = doGet(uri, headers)) {
+            return getResponseBody(httpResponse, valueType);
+        }
     }
 
     // GET请求
     public static <T> T doGet(String uri, Map<Object, Object> headers, TypeReference<T> valueTypeReference) throws Exception {
-        return getResponseBody(doGet(uri, headers), valueTypeReference);
+        try (CloseableHttpResponse httpResponse = doGet(uri, headers)) {
+            return getResponseBody(httpResponse, valueTypeReference);
+        }
     }
 
     /**
@@ -301,12 +305,16 @@ public class HttpClientUtil {
      * @throws Exception
      */
     public static <T> T doPost(String uri, Map<Object, Object> headers, Object body, Class<T> valueType) throws Exception {
-        return getResponseBody(doPost(uri, headers, body), valueType);
+        try (CloseableHttpResponse httpResponse = doPost(uri, headers, body)) {
+            return getResponseBody(httpResponse, valueType);
+        }
     }
 
     // POST请求
     public static <T> T doPost(String uri, Map<Object, Object> headers, Object body, TypeReference<T> valueTypeReference) throws Exception {
-        return getResponseBody(doPost(uri, headers, body), valueTypeReference);
+        try (CloseableHttpResponse httpResponse = doPost(uri, headers, body)) {
+            return getResponseBody(httpResponse, valueTypeReference);
+        }
     }
 
     /**
@@ -321,12 +329,16 @@ public class HttpClientUtil {
      * @throws Exception
      */
     public static <T> T doPut(String uri, Map<Object, Object> headers, Object body, Class<T> valueType) throws Exception {
-        return getResponseBody(doPut(uri, headers, body), valueType);
+        try (CloseableHttpResponse httpResponse = doPut(uri, headers, body)) {
+            return getResponseBody(httpResponse, valueType);
+        }
     }
 
     // PUT请求
     public static <T> T doPut(String uri, Map<Object, Object> headers, Object body, TypeReference<T> valueTypeReference) throws Exception {
-        return getResponseBody(doPut(uri, headers, body), valueTypeReference);
+        try (CloseableHttpResponse httpResponse = doPut(uri, headers, body)) {
+            return getResponseBody(httpResponse, valueTypeReference);
+        }
     }
 
     /**
@@ -340,11 +352,15 @@ public class HttpClientUtil {
      * @throws Exception
      */
     public static <T> T doDelete(String uri, Map<Object, Object> headers, Class<T> valueType) throws Exception {
-        return getResponseBody(doDelete(uri, headers), valueType);
+        try (CloseableHttpResponse httpResponse = doDelete(uri, headers)) {
+            return getResponseBody(httpResponse, valueType);
+        }
     }
 
     // DELETE请求
     public static <T> T doDelete(String uri, Map<Object, Object> headers, TypeReference<T> valueTypeReference) throws Exception {
-        return getResponseBody(doDelete(uri, headers), valueTypeReference);
+        try (CloseableHttpResponse httpResponse = doDelete(uri, headers)) {
+            return getResponseBody(httpResponse, valueTypeReference);
+        }
     }
 }
