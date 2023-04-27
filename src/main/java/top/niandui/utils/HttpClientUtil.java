@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;
@@ -21,7 +23,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -163,7 +164,7 @@ public class HttpClientUtil {
      * @param headers     请求头Map
      */
     public static void setHeaders(HttpRequestBase httpRequest, Map<String, String> headers) {
-        if (!CollectionUtils.isEmpty(headers)) {
+        if (MapUtils.isNotEmpty(headers)) {
             // 自定义请求头不为空，设置请求头
             for (Map.Entry<String, String> header : headers.entrySet()) {
                 httpRequest.setHeader(header.getKey(), header.getValue());
@@ -212,6 +213,9 @@ public class HttpClientUtil {
             // 如果要直接返回字符串，将响应体直接返回
             return (T) body;
         }
+        if (StringUtils.isBlank(body)) {
+            return null;
+        }
         return json.readValue(body, valueType);
     }
 
@@ -227,6 +231,9 @@ public class HttpClientUtil {
         if (valueTypeReference == null || valueTypeReference.getType() == String.class) {
             // 如果要直接返回字符串，将响应体直接返回
             return (T) body;
+        }
+        if (StringUtils.isBlank(body)) {
+            return null;
         }
         return json.readValue(body, valueTypeReference);
     }
