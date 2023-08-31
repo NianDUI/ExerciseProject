@@ -71,6 +71,7 @@ public class SeleniumUtil {
         WebDriverManager.edgedriver().setup();
         // 创建驱动
 //        return new FirefoxDriver();
+//        FirefoxOptions edgeOptions = new FirefoxOptions();
         EdgeOptions edgeOptions = new EdgeOptions();
         // 无头模式 不用打开图形界面
 //        edgeOptions.addArguments("--headless");
@@ -86,6 +87,7 @@ public class SeleniumUtil {
         edgeOptions.addArguments("-–ignore-certificate-errors");
         // 不做浏览器默认检查
         edgeOptions.addArguments("no-default-browser-check");
+//        return new FirefoxDriver(edgeOptions);
         return new EdgeDriver(edgeOptions);
     }
 
