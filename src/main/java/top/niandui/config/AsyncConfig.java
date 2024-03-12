@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.task.TaskExecutorBuilder;
-import org.springframework.boot.task.TaskExecutorCustomizer;
+import org.springframework.boot.task.ThreadPoolTaskExecutorBuilder;
+import org.springframework.boot.task.ThreadPoolTaskExecutorCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -33,47 +33,42 @@ public class AsyncConfig {
      * 注入默认的线程池任务执行器
      * <br>用于防止注入自定义时{@link TaskExecutionAutoConfiguration TaskExecutionAutoConfiguration.applicationTaskExecutor()}不生效。
      *
-     * @param builder 任务执行器生成器
+     * @param threadPoolTaskExecutorBuilder 任务执行器生成器
      * @return 默认的线程池任务执行器
      */
     @Lazy
     @Primary // 指示当多个候选者有资格自动装配单值依赖项时，应该优先考虑一个的 bean
     @Bean({TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME, AsyncAnnotationBeanPostProcessor.DEFAULT_TASK_EXECUTOR_BEAN_NAME})
-//    @ConditionalOnMissingBean({Executor.class})
-    public ThreadPoolTaskExecutor applicationTaskExecutor(TaskExecutorBuilder builder) {
-        return builder.build();
+//    @ConditionalOnThreading(Threading.PLATFORM)
+    public ThreadPoolTaskExecutor applicationTaskExecutor(ThreadPoolTaskExecutorBuilder threadPoolTaskExecutorBuilder) {
+        return threadPoolTaskExecutorBuilder.build();
     }
 
     /**
      * 获取书籍线程池任务执行器
      *
      * @param properties              任务执行属性
-     * @param taskExecutorCustomizers 任务执行器定制器
+     * @param threadPoolTaskExecutorCustomizers 任务执行器定制器
      * @param taskDecorator           任务装饰器
      * @return 异步任务执行器
      */
     @Lazy
     @Bean(GET_BOOK_TASK_EXECUTOR_BEAN_NAME)
-    public ThreadPoolTaskExecutor getBookTaskExecutor(TaskExecutionProperties properties
-            , ObjectProvider<TaskExecutorCustomizer> taskExecutorCustomizers
+    public ThreadPoolTaskExecutor threadPoolTaskExecutorBuilder(TaskExecutionProperties properties
+            , ObjectProvider<ThreadPoolTaskExecutorCustomizer> threadPoolTaskExecutorCustomizers
             , ObjectProvider<TaskDecorator> taskDecorator) {
         TaskExecutionProperties.Pool pool = properties.getPool();
-        TaskExecutorBuilder builder = new TaskExecutorBuilder();
+        ThreadPoolTaskExecutorBuilder builder = new ThreadPoolTaskExecutorBuilder();
         builder = builder.queueCapacity(pool.getQueueCapacity());
-        int coreSize = pool.getCoreSize();
-        if (coreSize > 1) {
-            // 如果核心量大于1，对其除以2
-            coreSize = coreSize / 2;
-        }
-        builder = builder.corePoolSize(coreSize);
-        builder = builder.maxPoolSize(coreSize);
+        builder = builder.corePoolSize(pool.getCoreSize());
+        builder = builder.maxPoolSize(pool.getMaxSize());
         builder = builder.allowCoreThreadTimeOut(pool.isAllowCoreThreadTimeout());
         builder = builder.keepAlive(pool.getKeepAlive());
         TaskExecutionProperties.Shutdown shutdown = properties.getShutdown();
         builder = builder.awaitTermination(shutdown.isAwaitTermination());
         builder = builder.awaitTerminationPeriod(shutdown.getAwaitTerminationPeriod());
-        builder = builder.threadNamePrefix("get-book-task-");
-        builder = builder.customizers(taskExecutorCustomizers.orderedStream()::iterator);
+        builder = builder.threadNamePrefix(properties.getThreadNamePrefix());
+        builder = builder.customizers(threadPoolTaskExecutorCustomizers.orderedStream()::iterator);
         builder = builder.taskDecorator(taskDecorator.getIfUnique());
         return builder.build();
     }
