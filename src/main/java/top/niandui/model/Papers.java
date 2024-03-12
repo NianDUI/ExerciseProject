@@ -2,6 +2,7 @@ package top.niandui.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.File;
  * @version: 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "文件")
 public class Papers extends BaseModel {
 

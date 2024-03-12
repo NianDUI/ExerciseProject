@@ -3,6 +3,7 @@ package top.niandui.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 import java.sql.Timestamp;
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
  * @time 2020/03/22 16:18:53
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "站点")
 public class Site extends BaseModel {
 	@Schema(description = "站点id")

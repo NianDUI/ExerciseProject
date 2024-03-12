@@ -2,6 +2,7 @@ package top.niandui.model.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.model.Site;
 
 /**
@@ -12,6 +13,7 @@ import top.niandui.model.Site;
  * @version: 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "站点列表查询返回vo")
 public class SiteListReturnVO extends Site {
     @Schema(description = "配置名称")

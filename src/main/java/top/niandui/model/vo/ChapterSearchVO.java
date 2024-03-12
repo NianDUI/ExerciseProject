@@ -2,6 +2,7 @@ package top.niandui.model.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.model.PageOrder;
 
 /**
@@ -12,6 +13,7 @@ import top.niandui.common.model.PageOrder;
  * @time: 2020/3/28 14:54
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "章节查询VO")
 public class ChapterSearchVO extends PageOrder {
     @Schema(description = "章节名称")

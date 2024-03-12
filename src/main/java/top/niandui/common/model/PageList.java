@@ -2,6 +2,7 @@ package top.niandui.common.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * @date 2020/3/22 18:32
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "返回分页数据公共类")
 public class PageList<T> extends BaseModel {
     @Schema(description = "总条数")

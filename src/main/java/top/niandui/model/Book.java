@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 import java.sql.Timestamp;
@@ -17,6 +18,7 @@ import java.sql.Timestamp;
  * @version: 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "书籍实体类")
 public class Book extends BaseModel {
     @Schema(description = "书籍id")

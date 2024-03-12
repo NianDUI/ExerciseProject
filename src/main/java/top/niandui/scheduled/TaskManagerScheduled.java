@@ -124,7 +124,7 @@ public class TaskManagerScheduled implements IBaseScheduled {
         try {
             if (task.getLoadmanner() == 0) {
                 // 通过反射创建
-                return Class.forName(task.getClasspath()).newInstance();
+                return Class.forName(task.getClasspath()).getDeclaredConstructor().newInstance();
             } else if (task.getLoadmanner() == 1) {
                 // 从IOC容器中获取
                 return applicationContext.getBean(Class.forName(task.getClasspath()));

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 import java.sql.Timestamp;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
  * @version: 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "段落实体类")
 public class Paragraph extends BaseModel {
     @Schema(description = "创建时间")

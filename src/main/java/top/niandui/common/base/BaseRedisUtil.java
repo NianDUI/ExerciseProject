@@ -364,7 +364,7 @@ public abstract class BaseRedisUtil<T> {
      * @param item 项 可以使多个 不能为null
      */
     public void hDel(String key, String... item) {
-        redisTemplate.opsForHash().delete(key, item);
+        redisTemplate.opsForHash().delete(key, (Object[]) item);
     }
 
     /**

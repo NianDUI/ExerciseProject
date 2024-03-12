@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 /**
@@ -14,6 +15,7 @@ import top.niandui.common.base.BaseModel;
  * @date 2020/12/1 11:03
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "任务实体类")
 public class Task extends BaseModel {
     @Schema(description = "任务id")

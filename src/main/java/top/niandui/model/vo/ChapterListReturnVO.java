@@ -2,6 +2,7 @@ package top.niandui.model.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.model.Chapter;
 
 /**
@@ -12,6 +13,7 @@ import top.niandui.model.Chapter;
  * @version: 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "章节列表查询返回vo")
 public class ChapterListReturnVO extends Chapter {
     @Schema(description = "配置名称")

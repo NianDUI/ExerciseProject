@@ -2,6 +2,7 @@ package top.niandui.model.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.model.Book;
 
 /**
@@ -12,6 +13,7 @@ import top.niandui.model.Book;
  * @version: 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "书籍列表查询返回vo")
 public class BookListReturnVO extends Book {
     @Schema(description = "配置名称")

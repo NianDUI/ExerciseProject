@@ -2,6 +2,7 @@ package top.niandui.common.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 import top.niandui.common.outher.StatusCode;
 
@@ -13,6 +14,7 @@ import top.niandui.common.outher.StatusCode;
  * @date 2020/3/22 16:45
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "公共返回数据")
 public class ResponseData<T> extends BaseModel {
     @Schema(description = "响应码")

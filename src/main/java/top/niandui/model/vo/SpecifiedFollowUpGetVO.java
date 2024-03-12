@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 /**
@@ -14,6 +15,7 @@ import top.niandui.common.base.BaseModel;
  * @version: 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "获取指定章节和后续章节vo")
 public class SpecifiedFollowUpGetVO extends BaseModel {
     @NotNull(message = "书籍id不能为空")

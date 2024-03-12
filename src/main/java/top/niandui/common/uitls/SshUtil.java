@@ -217,7 +217,7 @@ public class SshUtil {
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
             InputStream is = channel.getInputStream();
             channel.setErrStream(System.err);
-            channel.setCommand(String.format(command, args));
+            channel.setCommand(String.format(command, (Object[]) args));
             // 建立通道
             channel.connect();
             String result = FileCopyUtils.copyToString(new InputStreamReader(is));

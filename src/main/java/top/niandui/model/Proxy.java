@@ -2,6 +2,7 @@ package top.niandui.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 /**
@@ -12,6 +13,7 @@ import top.niandui.common.base.BaseModel;
  * @date 2020/12/25 15:08
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "代理")
 public class Proxy extends BaseModel {
     @Schema(description = "代理id")

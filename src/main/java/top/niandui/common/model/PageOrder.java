@@ -3,6 +3,7 @@ package top.niandui.common.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.niandui.common.base.BaseModel;
 
 /**
@@ -13,6 +14,7 @@ import top.niandui.common.base.BaseModel;
  * @date 2020/3/22 16:28
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "分页排序公共model")
 public class PageOrder extends BaseModel {
     @NotNull(message = "页数不能为空")
