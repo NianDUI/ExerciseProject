@@ -17,7 +17,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
         <!-- 注意：布局功能的支持程序：thymeleaf3主程序 适配 layout2以上版本 -->
