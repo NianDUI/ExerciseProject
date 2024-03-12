@@ -18,12 +18,12 @@
         </encoder>
     </appender>
     <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${logDir}/${applicationName}.log</file>
+        <file>${logDir}/${applicationName}/${applicationName}.log</file>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
         </encoder> <!--滚动策略 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!--路径 -->
-            <fileNamePattern>${logDir}/${applicationName}-%d.log.gz</fileNamePattern>
+            <fileNamePattern>${logDir}/${applicationName}/${applicationName}-%d.log.gz</fileNamePattern>
             <maxHistory>30</maxHistory><!-- 只保存30天的日志文件 -->
         </rollingPolicy>
     </appender>
