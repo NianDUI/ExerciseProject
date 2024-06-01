@@ -130,8 +130,8 @@ public class RedisTest {
 //        redisUtil.sAdd("set1");
         // 空指针异常
 //        redisUtil.sAdd("set2", null);
-        redisUtil.sAdd("set3", new String[]{null});
-        redisUtil.sAdd("set4", new String[]{"", "123"});
+        redisUtil.sAdd("set3", new Object[]{null});
+        redisUtil.sAdd("set4", "", "123");
     }
 
     @Test
@@ -169,7 +169,7 @@ public class RedisTest {
     @Test
     public void testSet() {
         // 测试set类型
-        String[] ss = {"O28", "4x7", "3htvaA", "oP9AAq", "M3qEK7"};
+        Object[] ss = {"O28", "4x7", "3htvaA", "oP9AAq", "M3qEK7"};
         long l = redisUtil.sAdd("test:set", 600, ss);
         Set<Object> objects = redisUtil.sGet("test:set");
         Object[] values = {objects};

@@ -206,6 +206,7 @@ public class Draft_6455 extends Draft {
         for (IExtension inputExtension : inputExtensions) {
             if (inputExtension.getClass().equals(DefaultExtension.class)) {
                 hasDefault = true;
+                break;
             }
         }
         knownExtensions.addAll(inputExtensions);
@@ -249,10 +250,10 @@ public class Draft_6455 extends Draft {
      */
     public int readVersion(Handshakedata handshakedata) {
         String vers = handshakedata.getFieldValue("Sec-WebSocket-Version");
-        if (vers.length() > 0) {
+        if (!vers.isEmpty()) {
             int v;
             try {
-                v = new Integer(vers.trim());
+                v = Integer.parseInt(vers.trim());
                 return v;
             } catch (NumberFormatException e) {
                 return -1;
@@ -706,7 +707,7 @@ public class Draft_6455 extends Draft {
                     }
                     incompleteframe.put(buffer.array(), buffer.position(), expectedNextByteCount);
                     buffer.position(buffer.position() + expectedNextByteCount);
-                    cur = translateSingleFrame((ByteBuffer) incompleteframe.duplicate().position(0));
+                    cur = translateSingleFrame(incompleteframe.duplicate().position(0));
                     frames.add(cur);
                     incompleteframe = null;
                 } catch (IncompleteException e) {
@@ -1019,8 +1020,7 @@ public class Draft_6455 extends Draft {
     private void processFrameClosing(WebSocketImpl webSocketImpl, Framedata frame) {
         int code = CloseFrame.NOCODE;
         String reason = "";
-        if (frame instanceof CloseFrame) {
-            CloseFrame cf = (CloseFrame) frame;
+        if (frame instanceof CloseFrame cf) {
             code = cf.getCloseCode();
             reason = cf.getMessage();
         }
