@@ -27,7 +27,7 @@ public class SshUtil {
     // 日志对象
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(SshUtil.class);
     // 会话映射
-    private static final ThreadLocal<Map<String, Session>> SESSION_MAP = ThreadLocal.withInitial(LinkedHashMap::new);
+    private static final Map<String, Session> SESSION_MAP = new LinkedHashMap<>();
 
     static {
         // 设置当前日志打印机级别
@@ -51,7 +51,7 @@ public class SshUtil {
     public static synchronized Session connectSession(String host, int port, String username, String password) {
         try {
             String key = host + ":" + port + ":" + username;
-            Session session = SESSION_MAP.get().get(key);
+            Session session = SESSION_MAP.get(key);
             if (session == null) {
                 // 创建JSch对象
                 JSch jsch = new JSch();
@@ -66,7 +66,7 @@ public class SshUtil {
                 log.debug("建立会话: ssh {}@{} -p {}", session.getUserName(), session.getHost(), session.getPort());
                 session.connect();
                 // 保存会话
-                SESSION_MAP.get().put(key, session);
+                SESSION_MAP.put(key, session);
             }
             return session;
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class SshUtil {
      * 关闭全部会话
      */
     public static synchronized void disconnectAllSession() {
-        List<Session> values = SESSION_MAP.get().values().stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
+        List<Session> values = SESSION_MAP.values().stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
         for (Session session : values) {
             disconnectSession(session);
         }
@@ -101,7 +101,7 @@ public class SshUtil {
             String key = session.getHost() + ":" + session.getPort() + ":" + session.getUserName();
             log.debug("关闭会话: ssh {}@{} -p {}", session.getUserName(), session.getHost(), session.getPort());
             session.disconnect();
-            SESSION_MAP.get().remove(key);
+            SESSION_MAP.remove(key);
         } catch (Exception e) {
             log.error("ssh会话关闭失败", e);
         }
@@ -150,7 +150,17 @@ public class SshUtil {
      * @return 分配的本地 TCP 端口号
      */
     public static int setPortForwardingL(Session session, String lHost, int lPort, String rHost, int rPort) {
-        return setPortForwardingL(session, String.format("%s:%s:%s:%s", lHost == null ? "*" : lHost, lPort, rHost, rPort));
+        try {
+            // 为环回接口注册本地端口转发
+            lPort = session.setPortForwardingL(lHost, lPort, rHost, rPort);
+            String conf = String.format("%s:%s:%s:%s", lHost, lPort, rHost, rPort);
+            log.debug("注册本地端口转发: ssh -N -L {} {}@{} -p {}", conf
+                    , session.getUserName(), session.getHost(), session.getPort());
+            return lPort;
+        } catch (JSchException e) {
+            throw new RuntimeException("注册本地端口转发错误", e);
+        }
+//        return setPortForwardingL(session, String.format("%s:%s:%s:%s", lHost == null ? "*" : lHost, lPort, rHost, rPort));
     }
 
     /**
@@ -167,7 +177,7 @@ public class SshUtil {
         String[] confs = conf.split(":");
         int length = confs.length;
         if (length < 3 || length > 4) {
-            throw new RuntimeException("参数格式错误");
+            throw new RuntimeException("参数格式错误：" + conf);
         }
         try {
             // 为环回接口注册本地端口转发
@@ -178,6 +188,31 @@ public class SshUtil {
             return lPort;
         } catch (JSchException e) {
             throw new RuntimeException("注册本地端口转发错误", e);
+        }
+    }
+
+    /**
+     * 删除会话本地端口转发
+     *
+     * @param session 会话对象
+     * @param lPort   用于本地端口转发的本地端口
+     */
+    public static void delPortForwardingL(Session session, int lPort) {
+        try {
+            String lPortStr = lPort + ":";
+            // 本地端口转发:[15555:172.26.35.75:5555]
+            String[] portForwardingLs = session.getPortForwardingL();
+            for (String portForwardingL : portForwardingLs) {
+                if (portForwardingL.contains(lPortStr)) {
+                    log.debug("关闭本地端口转发: ssh -N -L {}:{} {}@{} -p {}", portForwardingL, lPort
+                            , session.getUserName(), session.getHost(), session.getPort());
+                    session.delPortForwardingL(lPort);
+                    // 跳出循环
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            log.error("删除本地端口转发失败", e);
         }
     }
 
