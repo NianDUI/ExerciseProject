@@ -27,7 +27,7 @@
         <!-- 指定使用的ES版本为启动的ES版本 -->
         <elasticsearch.version>7.9.2</elasticsearch.version>
         <!-- 指定使用的selenium版本：覆盖springboot指定的版本，修复ClassDefFoundError: org/openqa/selenium -->
-        <selenium.version>4.16.1</selenium.version>
+        <selenium.version>4.27.0</selenium.version>
         <!-- 打包跳过测试 -->
         <skipTests>true</skipTests>
     </properties>

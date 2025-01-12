@@ -46,7 +46,8 @@ public class HtmlunitUtil {
         HtmlPage htmlPage = webClientUtil.getWebClient(handleInfo).getPage(book.getStarturl());
         int errorNum = 0;
         while (getBookTaskStatus(book.getBookid()) != 0) {
-            String url = htmlPage.getUrl().toString().trim();
+            String currentUrl = htmlPage.getUrl().toString().trim();
+            log.info("currentUrl：" + currentUrl);
             if (!isFirstJump) {
                 Chapter chapter = new Chapter();
                 // 获取标题DOM列表
@@ -80,7 +81,7 @@ public class HtmlunitUtil {
                 chapter.setBookid(book.getBookid());
                 chapter.setConfigid(book.getConfigid());
                 // 本页链接
-                chapter.setUrl(url);
+                chapter.setUrl(currentUrl);
                 chapter.setSeqid(seqid++);
                 // 创建章节
                 webClientUtil.createChapter(chapter);
@@ -97,7 +98,7 @@ public class HtmlunitUtil {
             // 获取下一页的超链接DOM
             HtmlAnchor next = aList.get(config.getNexta());
             // 调用自定义方法判断下一页是否还有内容
-            if (isEndHref.apply(url, next.getHrefAttribute().trim())) {
+            if (isEndHref.apply(currentUrl, next.getHrefAttribute().trim())) {
                 break;
             }
             // 跳转下一页

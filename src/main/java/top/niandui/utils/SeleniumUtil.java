@@ -115,7 +115,8 @@ public class SeleniumUtil {
             driver.get(book.getStarturl());
             int errorNum = 0;
             while (getBookTaskStatus(book.getBookid()) != 0) {
-                String url = driver.getCurrentUrl();
+                String currentUrl = driver.getCurrentUrl();
+                log.info("currentUrl：" + currentUrl);
                 JXDocument jxDocument = JXDocument.create(driver.getPageSource());
                 if (!isFirstJump) {
                     Chapter chapter = new Chapter();
@@ -139,7 +140,7 @@ public class SeleniumUtil {
                         // 调用休眠处理方法
                         HandleUtil.sleepHandler.get();
                         startTime = System.currentTimeMillis();
-                        driver.get(url);
+                        driver.get(currentUrl);
                         continue;
                     }
                     errorNum = 0;
@@ -150,7 +151,7 @@ public class SeleniumUtil {
                     chapter.setBookid(book.getBookid());
                     chapter.setConfigid(book.getConfigid());
                     // 本页链接
-                    chapter.setUrl(url);
+                    chapter.setUrl(currentUrl);
                     chapter.setSeqid(seqid++);
                     // 创建章节
                     webClientUtil.createChapter(chapter);
@@ -168,21 +169,27 @@ public class SeleniumUtil {
                 JXNode next = aList.get(config.getNexta());
                 String nextHref = next.asElement().attr("href").trim();
                 // 调用自定义方法判断下一页是否还有内容
-                if (isEndHref.apply(url, nextHref)) {
+                if (isEndHref.apply(currentUrl, nextHref)) {
                     break;
                 }
                 // 调用休眠处理方法
-//                HandleUtil.sleepHandler.get();
-                Thread.sleep(400);
+                HandleUtil.sleepHandler.get();
+//                Thread.sleep(400);
                 // 跳转下一页
                 String nextUrl;
                 if (nextHref.contains("http") && nextHref.contains("://")) {
                     // 下一页url：http://www.77dushu.la/chapter/105444/44091664.html
                     nextUrl = nextHref;
+                } else if (currentUrl != null && !nextHref.contains("/")) {
+                    // currentUrl: http://www.biqukai.net/bq/148/148688/39971383.html
+                    // nextHref: 39971384.html
+                    int lastIndexOf = currentUrl.lastIndexOf("/");
+                    nextUrl = currentUrl.substring(0, lastIndexOf + 1) + nextHref;
                 } else {
                     // 下一页url：/chapter/105444/44091664.html
                     nextUrl = rootUri + nextHref;
                 }
+                log.info("nextUrl：" + nextUrl);
                 driver.get(nextUrl);
             }
         } finally {
