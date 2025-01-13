@@ -1,6 +1,7 @@
 package top.niandui.common.base;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
 
@@ -247,6 +248,32 @@ public abstract class BaseRedisUtil<T> {
     public Map<String, T> hmGet(String key) {
         HashOperations<String, String, T> hashOperations = redisTemplate.opsForHash();
         return hashOperations.entries(key);
+    }
+
+    /**
+     * 获取hash缓存key对应的hashKeys键值(map)
+     *
+     * @param key 键
+     * @param hashKeys hash键列表
+     * @return 对应的多个键值
+     */
+    public Map<String, T> hmGet(String key, Collection<String> hashKeys) {
+        HashOperations<String, String, T> hashOperations = redisTemplate.opsForHash();
+        List<String> hashKeyList = hashKeys instanceof List ? (List<String>) hashKeys : new ArrayList<>(hashKeys);
+        List<T> hashValueList = hashOperations.multiGet(key, hashKeyList);
+        if (CollectionUtils.isEmpty(hashValueList)) {
+            return null;
+        }
+        int size = Math.min(hashKeyList.size(), hashValueList.size());
+        Map<String, T> versionMap = new HashMap<>(hashKeyList.size(), 1);
+        int i;
+        for (i = 0; i < size; i++) {
+            versionMap.put(hashKeyList.get(i), hashValueList.get(i));
+        }
+        for (i = 0; i < hashKeyList.size(); i++) {
+            versionMap.put(hashKeyList.get(i), null);
+        }
+        return versionMap;
     }
 
     /**
