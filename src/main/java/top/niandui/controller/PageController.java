@@ -49,6 +49,11 @@ public class PageController extends BaseController {
         return "main";
     }
 
+    @GetMapping("/modern/main")
+    public String modernMain() {
+        return "modern/main";
+    }
+
     /*站点*/
     @GetMapping("/site/list")
     public String siteList() {

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.niandui.common.model.ResponseData;
 import top.niandui.model.Papers;
 import top.niandui.service.IFileService;
+import top.niandui.utils.PathUtil;
 
 import java.util.List;
 
@@ -48,6 +49,12 @@ public class FileController {
     @Operation(summary = "文件列表", description = "时间：2020/09/09")
     public ResponseData<List<Papers>> list(HttpServletRequest request) throws Exception {
         return ResponseData.ok(iFileService.list(request));
+    }
+
+    @GetMapping({"/path", "/path/**"})
+    @Operation(summary = "当前路径", description = "时间：2026/02/27")
+    public ResponseData<String> path(HttpServletRequest request) throws Exception {
+        return ResponseData.ok(PathUtil.getPath(request, "path")[1]);
     }
 
     @GetMapping("/download/**")

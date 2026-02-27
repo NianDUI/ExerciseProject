@@ -76,6 +76,12 @@ public class BookController extends BaseController {
         return ResponseData.ok(iBookService.option());
     }
 
+    @GetMapping("/optionProxy")
+    @Operation(summary = "代理下拉", description = "时间：2026/02/27")
+    public ResponseData<List<IdNameModel<Integer>>> optionProxy() throws Exception {
+        return ResponseData.ok(iBookService.optionProxy());
+    }
+
     @GetMapping("/deleteBook/{id}")
     @Operation(summary = "删除书籍", description = "时间：2020/04/06")
     @Parameters(@Parameter(name = "id", description = "书籍id,多个用逗号隔开", required = true))

@@ -1,0 +1,919 @@
+openapi: 3.0.3
+info:
+  title: fictionweb 前后端分离接口清单
+  version: 1.0.0
+  description: |
+    面向前后端分离改造的接口清单（OpenAPI 风格）。
+    - 统一响应：ResponseData，成功 code=200
+    - 统一鉴权：请求头 token（RSA 公钥加密后的字符串）
+    - WebSocket 日志流：/api/log/ws（不属于标准 OpenAPI HTTP 接口，见文末说明）
+servers:
+  - url: /
+tags:
+  - name: 站点
+  - name: 书籍
+  - name: 配置
+  - name: 章节
+  - name: 文件
+security:
+  - tokenAuth: []
+paths:
+  /api/querySiteList:
+    post:
+      tags: [站点]
+      summary: 查询站点列表
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteSearchVO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSitePage'
+  /api/modelSite/{id}:
+    get:
+      tags: [站点]
+      summary: 查询单个站点
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseSite'
+  /api/saveSite:
+    post:
+      tags: [站点]
+      summary: 保存站点（siteid 为空新增，否则修改）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Site'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/deleteSite/{id}:
+    get:
+      tags: [站点]
+      summary: 删除站点（多个 id 用逗号分隔）
+      parameters:
+        - $ref: '#/components/parameters/IdPathString'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/optionSite:
+    get:
+      tags: [站点]
+      summary: 站点下拉
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseIdNameList'
+
+  /api/queryBookList:
+    post:
+      tags: [书籍]
+      summary: 查询书籍列表
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookSearchVO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBookPage'
+  /api/modelBook/{id}:
+    get:
+      tags: [书籍]
+      summary: 查询单个书籍
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBook'
+  /api/saveBook:
+    post:
+      tags: [书籍]
+      summary: 保存书籍（bookid 为空新增，否则修改）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/deleteBook/{id}:
+    get:
+      tags: [书籍]
+      summary: 删除书籍（多个 id 用逗号分隔）
+      parameters:
+        - $ref: '#/components/parameters/IdPathString'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/optionBook:
+    get:
+      tags: [书籍]
+      summary: 书籍下拉
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseIdNameList'
+  /api/downloadBook/{id}:
+    get:
+      tags: [书籍]
+      summary: 下载书籍（方式1）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: 文件流
+          content:
+            application/octet-stream: {}
+  /api/downloadBook2/{id}:
+    get:
+      tags: [书籍]
+      summary: 下载书籍（方式2）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: 文件流
+          content:
+            application/octet-stream: {}
+
+  /api/queryConfigList:
+    post:
+      tags: [配置]
+      summary: 查询配置列表
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigSearchVO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConfigPage'
+  /api/modelConfig/{id}:
+    get:
+      tags: [配置]
+      summary: 查询单个配置
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConfig'
+  /api/saveConfig:
+    post:
+      tags: [配置]
+      summary: 保存配置（configid 为空新增，否则修改）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/deleteConfig/{id}:
+    get:
+      tags: [配置]
+      summary: 删除配置（多个 id 用逗号分隔）
+      parameters:
+        - $ref: '#/components/parameters/IdPathString'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/optionConfig:
+    get:
+      tags: [配置]
+      summary: 配置下拉
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseIdNameList'
+
+  /api/queryChapterList:
+    post:
+      tags: [章节]
+      summary: 查询章节列表
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChapterSearchVO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseChapterPage'
+  /api/modelChapter/{id}:
+    get:
+      tags: [章节]
+      summary: 查询单个章节
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseChapter'
+  /api/saveChapter:
+    post:
+      tags: [章节]
+      summary: 保存章节（chapterid 为空新增，否则修改）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Chapter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/deleteChapter/{id}:
+    get:
+      tags: [章节]
+      summary: 删除章节（多个 id 用逗号分隔）
+      parameters:
+        - $ref: '#/components/parameters/IdPathString'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/queryChapterInfo/{id}:
+    get:
+      tags: [章节]
+      summary: 查询章节详情（含前后章和段落）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseChapterInfo'
+  /api/reacquireAllChapter/{id}:
+    get:
+      tags: [章节]
+      summary: 重新获取所有章节（bookid）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/getFollowUpChapter/{id}:
+    get:
+      tags: [章节]
+      summary: 获取后续章节（bookid）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/reacquireSingleChapter/{id}:
+    get:
+      tags: [章节]
+      summary: 重新获取单个章节（chapterid）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/getSpecifiedAndFollowUpChapter:
+    post:
+      tags: [章节]
+      summary: 获取指定章节和后续章节
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpecifiedFollowUpGetVO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/queryGetStatus/{id}:
+    get:
+      tags: [章节]
+      summary: 查询章节抓取状态（bookid）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInteger'
+  /api/stopGet/{id}:
+    get:
+      tags: [章节]
+      summary: 停止章节抓取（bookid）
+      parameters:
+        - $ref: '#/components/parameters/IdPathLong'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoid'
+  /api/optionChapter:
+    get:
+      tags: [章节]
+      summary: 章节下拉
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseIdNameList'
+
+  /api/file/read:
+    get:
+      tags: [文件]
+      summary: 文件读取
+      parameters:
+        - name: path
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 文件流
+          content:
+            application/octet-stream: {}
+  /api/file/list/{path}:
+    get:
+      tags: [文件]
+      summary: 文件列表（path 可为空）
+      parameters:
+        - name: path
+          in: path
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePapersList'
+  /api/file/download/{path}:
+    get:
+      tags: [文件]
+      summary: 文件下载（支持断点续传）
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 文件流
+          content:
+            application/octet-stream: {}
+
+components:
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: token
+      description: RSA 公钥加密后的 token 字符串
+  parameters:
+    IdPathLong:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    IdPathString:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 单个 id 或逗号分隔 id 列表
+  schemas:
+    ResponseBase:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: ""
+      required: [code, message]
+    ResponseVoid:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              nullable: true
+    ResponseInteger:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              type: integer
+              example: 0
+    ResponseIdNameList:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdNameModel'
+    ResponseSite:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Site'
+    ResponseBook:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Book'
+    ResponseConfig:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Config'
+    ResponseChapter:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Chapter'
+    ResponseChapterInfo:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/ChapterInfoReturnVO'
+    ResponseSitePage:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/PageListSiteListReturnVO'
+    ResponseBookPage:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/PageListBookListReturnVO'
+    ResponseConfigPage:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/PageListConfig'
+    ResponseChapterPage:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/PageListChapterListReturnVO'
+    ResponsePapersList:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Papers'
+
+    PageOrder:
+      type: object
+      properties:
+        pageNum:
+          type: integer
+          minimum: 1
+          example: 1
+        pageSize:
+          type: integer
+          minimum: 1
+          example: 10
+        orderBy:
+          type: string
+        descOrAsc:
+          type: string
+          enum: [Desc, Asc]
+    SiteSearchVO:
+      allOf:
+        - $ref: '#/components/schemas/PageOrder'
+        - type: object
+          properties:
+            name:
+              type: string
+    BookSearchVO:
+      allOf:
+        - $ref: '#/components/schemas/PageOrder'
+        - type: object
+          properties:
+            name:
+              type: string
+            siteid:
+              type: integer
+              format: int64
+              nullable: true
+    ConfigSearchVO:
+      allOf:
+        - $ref: '#/components/schemas/PageOrder'
+        - type: object
+          properties:
+            name:
+              type: string
+    ChapterSearchVO:
+      allOf:
+        - $ref: '#/components/schemas/PageOrder'
+        - type: object
+          properties:
+            name:
+              type: string
+            bookid:
+              type: integer
+              format: int64
+
+    PageListBase:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        pageNum:
+          type: integer
+        pageSize:
+          type: integer
+        pages:
+          type: integer
+        hasPreviousPage:
+          type: boolean
+        hasNextPage:
+          type: boolean
+    PageListSiteListReturnVO:
+      allOf:
+        - $ref: '#/components/schemas/PageListBase'
+        - type: object
+          properties:
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/SiteListReturnVO'
+    PageListBookListReturnVO:
+      allOf:
+        - $ref: '#/components/schemas/PageListBase'
+        - type: object
+          properties:
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/BookListReturnVO'
+    PageListConfig:
+      allOf:
+        - $ref: '#/components/schemas/PageListBase'
+        - type: object
+          properties:
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/Config'
+    PageListChapterListReturnVO:
+      allOf:
+        - $ref: '#/components/schemas/PageListBase'
+        - type: object
+          properties:
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChapterListReturnVO'
+
+    IdNameModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Site:
+      type: object
+      properties:
+        siteid:
+          type: integer
+          format: int64
+          nullable: true
+        name:
+          type: string
+        url:
+          type: string
+        configid:
+          type: integer
+          format: int64
+        createtime:
+          type: string
+          format: date-time
+    SiteListReturnVO:
+      allOf:
+        - $ref: '#/components/schemas/Site'
+        - type: object
+          properties:
+            configname:
+              type: string
+    Book:
+      type: object
+      properties:
+        bookid:
+          type: integer
+          format: int64
+          nullable: true
+        name:
+          type: string
+        url:
+          type: string
+        configid:
+          type: integer
+          format: int64
+        starturl:
+          type: string
+        handlerinfo:
+          type: string
+          description: JSON 字符串
+        siteid:
+          type: integer
+          format: int64
+        taskstatus:
+          type: integer
+          description: 0无，1重新获取全部，2获取后续章节，3重新获取单章
+        taskswitch:
+          type: integer
+          description: 0关闭，1开启
+        detail:
+          type: string
+        lastgettime:
+          type: string
+          format: date-time
+        createtime:
+          type: string
+          format: date-time
+    BookListReturnVO:
+      allOf:
+        - $ref: '#/components/schemas/Book'
+        - type: object
+          properties:
+            configname:
+              type: string
+            sitename:
+              type: string
+            taskstatusname:
+              type: string
+            taskswitchname:
+              type: string
+    Config:
+      type: object
+      properties:
+        configid:
+          type: integer
+          format: int64
+          nullable: true
+        name:
+          type: string
+        titlematch:
+          type: string
+        titlelnnum:
+          type: integer
+        conmatch:
+          type: string
+        conlnnum:
+          type: integer
+        startoffset:
+          type: integer
+        endoffset:
+          type: integer
+        amatch:
+          type: string
+        nexta:
+          type: integer
+    Chapter:
+      type: object
+      properties:
+        chapterid:
+          type: integer
+          format: int64
+          nullable: true
+        name:
+          type: string
+        rawname:
+          type: string
+        bookid:
+          type: integer
+          format: int64
+        configid:
+          type: integer
+          format: int64
+        seqid:
+          type: integer
+          format: int64
+        url:
+          type: string
+        createtime:
+          type: string
+          format: date-time
+    ChapterListReturnVO:
+      allOf:
+        - $ref: '#/components/schemas/Chapter'
+        - type: object
+          properties:
+            configname:
+              type: string
+            bookname:
+              type: string
+    Paragraph:
+      type: object
+      properties:
+        paragraphid:
+          type: integer
+          format: int64
+        chapterid:
+          type: integer
+          format: int64
+        seqid:
+          type: integer
+        content:
+          type: string
+    ChapterInfoReturnVO:
+      type: object
+      properties:
+        book:
+          $ref: '#/components/schemas/Book'
+        chapter:
+          $ref: '#/components/schemas/Chapter'
+        nextid:
+          type: integer
+          format: int64
+          nullable: true
+        previd:
+          type: integer
+          format: int64
+          nullable: true
+        paragraphList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paragraph'
+    SpecifiedFollowUpGetVO:
+      type: object
+      required: [bookid, url]
+      properties:
+        bookid:
+          type: integer
+          format: int64
+        url:
+          type: string
+    Papers:
+      type: object
+      properties:
+        name:
+          type: string
+        path:
+          type: string
+        isDir:
+          type: boolean
+        size:
+          type: number
+        unit:
+          type: string
+        lastModified:
+          type: string
+
+x-websocket:
+  /api/log/ws:
+    protocol: ws
+    auth:
+      firstMessage: token（RSA 公钥加密）
+    messageSchema:
+      type: object
+      properties:
+        date: { type: string }
+        level: { type: string }
+        thread: { type: string }
+        logger: { type: string }
+        msg: { type: string }
+        errorDetail: { type: string }
