@@ -54,6 +54,11 @@ public class PageController extends BaseController {
         return "modern/main";
     }
 
+    @GetMapping("/modern/mobile")
+    public String modernMobile() {
+        return "modern/mobile";
+    }
+
     /*站点*/
     @GetMapping("/site/list")
     public String siteList() {

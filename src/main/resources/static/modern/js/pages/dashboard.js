@@ -16,7 +16,7 @@ export default {
         <el-button type="primary" @click="$router.push('/config/list')">配置管理</el-button>
         <el-button type="primary" @click="$router.push('/file/list')">文件管理</el-button>
         <el-button type="primary" @click="$router.push('/log/live')">日志中心</el-button>
-        <el-button type="primary" @click="goMobile">移动端书籍</el-button>
+        <el-button type="primary" @click="goMobile">移动端页面</el-button>
         <el-button @click="goIvi">IVI测试频道列表</el-button>
         <el-button @click="goLegacy">旧版首页</el-button>
       </div>
@@ -24,7 +24,7 @@ export default {
   `,
     methods: {
         goMobile() {
-            window.location.href = "/m/list.html";
+            window.location.href = "/modern/mobile";
         },
         goIvi() {
             window.open("http://ivi.bupt.edu.cn", "_blank");
