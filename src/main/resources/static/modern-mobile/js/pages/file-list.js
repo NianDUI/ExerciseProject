@@ -1,14 +1,6 @@
 import {encodePath, get, warn} from "../../../modern/js/common/http.js";
-
-function isVideo(name) {
-    const lower = String(name || "").toLowerCase();
-    return lower.endsWith(".mp4") || lower.endsWith(".mkv") || lower.endsWith(".webm") || lower.endsWith(".m3u8");
-}
-
-function isText(name) {
-    const lower = String(name || "").toLowerCase();
-    return lower.endsWith(".txt") || lower.endsWith(".log") || lower.endsWith(".md") || lower.endsWith(".json");
-}
+import {isImageFile, isTextFile, isVideoFile} from "../../../modern/js/common/file-viewer.js";
+import {getVideoMimeType} from "../../../modern/js/common/video-player.js";
 
 export default {
     name: "MobileFileListPage",
@@ -34,13 +26,6 @@ export default {
         </div>
       </section>
 
-      <el-dialog v-model="videoVisible" fullscreen title="视频预览">
-        <video v-if="videoVisible" :src="videoUrl" style="width: 100%;" controls playsinline />
-      </el-dialog>
-
-      <el-dialog v-model="textVisible" fullscreen title="文本预览">
-        <pre class="text-preview">{{ textContent }}</pre>
-      </el-dialog>
     </div>
   `,
     data() {
@@ -48,11 +33,7 @@ export default {
             loading: false,
             list: [],
             currentPathName: "/",
-            parentPath: "",
-            videoVisible: false,
-            videoUrl: "",
-            textVisible: false,
-            textContent: ""
+            parentPath: ""
         };
     },
     computed: {
@@ -94,18 +75,40 @@ export default {
             }
             this.$router.push(`/files/${this.parentPath}`);
         },
-        async openItem(item) {
+        openItem(item) {
             if (item.isDir) {
                 this.$router.push(`/files/${item.path}`);
                 return;
             }
-            if (isVideo(item.name)) {
-                this.videoUrl = `/api/file/download/${encodePath(item.path)}`;
-                this.videoVisible = true;
+            if (isVideoFile(item.name)) {
+                this.$router.push({
+                    path: "/player/video",
+                    query: {
+                        path: item.path,
+                        name: item.name || "",
+                        type: getVideoMimeType(item.name)
+                    }
+                });
                 return;
             }
-            if (isText(item.name)) {
-                await this.previewText(item);
+            if (isImageFile(item.name)) {
+                this.$router.push({
+                    path: "/viewer/image",
+                    query: {
+                        path: item.path,
+                        name: item.name || ""
+                    }
+                });
+                return;
+            }
+            if (isTextFile(item.name)) {
+                this.$router.push({
+                    path: "/viewer/text",
+                    query: {
+                        path: item.path,
+                        name: item.name || ""
+                    }
+                });
                 return;
             }
             if (!item.path) {
@@ -114,27 +117,17 @@ export default {
             }
             window.location.href = `/api/file/download/${encodePath(item.path)}`;
         },
-        async previewText(item) {
-            if (!item.path) {
-                warn("文件路径无效");
-                return;
-            }
-            const token = window.Cookies.get("token") || window.sessionStorage.getItem("token") || "";
-            const res = await window.axios.get(`/api/file/read?path=${encodeURIComponent(item.path)}`, {
-                headers: { token },
-                responseType: "text"
-            });
-            this.textContent = typeof res.data === "string" ? res.data : "";
-            this.textVisible = true;
-        },
         iconOf(item) {
             if (item.isDir) {
                 return "DIR";
             }
-            if (isVideo(item.name)) {
+            if (isVideoFile(item.name)) {
                 return "VID";
             }
-            if (isText(item.name)) {
+            if (isImageFile(item.name)) {
+                return "IMG";
+            }
+            if (isTextFile(item.name)) {
                 return "TXT";
             }
             return "FILE";

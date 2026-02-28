@@ -41,7 +41,10 @@ const App = {
     },
     computed: {
         isReader() {
-            return this.$route.path.startsWith("/reader/");
+            return this.$route.path.startsWith("/reader/")
+                || this.$route.path.startsWith("/player/video")
+                || this.$route.path.startsWith("/viewer/image")
+                || this.$route.path.startsWith("/viewer/text");
         },
         pageTitle() {
             return (this.$route.meta && this.$route.meta.title) || "手机端";

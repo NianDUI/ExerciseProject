@@ -473,6 +473,144 @@ textarea {
     font-family: Consolas, "Microsoft YaHei", monospace;
 }
 
+.video-player-page {
+    min-height: 100vh;
+    background: #090b0c;
+    color: #fff;
+}
+
+.image-viewer-page,
+.text-viewer-page {
+    min-height: 100dvh;
+    background: #090b0c;
+    color: #fff;
+}
+
+.mobile-fit-page {
+    min-height: 100dvh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-player-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(9, 11, 12, 0.92);
+    backdrop-filter: blur(10px);
+}
+
+.video-player-title {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.video-stage {
+    padding: 12px 0 24px;
+}
+
+.video-stage .video-js {
+    width: 100%;
+    min-height: 240px;
+    background: #000;
+}
+
+.mobile-fit-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.mobile-fit-stage .video-js {
+    width: var(--player-stage-width, 100%);
+    height: var(--player-stage-height, 260px);
+    min-height: 0;
+    max-height: var(--player-stage-height, 260px);
+    max-width: 100%;
+}
+
+.mobile-fit-stage .video-js .vjs-tech {
+    object-fit: contain;
+}
+
+.video-player-panel {
+    padding: 0 16px 20px;
+}
+
+.image-stage {
+    min-height: calc(100dvh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.image-stage-img {
+    max-width: 100%;
+    max-height: calc(100dvh - 96px);
+    object-fit: contain;
+    border-radius: 14px;
+}
+
+.text-viewer-body {
+    padding: 16px;
+}
+
+.mobile-text-view {
+    min-height: calc(100dvh - 96px);
+    padding: 18px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #f3f2ea;
+}
+
+.video-player-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.meta-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 12px;
+}
+
+.video-error-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(255, 109, 92, 0.14);
+    color: #ffd8d2;
+}
+
+.link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
 @media (min-width: 768px) {
     .mobile-main {
         width: min(100%, 760px);

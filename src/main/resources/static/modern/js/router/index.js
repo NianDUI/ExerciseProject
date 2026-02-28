@@ -9,6 +9,9 @@ import ChapterListPage from "../pages/chapter/list.js";
 import ChapterFormPage from "../pages/chapter/form.js";
 import ChapterViewPage from "../pages/chapter/view.js";
 import FileListPage from "../pages/file/list.js";
+import FilePlayerPage from "../pages/file/player.js";
+import FileImageViewerPage from "../pages/file/image-viewer.js";
+import FileTextViewerPage from "../pages/file/text-viewer.js";
 import LogLivePage from "../pages/log/live.js";
 
 const routes = [
@@ -25,6 +28,9 @@ const routes = [
     { path: "/chapter/form/:id", component: ChapterFormPage, meta: { title: "章节编辑" } },
     { path: "/chapter/view/:id", component: ChapterViewPage, meta: { title: "章节内容" } },
     { path: "/file/list/:pathMatch(.*)*", component: FileListPage, meta: { title: "文件管理" } },
+    { path: "/file/player", component: FilePlayerPage, meta: { title: "视频播放器" } },
+    { path: "/file/image", component: FileImageViewerPage, meta: { title: "图片查看" } },
+    { path: "/file/text", component: FileTextViewerPage, meta: { title: "文本查看" } },
     { path: "/log/live", component: LogLivePage, meta: { title: "日志中心" } }
 ];
 

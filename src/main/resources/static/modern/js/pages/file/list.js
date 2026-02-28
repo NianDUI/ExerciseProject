@@ -1,12 +1,6 @@
 import {encodePath, get, warn} from "../../common/http.js";
-
-function isVideo(name) {
-    if (!name) {
-        return false;
-    }
-    const lower = name.toLowerCase();
-    return lower.endsWith(".mp4") || lower.endsWith(".mkv") || lower.endsWith(".m3u8") || lower.endsWith(".webm");
-}
+import {isImageFile, isTextFile, isVideoFile} from "../../common/file-viewer.js";
+import {getVideoMimeType} from "../../common/video-player.js";
 
 export default {
     name: "FileListPage",
@@ -31,9 +25,6 @@ export default {
         <el-table-column prop="lastModified" label="修改时间" min-width="180" />
       </el-table>
 
-      <el-dialog v-model="videoVisible" title="视频预览" width="80%">
-        <video v-if="videoVisible" :src="videoUrl" style="width: 100%;" controls />
-      </el-dialog>
     </div>
   `,
     data() {
@@ -41,9 +32,7 @@ export default {
             loading: false,
             list: [],
             currentPathName: "/",
-            parentPath: "",
-            videoVisible: false,
-            videoUrl: ""
+            parentPath: ""
         };
     },
     computed: {
@@ -90,8 +79,28 @@ export default {
                 this.$router.push(`/file/list/${row.path}`);
                 return;
             }
-            if (isVideo(row.name)) {
+            if (isVideoFile(row.name)) {
                 this.preview(row);
+                return;
+            }
+            if (isImageFile(row.name)) {
+                this.$router.push({
+                    path: "/file/image",
+                    query: {
+                        path: row.path,
+                        name: row.name || ""
+                    }
+                });
+                return;
+            }
+            if (isTextFile(row.name)) {
+                this.$router.push({
+                    path: "/file/text",
+                    query: {
+                        path: row.path,
+                        name: row.name || ""
+                    }
+                });
                 return;
             }
             this.download(row);
@@ -107,12 +116,18 @@ export default {
             if (row.isDir) {
                 return;
             }
-            if (!isVideo(row.name)) {
+            if (!isVideoFile(row.name)) {
                 warn("当前仅内置视频预览，其他类型请下载查看");
                 return;
             }
-            this.videoUrl = `/api/file/download/${encodePath(row.path)}`;
-            this.videoVisible = true;
+            this.$router.push({
+                path: "/file/player",
+                query: {
+                    path: row.path,
+                    name: row.name || "",
+                    type: getVideoMimeType(row.name)
+                }
+            });
         }
     }
 };
