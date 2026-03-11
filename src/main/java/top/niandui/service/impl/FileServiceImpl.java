@@ -89,4 +89,11 @@ public class FileServiceImpl implements IFileService {
         log.info("下载文件：" + filePath);
         downloadFile(request, response, filePath);
     }
+
+    @Override
+    public void downloadByPath(String path, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String filePath = getPath(path);
+        log.info("按原始路径下载文件：{}", filePath);
+        downloadFile(request, response, filePath);
+    }
 }

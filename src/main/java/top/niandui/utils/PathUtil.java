@@ -2,6 +2,7 @@ package top.niandui.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 import top.niandui.model.Papers;
 
 import java.io.File;
@@ -56,6 +57,23 @@ public class PathUtil {
     }
 
     /**
+     * 获取本地文件绝对路径
+     *
+     * @param path 相对路径
+     * @return 本地绝对路径
+     */
+    public static String getPath(String path) {
+        if (!StringUtils.hasText(path)) {
+            return configInfo.getFilePath();
+        }
+        String safePath = path.replace("\\", "/").replace("..", ".");
+        if (!safePath.startsWith("/")) {
+            safePath = "/" + safePath;
+        }
+        return configInfo.getFilePath() + safePath;
+    }
+
+    /**
      * 获取路径md5
      *
      * @param path 路径
@@ -91,6 +109,14 @@ public class PathUtil {
         if (file != null && papers.getIsExists()) {
             papers.setName(file.getName());
             papers.setPath(getMd5(file.getAbsolutePath()));
+            String rawPath = file.getAbsolutePath().replace("\\", "/");
+            if (rawPath.startsWith(configInfo.getFilePath())) {
+                rawPath = rawPath.substring(filePathLength);
+            }
+            if (!rawPath.startsWith("/")) {
+                rawPath = "/" + rawPath;
+            }
+            papers.setRawPath(rawPath);
             String[] sizeUnit = unitConvert(file.length());
             papers.setSize(Double.valueOf(sizeUnit[0]));
             papers.setUnit(sizeUnit[1]);

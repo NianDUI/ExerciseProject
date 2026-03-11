@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.niandui.common.model.ResponseData;
 import top.niandui.model.Papers;
+import top.niandui.model.vo.VideoPlaySourceVO;
 import top.niandui.service.IFileService;
+import top.niandui.service.IVideoPlayService;
 import top.niandui.utils.PathUtil;
 
 import java.util.List;
@@ -37,6 +39,8 @@ import java.util.List;
 public class FileController {
     @Autowired
     private IFileService iFileService;
+    @Autowired
+    private IVideoPlayService iVideoPlayService;
 
     @GetMapping("/read")
     @Operation(summary = "读取文件", description = "时间：2020/08/21")
@@ -63,5 +67,31 @@ public class FileController {
     )
     public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
         iFileService.download(request, response);
+    }
+
+    @GetMapping("/downloadByPath")
+    @Operation(summary = "通过原始路径下载文件", description = "时间：2026/03/10")
+    public void downloadByPath(@RequestParam String path, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        iFileService.downloadByPath(path, request, response);
+    }
+
+    @GetMapping("/video/source/**")
+    @Operation(summary = "获取视频播放源", description = "时间：2026/03/10")
+    public ResponseData<VideoPlaySourceVO> videoSource(HttpServletRequest request) throws Exception {
+        return ResponseData.ok(iVideoPlayService.resolveSource(request));
+    }
+
+    @GetMapping("/video/sourceByPath")
+    @Operation(summary = "通过原始路径获取视频播放源", description = "时间：2026/03/10")
+    public ResponseData<VideoPlaySourceVO> videoSourceByPath(@RequestParam String path) throws Exception {
+        return ResponseData.ok(iVideoPlayService.resolveSourceByPath(path));
+    }
+
+    @GetMapping("/video/hls/{cacheKey}/{fileName:.+}")
+    @Operation(summary = "读取HLS播放资源", description = "时间：2026/03/10")
+    public void videoHls(@org.springframework.web.bind.annotation.PathVariable String cacheKey,
+                         @org.springframework.web.bind.annotation.PathVariable String fileName,
+                         HttpServletResponse response) throws Exception {
+        iVideoPlayService.streamHls(cacheKey, fileName, response);
     }
 }

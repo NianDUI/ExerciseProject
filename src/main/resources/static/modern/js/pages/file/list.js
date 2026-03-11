@@ -124,6 +124,7 @@ export default {
                 path: "/file/player",
                 query: {
                     path: row.path,
+                    rawPath: row.rawPath || "",
                     name: row.name || "",
                     type: getVideoMimeType(row.name)
                 }

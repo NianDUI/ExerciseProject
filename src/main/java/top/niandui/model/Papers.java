@@ -25,6 +25,8 @@ public class Papers extends BaseModel {
     private String name;
     @Schema(description = "路径")
     private String path;
+    @Schema(description = "原始相对路径")
+    private String rawPath;
     @Schema(description = "大小")
     private Double size;
     @Schema(description = "大小单位")

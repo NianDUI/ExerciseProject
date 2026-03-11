@@ -3,3 +3,5 @@ config-info:
   win-file-path: "D:"
   linux-file-path: /data
   token: 'root'
+  ffmpeg-command: "ffmpeg"
+  video-cache-path: ".transcode"

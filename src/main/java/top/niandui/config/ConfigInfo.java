@@ -34,6 +34,11 @@ public class ConfigInfo {
     private String filePath;
     private String winFilePath;
     private String linuxFilePath;
+    // 视频转码
+    private String ffmpegCommand = "ffmpeg";
+    private String videoCachePath = ".transcode";
+    private Integer videoTranscodeThreads = 2;
+    private Integer videoCacheExpireHours = 72;
     // token
     private String token;
 

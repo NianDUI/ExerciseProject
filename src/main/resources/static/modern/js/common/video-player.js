@@ -6,9 +6,6 @@ export function getVideoMimeType(name) {
     if (lower.endsWith(".webm")) {
         return "video/webm";
     }
-    if (lower.endsWith(".mkv")) {
-        return "video/x-matroska";
-    }
     return "video/mp4";
 }
 

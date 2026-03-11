@@ -1,4 +1,4 @@
-import {encodePath} from "../../../modern/js/common/http.js";
+import {encodePath, get} from "../../../modern/js/common/http.js";
 import {createVideoPlayer, disposeVideoPlayer} from "../../../modern/js/common/video-player.js";
 
 export default {
@@ -8,7 +8,7 @@ export default {
       <div ref="topbarRef" class="video-player-topbar">
         <button class="ghost-btn" @click="$router.back()">返回</button>
         <div class="video-player-title">{{ title }}</div>
-        <a class="ghost-btn link-btn" :href="videoUrl">下载</a>
+        <a class="ghost-btn link-btn" :href="downloadUrl">下载</a>
       </div>
       <div ref="pageRef" class="video-stage mobile-fit-stage" :style="stageStyle">
         <video
@@ -24,6 +24,9 @@ export default {
           <span class="meta-chip">{{ videoType }}</span>
           <span class="meta-chip">{{ playbackLabel }}</span>
         </div>
+        <div v-if="statusMessage && !errorMessage" class="video-error-box">
+          <div>{{ statusMessage }}</div>
+        </div>
         <div v-if="errorMessage" class="video-error-box">
           <div>{{ errorMessage }}</div>
           <button class="ghost-btn" @click="reloadPlayer">重试播放</button>
@@ -35,7 +38,12 @@ export default {
         return {
             player: null,
             errorMessage: "",
+            statusMessage: "",
             playbackLabel: "倍速 1x",
+            resolvedVideoUrl: "",
+            resolvedVideoType: "video/mp4",
+            sourceStatus: "",
+            pollTimer: null,
             playerWidth: 320,
             playerHeight: 260,
             resizeObserver: null
@@ -43,16 +51,24 @@ export default {
     },
     computed: {
         rawPath() {
+            return this.$route.query.rawPath || "";
+        },
+        encodedPath() {
             return this.$route.query.path || "";
         },
         title() {
             return this.$route.query.name || "视频播放";
         },
         videoType() {
-            return this.$route.query.type || "video/mp4";
+            return this.resolvedVideoType || this.$route.query.type || "video/mp4";
         },
         videoUrl() {
-            return `/api/file/download/${encodePath(this.rawPath)}`;
+            return this.resolvedVideoUrl || this.downloadUrl;
+        },
+        downloadUrl() {
+            return this.rawPath
+                ? `/api/file/downloadByPath?path=${encodeURIComponent(this.rawPath)}`
+                : `/api/file/download/${encodePath(this.encodedPath)}`;
         },
         stageStyle() {
             return {
@@ -72,12 +88,38 @@ export default {
     beforeUnmount() {
         window.removeEventListener("resize", this.updateStageByViewport);
         this.destroyResizeObserver();
+        this.stopPolling();
         this.destroyPlayer();
     },
     methods: {
-        initPlayer() {
+        async initPlayer() {
             this.destroyPlayer();
+            this.stopPolling();
             this.errorMessage = "";
+            this.statusMessage = "正在准备播放地址，部分格式首次播放需要转码，请稍候...";
+            try {
+                const source = this.rawPath
+                    ? await get(`/api/file/video/sourceByPath?path=${encodeURIComponent(this.rawPath)}`)
+                    : await get(`/api/file/video/source/${encodePath(this.encodedPath)}`);
+                this.applySource(source);
+            } catch (e) {
+                this.statusMessage = "";
+                this.errorMessage = e.message || "获取播放地址失败";
+                return;
+            }
+            if (this.sourceStatus === "processing") {
+                this.startPolling();
+                return;
+            }
+            if (this.sourceStatus !== "ready" || !this.resolvedVideoUrl) {
+                this.statusMessage = "";
+                this.errorMessage = this.errorMessage || "未获取到可播放地址";
+                return;
+            }
+            this.mountPlayer();
+        },
+        mountPlayer() {
+            this.destroyPlayer();
             this.player = createVideoPlayer("mobile-video-player", {
                 source: {
                     src: this.videoUrl,
@@ -87,6 +129,7 @@ export default {
                     this.errorMessage = message;
                 },
                 onReady: (player) => {
+                    this.statusMessage = "";
                     player.on("ratechange", () => {
                         this.playbackLabel = `倍速 ${player.playbackRate()}x`;
                     });
@@ -95,6 +138,51 @@ export default {
                     this.updateStageHeight(meta);
                 }
             });
+        },
+        applySource(source) {
+            this.sourceStatus = source && source.status ? source.status : "";
+            this.resolvedVideoUrl = source && source.sourceUrl ? source.sourceUrl : "";
+            this.resolvedVideoType = source && source.mimeType ? source.mimeType : "video/mp4";
+            if (this.sourceStatus === "ready") {
+                this.statusMessage = "";
+                this.errorMessage = "";
+                return;
+            }
+            if (this.sourceStatus === "failed") {
+                this.statusMessage = "";
+                this.errorMessage = source && source.message ? source.message : "视频转码失败";
+                return;
+            }
+            this.statusMessage = source && source.message ? source.message : "视频转码中，请稍候...";
+        },
+        startPolling() {
+            this.stopPolling();
+            this.pollTimer = window.setTimeout(async () => {
+                try {
+                    const source = this.rawPath
+                        ? await get(`/api/file/video/sourceByPath?path=${encodeURIComponent(this.rawPath)}`)
+                        : await get(`/api/file/video/source/${encodePath(this.encodedPath)}`);
+                    this.applySource(source);
+                    if (this.sourceStatus === "ready" && this.resolvedVideoUrl) {
+                        this.stopPolling();
+                        this.mountPlayer();
+                        return;
+                    }
+                    if (this.sourceStatus === "processing") {
+                        this.startPolling();
+                    }
+                } catch (e) {
+                    this.stopPolling();
+                    this.statusMessage = "";
+                    this.errorMessage = e.message || "获取播放地址失败";
+                }
+            }, 3000);
+        },
+        stopPolling() {
+            if (this.pollTimer) {
+                window.clearTimeout(this.pollTimer);
+                this.pollTimer = null;
+            }
         },
         reloadPlayer() {
             this.initPlayer();

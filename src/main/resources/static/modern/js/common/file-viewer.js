@@ -1,6 +1,9 @@
 export function isVideoFile(name) {
     const lower = String(name || "").toLowerCase();
-    return lower.endsWith(".mp4") || lower.endsWith(".mkv") || lower.endsWith(".webm") || lower.endsWith(".m3u8");
+    return lower.endsWith(".mp4") || lower.endsWith(".mkv") || lower.endsWith(".webm") || lower.endsWith(".m3u8")
+        || lower.endsWith(".avi") || lower.endsWith(".mov") || lower.endsWith(".flv") || lower.endsWith(".ts")
+        || lower.endsWith(".m4v") || lower.endsWith(".mpeg") || lower.endsWith(".mpg") || lower.endsWith(".wmv")
+        || lower.endsWith(".rmvb") || lower.endsWith(".3gp");
 }
 
 export function isTextFile(name) {

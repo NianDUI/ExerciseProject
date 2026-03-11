@@ -25,4 +25,7 @@ public interface IFileService {
 
     // 下载文件
     void download(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+    // 通过原始相对路径下载文件
+    void downloadByPath(String path, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

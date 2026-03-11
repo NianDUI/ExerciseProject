@@ -85,6 +85,7 @@ export default {
                     path: "/player/video",
                     query: {
                         path: item.path,
+                        rawPath: item.rawPath || "",
                         name: item.name || "",
                         type: getVideoMimeType(item.name)
                     }
