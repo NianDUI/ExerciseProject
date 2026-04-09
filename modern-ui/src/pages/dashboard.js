@@ -1,8 +1,8 @@
-import {get} from "../common/http.js";
+import { get } from '../common/http.js'
 
 export default {
-    name: "ModernDashboard",
-    template: `
+  name: 'ModernDashboard',
+  template: `
     <div>
       <div class="dashboard-header">
         <h2>FictionWeb 管理后台</h2>
@@ -68,10 +68,6 @@ export default {
               <el-icon class="nav-icon" :size="24"><Cellphone /></el-icon>
               <span class="nav-label">移动端</span>
             </div>
-            <div class="quick-nav-item" @click="goIvi">
-              <el-icon class="nav-icon" :size="24"><Link /></el-icon>
-              <span class="nav-label">IVI 频道</span>
-            </div>
             <div class="quick-nav-item" @click="goLegacy">
               <el-icon class="nav-icon" :size="24"><SwitchButton /></el-icon>
               <span class="nav-label">旧版首页</span>
@@ -81,41 +77,34 @@ export default {
       </div>
     </div>
   `,
-    data() {
-        return {
-            stats: {
-                sites: null,
-                books: null,
-                configs: null
-            }
-        };
-    },
-    mounted() {
-        this.loadStats();
-    },
-    methods: {
-        async loadStats() {
-            try {
-                const [sites, books, configs] = await Promise.all([
-                    get("/api/optionSite").catch(() => []),
-                    get("/api/optionBook").catch(() => []),
-                    get("/api/optionConfig").catch(() => [])
-                ]);
-                this.stats.sites = Array.isArray(sites) ? sites.length : 0;
-                this.stats.books = Array.isArray(books) ? books.length : 0;
-                this.stats.configs = Array.isArray(configs) ? configs.length : 0;
-            } catch (e) {
-                // stats are optional, ignore errors
-            }
-        },
-        goMobile() {
-            window.location.href = "/modern/mobile";
-        },
-        goIvi() {
-            window.open("http://ivi.bupt.edu.cn", "_blank");
-        },
-        goLegacy() {
-            window.location.href = "/main";
-        }
+  data () {
+    return {
+      stats: { sites: null, books: null, configs: null }
     }
-};
+  },
+  mounted () {
+    this.loadStats()
+  },
+  methods: {
+    async loadStats () {
+      try {
+        const [sites, books, configs] = await Promise.all([
+          get('/api/optionSite').catch(() => []),
+          get('/api/optionBook').catch(() => []),
+          get('/api/optionConfig').catch(() => [])
+        ])
+        this.stats.sites = Array.isArray(sites) ? sites.length : 0
+        this.stats.books = Array.isArray(books) ? books.length : 0
+        this.stats.configs = Array.isArray(configs) ? configs.length : 0
+      } catch (e) {
+        // stats are optional
+      }
+    },
+    goMobile () {
+      window.location.href = '/modern/mobile'
+    },
+    goLegacy () {
+      window.location.href = '/main'
+    }
+  }
+}

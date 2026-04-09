@@ -34,7 +34,7 @@ body,
     padding: 0;
     height: 100%;
     background: var(--bg);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
 }
 
 /* ==================== Layout ==================== */
@@ -237,63 +237,19 @@ body,
     flex-shrink: 0;
 }
 
-.stat-card .stat-icon.blue {
-    background: rgba(22, 93, 255, 0.1);
-    color: var(--primary);
-}
+.stat-card .stat-icon.blue { background: rgba(22, 93, 255, 0.1); color: var(--primary); }
+.stat-card .stat-icon.green { background: rgba(0, 180, 42, 0.1); color: var(--success); }
+.stat-card .stat-icon.orange { background: rgba(255, 125, 0, 0.1); color: var(--warning); }
+.stat-card .stat-icon.purple { background: rgba(114, 46, 209, 0.1); color: #722ed1; }
+.stat-card .stat-icon.cyan { background: rgba(20, 201, 201, 0.1); color: #14c9c9; }
+.stat-card .stat-icon.red { background: rgba(245, 63, 63, 0.1); color: var(--danger); }
 
-.stat-card .stat-icon.green {
-    background: rgba(0, 180, 42, 0.1);
-    color: var(--success);
-}
+.stat-card .stat-info { flex: 1; min-width: 0; }
+.stat-card .stat-info .stat-label { font-size: 13px; color: var(--text-3); margin-bottom: 4px; }
+.stat-card .stat-info .stat-value { font-size: 22px; font-weight: 600; color: var(--text-1); }
 
-.stat-card .stat-icon.orange {
-    background: rgba(255, 125, 0, 0.1);
-    color: var(--warning);
-}
-
-.stat-card .stat-icon.purple {
-    background: rgba(114, 46, 209, 0.1);
-    color: #722ed1;
-}
-
-.stat-card .stat-icon.cyan {
-    background: rgba(20, 201, 201, 0.1);
-    color: #14c9c9;
-}
-
-.stat-card .stat-icon.red {
-    background: rgba(245, 63, 63, 0.1);
-    color: var(--danger);
-}
-
-.stat-card .stat-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.stat-card .stat-info .stat-label {
-    font-size: 13px;
-    color: var(--text-3);
-    margin-bottom: 4px;
-}
-
-.stat-card .stat-info .stat-value {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-1);
-}
-
-.quick-nav {
-    margin-top: 24px;
-}
-
-.quick-nav h3 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-1);
-    margin: 0 0 12px 0;
-}
+.quick-nav { margin-top: 24px; }
+.quick-nav h3 { font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0 0 12px 0; }
 
 .quick-nav-grid {
     display: grid;
@@ -320,16 +276,8 @@ body,
     border-color: rgba(22, 93, 255, 0.2);
 }
 
-.quick-nav-item .nav-icon {
-    font-size: 24px;
-    color: var(--primary);
-}
-
-.quick-nav-item .nav-label {
-    font-size: 13px;
-    color: var(--text-2);
-    font-weight: 500;
-}
+.quick-nav-item .nav-icon { font-size: 24px; color: var(--primary); }
+.quick-nav-item .nav-label { font-size: 13px; color: var(--text-2); font-weight: 500; }
 
 /* ==================== Content pages ==================== */
 .chapter-content {
@@ -358,34 +306,13 @@ body,
 }
 
 /* ==================== Video / Image / Text ==================== */
-.video-card {
-    min-height: 420px;
-}
+.video-card { min-height: 420px; }
 
-.video-stage.pc {
-    width: 100%;
-    margin-top: 8px;
-}
+.video-stage.pc { width: 100%; margin-top: 8px; }
+.video-stage.pc .video-js { width: 100%; min-height: 420px; background: #000; border-radius: var(--radius); }
 
-.video-stage.pc .video-js {
-    width: 100%;
-    min-height: 420px;
-    background: #000;
-    border-radius: var(--radius);
-}
-
-.pc-fit-page {
-    min-height: calc(100vh - 96px);
-    display: flex;
-    flex-direction: column;
-}
-
-.pc-fit-stage {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    align-items: center;
-}
+.pc-fit-page { min-height: calc(100vh - 96px); display: flex; flex-direction: column; }
+.pc-fit-stage { flex: 1; min-height: 0; display: flex; align-items: center; }
 
 .pc-fit-stage .video-js {
     width: var(--player-stage-width, 100%);
@@ -395,14 +322,10 @@ body,
     max-width: 100%;
 }
 
-.pc-fit-stage .video-js .vjs-tech {
-    object-fit: contain;
-}
+.pc-fit-stage .video-js .vjs-tech { object-fit: contain; }
 
 .image-viewer-card,
-.text-viewer-card {
-    min-height: calc(100vh - 96px);
-}
+.text-viewer-card { min-height: calc(100vh - 96px); }
 
 .image-stage.pc {
     display: flex;
@@ -419,11 +342,7 @@ body,
     border-radius: var(--radius);
 }
 
-.pc-text-wrap {
-    min-height: calc(100vh - 224px);
-    padding: 12px;
-}
-
+.pc-text-wrap { min-height: calc(100vh - 224px); padding: 12px; }
 .pc-text-view {
     min-height: calc(100vh - 248px);
     margin: 0;
@@ -435,56 +354,20 @@ body,
 }
 
 /* ==================== Table enhancements ==================== */
-.el-table {
-    border-radius: var(--radius) !important;
-}
-
-.el-table th.el-table__cell {
-    background: #fafbfc !important;
-    font-weight: 500;
-    color: var(--text-2);
-    font-size: 13px;
-}
-
-.el-pagination {
-    margin-top: 16px;
-    justify-content: flex-end;
-}
+.el-table { border-radius: var(--radius) !important; }
+.el-table th.el-table__cell { background: #fafbfc !important; font-weight: 500; color: var(--text-2); font-size: 13px; }
+.el-pagination { margin-top: 16px; justify-content: flex-end; }
 
 /* ==================== Element Plus overrides ==================== */
-.el-page-header {
-    padding: 0;
-}
-
-.el-page-header__content {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-1);
-}
-
-.el-form-item__label {
-    font-weight: 500;
-    color: var(--text-2);
-}
-
-.el-button--primary {
-    --el-button-bg-color: var(--primary);
-    --el-button-border-color: var(--primary);
-}
+.el-page-header { padding: 0; }
+.el-page-header__content { font-size: 16px; font-weight: 600; color: var(--text-1); }
+.el-form-item__label { font-weight: 500; color: var(--text-2); }
+.el-button--primary { --el-button-bg-color: var(--primary); --el-button-border-color: var(--primary); }
 
 /* Scrollbar */
-.main-scroll::-webkit-scrollbar {
-    width: 6px;
-}
-
-.main-scroll::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.12);
-    border-radius: 3px;
-}
-
-.main-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
-}
+.main-scroll::-webkit-scrollbar { width: 6px; }
+.main-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.12); border-radius: 3px; }
+.main-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.2); }
 
 /* ==================== Theme: Light (Notion/Linear) ==================== */
 [data-theme="light"] {

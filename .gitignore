@@ -11,3 +11,8 @@ target/
 /src/main/java/top/niandui/controller/TestController.java
 /src/main/java/top/niandui/dao/ITestDao.java
 /src/main/resources/mapper/Test-mapper.xml
+
+# frontend build
+/modern-ui/node_modules/
+/modern-ui/.node/
+/src/main/resources/static/modern-dist/

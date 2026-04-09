@@ -1,23 +1,22 @@
-import router from "./router/index.js";
-import {setTokenByPrompt} from "./common/auth.js";
+import { setTokenByPrompt } from './common/auth.js'
 
 const THEME_OPTIONS = [
-    {value: "default", label: "经典深色"},
-    {value: "light", label: "浅色简约"},
-    {value: "glass", label: "毛玻璃"}
-];
+  { value: 'default', label: '经典深色' },
+  { value: 'light', label: '浅色简约' },
+  { value: 'glass', label: '毛玻璃' }
+]
 
-function applyTheme(name) {
-    if (name && name !== "default") {
-        document.documentElement.setAttribute("data-theme", name);
-    } else {
-        document.documentElement.removeAttribute("data-theme");
-    }
-    localStorage.setItem("fw-theme", name || "default");
+function applyTheme (name) {
+  if (name && name !== 'default') {
+    document.documentElement.setAttribute('data-theme', name)
+  } else {
+    document.documentElement.removeAttribute('data-theme')
+  }
+  localStorage.setItem('fw-theme', name || 'default')
 }
 
-const App = {
-    template: `
+export default {
+  template: `
     <el-container class="layout">
       <el-aside width="220px">
         <div class="sidebar">
@@ -76,51 +75,41 @@ const App = {
       </el-main>
     </el-container>
   `,
-    data() {
-        return {
-            currentTheme: localStorage.getItem("fw-theme") || "default",
-            themeOptions: THEME_OPTIONS
-        };
-    },
-    computed: {
-        activeMenu() {
-            const p = this.$route.path;
-            if (p.startsWith("/site")) return "/site/list";
-            if (p.startsWith("/book")) return "/book/list";
-            if (p.startsWith("/config")) return "/config/list";
-            if (p.startsWith("/chapter")) return "/book/list";
-            if (p.startsWith("/file")) return "/file/list";
-            if (p.startsWith("/log")) return "/log/live";
-            return "/dashboard";
-        }
-    },
-    created() {
-        applyTheme(this.currentTheme);
-    },
-    methods: {
-        selectMenu(path) {
-            if (this.$route.path !== path) {
-                this.$router.push(path);
-            }
-        },
-        changeTheme(val) {
-            applyTheme(val);
-        },
-        refreshToken() {
-            setTokenByPrompt();
-        },
-        goLegacy() {
-            window.location.href = "/main";
-        }
+  data () {
+    return {
+      currentTheme: localStorage.getItem('fw-theme') || 'default',
+      themeOptions: THEME_OPTIONS
     }
-};
-
-const app = window.Vue.createApp(App);
-app.use(window.ElementPlus);
-if (window.ElementPlusIconsVue) {
-    for (const [key, component] of Object.entries(window.ElementPlusIconsVue)) {
-        app.component(key, component);
+  },
+  computed: {
+    activeMenu () {
+      const p = this.$route.path
+      if (p.startsWith('/site')) return '/site/list'
+      if (p.startsWith('/book')) return '/book/list'
+      if (p.startsWith('/config')) return '/config/list'
+      if (p.startsWith('/chapter')) return '/book/list'
+      if (p.startsWith('/file')) return '/file/list'
+      if (p.startsWith('/log')) return '/log/live'
+      return '/dashboard'
     }
+  },
+  created () {
+    applyTheme(this.currentTheme)
+  },
+  methods: {
+    selectMenu (path) {
+      if (this.$route.path !== path) {
+        this.$router.push(path)
+      }
+    },
+    changeTheme (val) {
+      applyTheme(val)
+    },
+    refreshToken () {
+      setTokenByPrompt()
+    },
+    goLegacy () {
+      window.location.href = '/main'
+    }
+  }
 }
-app.use(router);
-app.mount("#app");

@@ -382,6 +382,39 @@
 
     <build>
         <plugins>
+            <!-- 前端自动构建：npm install + npm run build -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.15.1</version>
+                <configuration>
+                    <workingDirectory>${project.basedir}/modern-ui</workingDirectory>
+                    <installDirectory>${project.basedir}/modern-ui/.node</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+                        <goals><goal>install-node-and-npm</goal></goals>
+                        <configuration>
+                            <nodeVersion>v20.18.3</nodeVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-install</id>
+                        <goals><goal>npm</goal></goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-build</id>
+                        <goals><goal>npm</goal></goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
